@@ -1,0 +1,5 @@
+- ATMEGA328 x8 (message Henning about them first)
+- ESP62 x1
+- Buzzer x1
+- Veroboard (message Henning about them first)
+- Red LED's 
