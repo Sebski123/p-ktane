@@ -33,6 +33,8 @@ LedControl lc=LedControl(12,11,10,1);
 /* we always wait a bit between updates of the display */
 unsigned long delaytime=500;
 
+unsigned long previousMillis = 0;
+
 int win_melody[] = {262, 330, 294, 370, 392};
 int win_melody_durations[] = {8, 8, 8, 8, 2};
 int win_melody_len = 5;
@@ -41,11 +43,16 @@ int lose_melody_durations[] = {8,8,8,1};
 int lose_melody_len = 4;
 
 
+void toggleClockBlink();
 void writeArduinoOn7Segment();
 void scrollDigits();
 void showOrder();
 void playMelody(int *melody, int* durations, int melody_len);
 
+
+void toggleClockBlink() {
+  digitalWrite(CLOCK_DOT, !digitalRead(CLOCK_DOT));
+}
 
 void playMelody(int *melody, int* durations, int melody_len) {
   for (int thisNote = 0; thisNote < melody_len; thisNote++) {
@@ -201,6 +208,17 @@ void loop() {
     lc.setDigit(0, 2, seconds / 10, false);
     lc.setDigit(0, 3, seconds % 10, false);
   }
+
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= 1000) {
+    // save the last time you blinked the LED
+    previousMillis = currentMillis;
+
+    // if the LED is off turn it on and vice-versa:
+    toggleClockBlink();
+  }
+
 /* 
   if(strikes < controller.getStrikes()){
     tone(5, 340, 150);
@@ -221,7 +239,7 @@ void loop() {
     noTone(5);
     solves = controller.getSolves();
   }
-
+  */
   digitalWrite(STRIKE_1_PIN, strikes >= 1);
   digitalWrite(STRIKE_2_PIN, strikes >= 2);
 
@@ -229,7 +247,7 @@ void loop() {
   if(strikes >= 3){
     youLose();
   }
-
+  /*
   if(controller.getSolves() >= num_modules) {
     youWin();
   }*/
