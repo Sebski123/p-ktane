@@ -1,0 +1,3 @@
+- ATMEGA328 x8
+- Buzzer x1
+- Red LED's 
