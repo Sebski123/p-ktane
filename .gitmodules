@@ -1,3 +1,0 @@
-[submodule ".\\Modules\\Libraries\\NeoICSerial"]
-	path = .\\Modules\\Libraries\\NeoICSerial
-	url = https://github.com/SlashDevin/NeoICSerial
