@@ -4,7 +4,11 @@
 #include "morse.h"
 #include <Wire.h>
 #include <SPI.h>
+#include "LedControl.h"
 
+#define DATA_PIN 12
+#define CLOCK_PIN 11
+#define LOAD_PIN 10
 #define BUTTON_R_PIN A3
 #define BUTTON_L_PIN A2
 #define BUTTON_TX_PIN A1
@@ -17,7 +21,7 @@ void doMorse();
 NeoICSerial serial_port;
 DSerialClient client(serial_port, MY_ADDRESS);
 KTANEModule module(client, 3, 4);
-Adafruit_7segment matrix = Adafruit_7segment();
+LedControl lc = LedControl(12,11,10,1);
 
 int goal_freq;
 int selected_freq = 0;
@@ -45,7 +49,15 @@ int getMorseBit(uint8_t *bits, int index) {
 void setup() {
   serial_port.begin(19200);
   Serial.begin(19200);
-  matrix.begin(0x70);
+  /*
+   The MAX72XX is in power-saving mode on startup,
+   we have to do a wakeup call
+   */
+  lc.shutdown(0,false);
+  /* Set the brightness to a medium values */
+  lc.setIntensity(0,8);
+  /* and clear the display */
+  lc.clearDisplay(0);
   
   while(!module.getConfig()){
     module.interpretData();
@@ -114,11 +126,10 @@ void loop() {
     }
 
 
-    matrix.writeDigitNum(0, 3);
-    matrix.writeDigitNum(1, freqs[selected_freq][0] - '0');
-    matrix.writeDigitNum(3, freqs[selected_freq][1] - '0');
-    matrix.writeDigitNum(4, freqs[selected_freq][2] - '0');
-    matrix.writeDisplay();
+    lc.setDigit(0, 0, 3, true);
+    lc.setDigit(0, 1, freqs[selected_freq][0] - '0', false);
+    lc.setDigit(0, 2, freqs[selected_freq][1] - '0', false);
+    lc.setDigit(0, 3, freqs[selected_freq][2] - '0', false);
 
     if(!digitalRead(BUTTON_TX_PIN)) {
       if(selected_freq == goal_freq) {
