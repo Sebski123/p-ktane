@@ -159,7 +159,7 @@ void setup() {
   pinMode(CLOCK_DOT,  OUTPUT);
   pinMode(SPEAKER_PIN,   OUTPUT);
 
-  // Clock 7-segment setup
+  // 7-segment setup
   pinMode(DATA_PIN, OUTPUT);
   pinMode(CLOCK_PIN,  OUTPUT);
   pinMode(LOAD_PIN,   OUTPUT);
