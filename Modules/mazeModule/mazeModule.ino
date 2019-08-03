@@ -15,11 +15,21 @@
 #define LEFT_BTN 7
 #define RIGHT_BTN 6
 
+//Function prototypes
+int getBtnDir();
+void move(int direction);
+
 //Variables
 int playerLocation[2];
 int goalLocation[2];
-int (*markerLocations)[2][2];
+int markerLocations[2][2];
 int mazeNum;
+bool markerBlinkState = true;
+bool playerBlinkState = true;
+unsigned long currentMillis;
+unsigned long previousMarkerMillis = 0;
+unsigned long previousPlayerMillis = 0;
+int dir;
 
 //Class inits
 /*
@@ -35,6 +45,61 @@ LedControl lc = LedControl(DATA_PIN,CLOCK_PIN,LOAD_PIN,1);
 NeoICSerial serial_port;
 DSerialClient client(serial_port, MY_ADDRESS);
 KTANEModule module(client, 3, 4);
+
+int getBtnDir(){
+  if (analogRead(UP_BTN) == 0){
+    return UP;
+  } else if (analogRead(DOWN_BTN) == 0){
+    return DOWN;
+  } else if (analogRead(LEFT_BTN) == 0){
+    return LEFT;
+  } else if (analogRead(RIGHT_BTN) == 0){
+    return RIGHT;
+  } else {
+    return -1;
+  }
+}
+
+void move(int direction){
+  switch (direction)
+  {
+    case UP:
+      if(mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1]]){
+        module.strike();
+      } else {
+        playerLocation[1] -= 1;
+      }
+      break;
+    
+    case DOWN:
+      if(mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1]+1]){
+        module.strike();
+      } else {
+        playerLocation[1] += 1;
+      }
+      break;
+    
+    case LEFT:
+      if(mazeVerticalWalls[mazeNum][playerLocation[1]][playerLocation[0]]){
+        module.strike();
+      } else {
+        playerLocation[0] -= 1;
+      }
+      break;
+    
+    case RIGHT:
+      if(mazeVerticalWalls[mazeNum][playerLocation[1]][playerLocation[0]+1]){
+        module.strike();
+      } else {
+        playerLocation[0] += 1;
+      }
+      break;
+    
+    default:
+      break;
+  }
+  return;
+}
 
 void setup() {
   serial_port.begin(19200);
@@ -77,12 +142,19 @@ void setup() {
   Serial.println("Getting marker locations");
   memcpy(markerLocations,markers[mazeNum],sizeof(markerLocations));
 
+  Serial.println("Choosing player location");
+  playerLocation[0] = random(0,6);
+  playerLocation[1] = random(0,6);
 
-  /*
-    Get player location
-    Get goal location
-    show markers
-  */
+  Serial.println("Choosing goal location");
+  while (goalLocation != playerLocation)
+  {
+    goalLocation[0] = random(0,6);
+    goalLocation[1] = random(0,6);
+  }
+
+  Serial.println("Showing goal location");
+  lc.setLed(0, goalLocation[0], goalLocation[1], true);
 
   module.sendReady();
 }
@@ -90,16 +162,44 @@ void setup() {
 void loop() {
   module.interpretData();
 
-  if(!module.is_solved){
-    /*
-    checkInputs();
-    if(they_solved_it) {
-      module.win();
-    }
-    if(they_messed_up) {
-      module.strike();
-    }
-    updateOutputs();
-    */
+  //Blink maze markers and player location with different intervals
+  currentMillis = millis();
+  
+  if (currentMillis - previousMarkerMillis >= 500) {
+    // save the last time you blinked the markers
+    previousMarkerMillis = currentMillis;
+    markerBlinkState = !markerBlinkState;
   }
+
+  if (currentMillis - previousPlayerMillis >= 100) {
+    // save the last time you blinked the player
+    previousPlayerMillis = currentMillis;
+    markerBlinkState = !markerBlinkState;
+  }
+
+  lc.setLed(0, goalLocation[0], goalLocation[1], true);
+  lc.setLed(0, markerLocations[0][0], markerLocations[0][1], markerBlinkState);
+  lc.setLed(0, markerLocations[1][0], markerLocations[1][1], markerBlinkState);
+  lc.setLed(0, playerLocation[0], playerLocation[1], playerBlinkState);
+
+
+
+  if(!module.is_solved){
+    
+    //Read button press
+    dir = getBtnDir();
+
+    //Try to move the player, gave a strike if a wall is hit
+    move(dir);
+
+    //Check if player reached the goal
+    if(playerLocation == goalLocation) {
+      module.win();
+      while (1){
+        delayWithUpdates(module, 10);
+      }
+    } 
+  }
+
+  lc.clearDisplay(0);
 }
