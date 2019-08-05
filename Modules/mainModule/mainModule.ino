@@ -219,7 +219,7 @@ void loop() {
 
 
   if(millis() > dest_time) {
-    youWin();
+    youLose();
   } else {
     // Update clock
     unsigned long diff_time = dest_time - millis();
