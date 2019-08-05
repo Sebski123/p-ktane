@@ -15,6 +15,7 @@
 #define STRIKE_1_PIN 9
 #define STRIKE_2_PIN 8
 #define CLOCK_DOT 7
+#define CLEAR_PIN 6
 #define SPEAKER_PIN 5
 
 //Function prototypes
@@ -101,6 +102,8 @@ void youWin() {
   // Play win music
   Serial.println("Win");
 
+  digitalWrite(CLEAR_PIN, false);
+
   lc.clearDisplay(0);
   lc.setDigit(0, 4, 5, false);
   lc.setChar(0, 5, 'u', false);
@@ -132,7 +135,7 @@ void getConfigManual(){
   config.ports = 3;
   config.batteries = 1;
   config.indicators = 0;
-  strncpy(config.serial, "KTANE1", 6);
+  strncpy(config.serial, "HA69", 6);
   config.serial[6] = '\0';
   num_minutes = 1;
 }
@@ -145,8 +148,8 @@ void setup() {
   delay(1000);
 
   Serial.println("Getting config");
-  //getConfigESP();
-  getConfigManual();
+  getConfigESP();
+  //getConfigManual();
   Serial.println("Got config");
   Serial.write((uint8_t *)(&config), 7);
   Serial.write(num_minutes);
@@ -156,6 +159,7 @@ void setup() {
   // LED/Speaker setup
   pinMode(STRIKE_1_PIN,  OUTPUT);
   pinMode(STRIKE_2_PIN,  OUTPUT);
+  pinMode(CLEAR_PIN,  OUTPUT);
   pinMode(CLOCK_DOT,  OUTPUT);
   pinMode(SPEAKER_PIN,   OUTPUT);
 
@@ -164,6 +168,7 @@ void setup() {
   pinMode(CLOCK_PIN,  OUTPUT);
   pinMode(LOAD_PIN,   OUTPUT);
 
+  digitalWrite(CLEAR_PIN, true);
 
   Serial.println("Initializing display");
   /*
@@ -176,13 +181,14 @@ void setup() {
   /* and clear the display */
   lc.clearDisplay(0);
 
+  delay(500);
 
   Serial.println("Writing serial-number");
   // Serial alphanumeric setup
-  lc.setChar(0, 4, "A"/*config.serial[0]*/, false);
-  lc.setChar(0, 5, "C"/*config.serial[1]*/, false);
-  lc.setChar(0, 6, "E"/*config.serial[2]*/, false);
-  lc.setChar(0, 7, "F"/*config.serial[3]*/, false);
+  lc.setChar(0, 4, config.serial[0], false);
+  lc.setChar(0, 5, config.serial[1], false);
+  lc.setChar(0, 6, config.serial[2], false);
+  lc.setChar(0, 7, config.serial[3], false);
 
 
   delay(1000);
@@ -251,8 +257,8 @@ void loop() {
     solves = controller.getSolves();
   }
 
-  digitalWrite(STRIKE_1_PIN, strikes >= 1);
-  digitalWrite(STRIKE_2_PIN, strikes >= 2);
+  digitalWrite(STRIKE_1_PIN, !(strikes >= 1));
+  digitalWrite(STRIKE_2_PIN, !(strikes >= 2));
 
   if(strikes >= 3){
     youLose();
