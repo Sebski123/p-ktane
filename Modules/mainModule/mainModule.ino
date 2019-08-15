@@ -12,11 +12,11 @@
 #define DATA_PIN 12
 #define CLOCK_PIN 11
 #define LOAD_PIN 10
-#define STRIKE_1_PIN 9
-#define STRIKE_2_PIN 8
 #define CLOCK_DOT 7
 #define CLEAR_PIN 6
 #define SPEAKER_PIN 5
+#define STRIKE_1_PIN 4
+#define STRIKE_2_PIN 3
 
 //Function prototypes
 void toggleClockBlink();
@@ -137,7 +137,7 @@ void getConfigManual(){
   config.indicators = 0;
   strncpy(config.serial, "HA69", 6);
   config.serial[6] = '\0';
-  num_minutes = 1;
+  num_minutes = 6;
 }
 
 void setup() {
@@ -148,12 +148,14 @@ void setup() {
   delay(1000);
 
   Serial.println("Getting config");
-  getConfigESP();
-  //getConfigManual();
+  //getConfigESP();
+  getConfigManual();
   Serial.println("Got config");
   Serial.write((uint8_t *)(&config), 7);
   Serial.write(num_minutes);
-  Serial.println();
+  Serial.println("\n");
+
+  delay(100);
 
   Serial.println("Setting up I/O-pins");
   // LED/Speaker setup
@@ -194,7 +196,10 @@ void setup() {
   delay(1000);
 
   Serial.println("Get modules");
-  num_modules = 2;//master.identifyClients();
+  num_modules = master.identifyClients();
+
+  Serial.print("Number of modules: ");
+  Serial.println(num_modules);
 
   controller.sendReset();
   delayWithUpdates(controller, 500);

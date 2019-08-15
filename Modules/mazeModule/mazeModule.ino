@@ -10,10 +10,10 @@
 #define DATA_PIN 12
 #define CLOCK_PIN 11
 #define LOAD_PIN 10
-#define UP_BTN 9
-#define DOWN_BTN 8
-#define LEFT_BTN 7
-#define RIGHT_BTN 6
+#define UP_BTN 7
+#define DOWN_BTN 6
+#define LEFT_BTN 5
+#define RIGHT_BTN 4
 
 //Function prototypes
 int getBtnDir();
@@ -43,7 +43,7 @@ int dir;
  */
 LedControl lc = LedControl(DATA_PIN,CLOCK_PIN,LOAD_PIN,1);
 NeoICSerial serial_port;
-DSerialClient client(serial_port, MY_ADDRESS);
+DSerialClient client(serial_port, 1);
 KTANEModule module(client, 3, 4);
 
 int getBtnDir(){
