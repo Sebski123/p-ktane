@@ -6,16 +6,16 @@
 
 
 ## Modules
-* [Wires](https://i.imgur.com/xLXpCYH.png)
-* [Button](https://i.imgur.com/Leew7du.png)
+* [Wires](https://i.imgur.com/xLXpCYH.png)              (MAIN)
+* [Button](https://i.imgur.com/Leew7du.png)             (MAIN)
 * [Keypads](https://i.imgur.com/Zy6ScEo.png)
-* [Simon Says](https://i.imgur.com/uX7BzED.png)
+* [Simon Says](https://i.imgur.com/uX7BzED.png)         (MAIN)
 * [Who's on First](https://i.imgur.com/YisE1go.png)
-* [Memory](https://i.imgur.com/bvGt5gz.png)
+* [Memory](https://i.imgur.com/bvGt5gz.png)             (MAIN)
 * [Morse Code](https://i.imgur.com/V4XAdVZ.png)
 * [Complicated Wires](https://i.imgur.com/jJb2Kp9.png)
 * [Wire Sequences](https://i.imgur.com/1drzKTO.png)
-* [Mazes](https://i.imgur.com/xXMdvLr.png)
+* [Mazes](https://i.imgur.com/xXMdvLr.png)              (MAIN)
 * [Passwords](https://i.imgur.com/us0XRBs.png)
 
 
