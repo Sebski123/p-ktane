@@ -1,9 +1,9 @@
 #include "DSerial.h"
 #include "KTANECommon.h"
-#include <NeoICSerial.h>
-#include "morse.h"
-#include <Wire.h>
-#include <SPI.h>
+#include "NeoICSerial.h"
+#include "morseCodeModule.h"
+//#include <Wire.h>
+//#include <SPI.h>
 #include "LedControl.h"
 
 #define DATA_PIN 12
@@ -19,7 +19,7 @@ int getMorseBit(uint8_t *bits, int index);
 void doMorse();
 
 NeoICSerial serial_port;
-DSerialClient client(serial_port, MY_ADDRESS);
+DSerialClient client(serial_port, 0x01);
 KTANEModule module(client, 3, 4);
 LedControl lc = LedControl(12,11,10,1);
 

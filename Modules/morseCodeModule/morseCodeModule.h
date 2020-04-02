@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 #include "Arduino.h"
 
 #define DOT_TIME 300
