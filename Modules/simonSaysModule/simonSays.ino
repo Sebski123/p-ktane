@@ -1,6 +1,6 @@
 #include "DSerial.h"
 #include "KTANECommon.h"
-#include <NeoICSerial.h>
+#include "NeoICSerial.h"
 
 NeoICSerial serial_port;
 DSerialClient client(serial_port, MY_ADDRESS);
