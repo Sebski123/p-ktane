@@ -1,8 +1,7 @@
-#include <Arduino.h>
 
 #include "DSerial.h"
 #include "KTANECommon.h"
-#include <NeoICSerial.h>
+#include "NeoICSerial.h"
 #include "LedControl.h"
 #include "mazeModule.h"
 

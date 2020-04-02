@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "DSerial.h"
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
