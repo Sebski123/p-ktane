@@ -1,11 +1,7 @@
-#include <Arduino.h>
 
 #include "DSerial.h"
 #include "KTANECommon.h"
-#include <NeoICSerial.h>
-#include <string.h>
-#include <Wire.h>
-#include <SPI.h>
+#include "NeoICSerial.h"
 #include "LedControl.h"
 
 // Defines
@@ -211,6 +207,8 @@ void setup() {
 
   dest_time = millis() + num_minutes*60*1000;
 
+  controller.setTime(dest_time);
+
   Serial.println("Done setup");
 }
 
@@ -234,6 +232,7 @@ void loop() {
   } else {
     // Update clock
     unsigned long diff_time = dest_time - millis();
+    controller.setTime(diff_time);
     int seconds = (diff_time / 1000)%60;
     int minutes = diff_time / 60000;
     lc.setDigit(0, 0, minutes / 10, false);
