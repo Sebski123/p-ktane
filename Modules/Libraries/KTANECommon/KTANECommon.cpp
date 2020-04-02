@@ -42,6 +42,11 @@ unsigned long config_to_seed(config_t *config){
   return retval;
 }
 
+void saveTimeLeft(char *raw_config, char *config) {
+  memcpy(config, raw_config, 4);
+  config[4] = '\0';
+}
+
 void delayWithUpdates(KTANEModule &module, unsigned int length) {
   unsigned long start_millis = millis();
   while(millis() - start_millis < length){
@@ -86,6 +91,7 @@ void(* softwareReset) (void) = 0;
 KTANEModule::KTANEModule(DSerialClient &dserial, int green_led_pin, 
                          int red_led_pin):_dserial(dserial) {
   memset(&_config, 0, sizeof(config_t));
+  memset(&_timeLeft, 0, sizeof(_timeLeft));
   _red_led_pin = red_led_pin;
   _green_led_pin = green_led_pin;
   pinMode(_green_led_pin, OUTPUT);
@@ -123,6 +129,8 @@ void KTANEModule::interpretData(){
       softwareReset();
     } else if(out_message[0] == NUM_STRIKES) {
       _num_strikes = out_message[1];
+    } else if(out_message[0] == TIME) {
+      saveTimeLeft((out_message + 1), _timeLeft);
     }
   }
 }
@@ -176,6 +184,15 @@ config_t *KTANEModule::getConfig() {
   } else {
     return NULL;
   }
+}
+
+int KTANEModule::sendTime() {
+  char str[2] = {TIME, '\0'};
+  return _dserial.sendData(str);
+}
+
+char* KTANEModule::getTime() {
+  return _timeLeft;
 }
 
 int KTANEModule::getLitFRK() {
@@ -242,7 +259,9 @@ KTANEController::KTANEController(DSerialMaster &dserial):_dserial(dserial) {
   memset(_solves, 0, MAX_CLIENTS);
   memset(_readies, 0, MAX_CLIENTS);
 }
-
+void KTANEController::setTime(unsigned long timeLeft) {
+  timeLeftOnTimer = timeLeft;
+}
 void KTANEController::interpretData() {
   char out_message[MAX_MSG_LEN];
   _dserial.doSerial();
@@ -255,6 +274,17 @@ void KTANEController::interpretData() {
       _solves[client_id] = 1;
     } else if(out_message[0] == READY) {
       _readies[client_id] = 1;
+    } else if(out_message[0] == TIME) {
+      char msg[6];
+      msg[0] = TIME;
+      int seconds = (timeLeftOnTimer / 1000)%60;
+      int minutes = timeLeftOnTimer / 60000;
+      msg[1] = (minutes / 10) + '0';
+      msg[2] = (minutes % 10) + '0';
+      msg[3] = (seconds / 10) + '0';
+      msg[4] = (seconds % 10) + '0';
+      msg[5] = '\0';
+      _dserial.sendData(client_id, msg);
     }
   }
 }

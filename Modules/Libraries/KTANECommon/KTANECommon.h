@@ -22,6 +22,7 @@
 #define READY (char)0xC3
 #define RESET (char)0xC4
 #define NUM_STRIKES (char)0xC5
+#define TIME (char)0xC6
 
 typedef struct raw_config_st {
   // Byte 0
@@ -68,8 +69,10 @@ class KTANEModule {
     // Helper functions for strike() and win()
     int sendSolve();
     int sendStrike();
+    int sendTime();
 
     // Various config getters
+    char *getTime();
     int getLitFRK();
     int getLitCAR();
     int getNumBatteries();
@@ -85,6 +88,7 @@ class KTANEModule {
   private:
     DSerialClient &_dserial;
     config_t _config;
+    char _timeLeft[5];
     int _green_led_pin;
     int _red_led_pin;
     int _got_config;
@@ -95,6 +99,7 @@ class KTANEModule {
 class KTANEController {
   public:
     KTANEController(DSerialMaster &dserial);
+    void setTime(unsigned long timeLeft);
     void interpretData();
     int sendConfig(config_t *config);
     int getStrikes();
@@ -108,6 +113,7 @@ class KTANEController {
     uint8_t _strikes[MAX_CLIENTS];
     uint8_t _solves[MAX_CLIENTS];
     uint8_t _readies[MAX_CLIENTS];
+    unsigned long timeLeftOnTimer;
 };
 
 void delayWithUpdates(KTANEModule &module, unsigned int length);
