@@ -1,2 +1,20 @@
-- ATMEGA328 x8
-- Red LED's 
+- Pinheaders-4 x6
+- Pins-4 x6
+- 100nF Cap
+- 10uF Pol Cap
+- 24.5k Res x3
+- Big 7-segment
+- 0.1 uF Cap x2
+- Max7219 x3
+- Simon says button x4
+- 10k Res x13
+- 1k Res x6
+- ATMEGA328 x6
+- Double 7-segment x6
+- 330 Res x21
+- RGB LEDs x7
+- Push-Buttons x8
+- Single pin-header x12
+- Green LED x42
+- Red LED x4 
+- Big transparent button
