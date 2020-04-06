@@ -69,6 +69,8 @@ void setup() {
   serial_port.begin(19200);
   Serial.begin(19200);
 
+  Serial.println("Begin setup");
+
   // Detect wires:
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
@@ -86,10 +88,13 @@ void setup() {
     delay(10);
   }
 
+  Serial.println("Getting config");
 
   while(!module.getConfig()){
     module.interpretData();
   }
+
+  Serial.println("Got config");
 
   // Detect Solution:
   switch(num_wires) {
@@ -159,6 +164,7 @@ void setup() {
     }
   }
 
+  Serial.println("Done with setup");
   module.sendReady();
 }
 
