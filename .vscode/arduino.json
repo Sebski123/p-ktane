@@ -1,6 +1,8 @@
 {
     "programmer": "AVRISP mkII",
     "board": "arduino:avr:uno",
-    "sketch": "Modules\\basicWiresModule\\basicWires.ino",
-    "output": "./build"
+    "sketch": "Modules\\mainModule\\mainModule.ino",
+    "output": "./build",
+    "port": "COM3",
+    "prebuild": "bash moveLibs.sh"
 }
