@@ -3,8 +3,8 @@
 #include "NeoICSerial.h"
 
 NeoICSerial serial_port;
-DSerialClient client(serial_port, 0x01);
-KTANEModule module(client, 3, 4);
+DSerialClient client(serial_port, MY_ADDRESS);
+KTANEModule module(client, 2, 3);
 
 // Resistor values = 33, 330, 1000, 3300, 22000
 // Wire colors  = White, Blue, Yellow, Black, Red
@@ -15,6 +15,18 @@ KTANEModule module(client, 3, 4);
 #define YELLOW 3
 #define RED 4
 #define BLACK 5
+
+// Defines
+//Pin header A0
+//Pin header A1
+//Pin header A2
+//Pin header A3
+//Pin header A4
+//Pin header A5
+//Green clear Led 2
+//Red strike Led 3
+//NeoICSerial RX-pin 8
+//NeoICSerial TX-pin 9
 
 int wires[6] = {0,0,0,0,0,0};
 int color_count[6] = {0,0,0,0,0,0};

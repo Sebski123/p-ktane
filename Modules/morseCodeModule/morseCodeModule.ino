@@ -6,9 +6,13 @@
 //#include <SPI.h>
 #include "LedControl.h"
 
+
+// Defines
 #define DATA_PIN 12
 #define CLOCK_PIN 11
 #define LOAD_PIN 10
+//NeoICSerial TX-pin 9
+//NeoICSerial RX-pin 8
 #define BUTTON_R_PIN A3
 #define BUTTON_L_PIN A2
 #define BUTTON_TX_PIN A1
@@ -19,7 +23,7 @@ int getMorseBit(uint8_t *bits, int index);
 void doMorse();
 
 NeoICSerial serial_port;
-DSerialClient client(serial_port, 0x01);
+DSerialClient client(serial_port, MY_ADDRESS);
 KTANEModule module(client, 3, 4);
 LedControl lc = LedControl(12,11,10,1);
 

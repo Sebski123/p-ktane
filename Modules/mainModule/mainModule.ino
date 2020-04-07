@@ -5,14 +5,16 @@
 #include "LedControl.h"
 
 // Defines
-#define DATA_PIN 12
-#define CLOCK_PIN 11
-#define LOAD_PIN 10
-#define CLOCK_DOT 7
-#define CLEAR_PIN 6
-#define SPEAKER_PIN 5
+#define SPEAKER_PIN 3
 #define STRIKE_1_PIN 4
-#define STRIKE_2_PIN 3
+#define STRIKE_2_PIN 5
+#define CLEAR_PIN 6
+#define CLOCK_DOT 7
+//NeoICSerial RX-pin 8
+//NeoICSerial TX-pin 9
+#define CLOCK_PIN 10
+#define LOAD_PIN 11
+#define DATA_PIN 12
 
 //Function prototypes
 void toggleClockBlink();

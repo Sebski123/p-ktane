@@ -2,25 +2,33 @@
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
 
-#define DATA_IN_PIN 11
-#define LOAD_PIN 12
-#define CLOCK_PIN 13
+
+// Defines
+#define BUTTON1_PIN 2
+#define BUTTON2_PIN 3
+#define BUTTON3_PIN 4
+#define BUTTON4_PIN 5
+//Green clear Led 6
+//Red strike Led 7
+//NeoICSerial RX-pin 8
+//NeoICSerial TX-pin 9
+#define CLOCK_PIN 10
+#define LOAD_PIN 11
+#define DATA_IN_PIN 12
+
+#define LED1_PIN 14
+#define LED2_PIN 15
+#define LED3_PIN 16
+#define LED4_PIN 17
+#define LED5_PIN 18
+
 #define DISP_SINGLE(x,y) maxSingle((x), (y), LOAD_PIN, CLOCK_PIN, DATA_IN_PIN)
 
-#define BUTTON1_PIN 14
-#define BUTTON2_PIN 15
-#define BUTTON3_PIN 16
-#define BUTTON4_PIN 17
 
-#define LED1_PIN 19
-#define LED2_PIN 18
-#define LED3_PIN 7
-#define LED4_PIN 6
-#define LED5_PIN 5
 
 NeoICSerial serial_port;
 DSerialClient client(serial_port, MY_ADDRESS);
-KTANEModule module(client, 3, 4);
+KTANEModule module(client, 6, 7);
 
 uint8_t bottom_nums[5][4];
 uint8_t top_nums[5];

@@ -4,7 +4,7 @@
 
 NeoICSerial serial_port;
 DSerialClient client(serial_port, MY_ADDRESS);
-KTANEModule module(client, 12, 4);
+KTANEModule module(client, 2, 3);
 
 #define MAX_NUM_STAGES 5
 #define RED 1
@@ -12,8 +12,14 @@ KTANEModule module(client, 12, 4);
 #define GREEN 3
 #define BLUE 4
 
-int led_pins[4] = {8, 9, 10, 11};
+// Defines
+//Green clear Led 2
+//Red strike Led 3
 int button_pins[4] = {4, 5, 6, 7};
+//NeoICSerial RX-pin 8
+//NeoICSerial TX-pin 9
+int led_pins[4] = {10, 11, 12, 13};
+
 
 unsigned long last_button_action = 0;
 int last_action_multiplier;

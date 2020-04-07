@@ -6,13 +6,17 @@
 #include "mazeModule.h"
 
 // Defines
-#define DATA_PIN 12
-#define CLOCK_PIN 11
-#define LOAD_PIN 10
-#define UP_BTN 7
-#define DOWN_BTN 6
-#define LEFT_BTN 5
+//Green clear Led 2
+//Red strike Led 3
 #define RIGHT_BTN 4
+#define LEFT_BTN 5
+#define DOWN_BTN 6
+#define UP_BTN 7
+//NeoICSerial RX-pin 8
+//NeoICSerial TX-pin 9
+#define CLOCK_PIN 10
+#define LOAD_PIN 11
+#define DATA_PIN 12
 
 //Function prototypes
 int getBtnDir();
@@ -42,8 +46,8 @@ int dir;
  */
 LedControl lc = LedControl(DATA_PIN,CLOCK_PIN,LOAD_PIN,1);
 NeoICSerial serial_port;
-DSerialClient client(serial_port, 1);
-KTANEModule module(client, 3, 4);
+DSerialClient client(serial_port, MY_ADDRESS);
+KTANEModule module(client, 2, 3);
 
 int getBtnDir(){
   if (analogRead(UP_BTN) == 0){
