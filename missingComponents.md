@@ -18,4 +18,5 @@
 - Green LED x42
 - Red LED x4 
 - Big transparent button (3D-print)
-- Keyboard switches
+- Keyboard switches x~5
+- Small speaker
