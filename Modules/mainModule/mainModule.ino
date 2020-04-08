@@ -3,6 +3,8 @@
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
 #include "LedControl.h"
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(14, 15); // RX, TX
 
 // Defines
 #define SPEAKER_PIN 3
@@ -18,7 +20,7 @@
 
 //Function prototypes
 void toggleClockBlink();
-void playMelody(int *melody, int* durations, int melody_len);
+void playMelody(int *melody, int *durations, int melody_len);
 void youLose();
 void youWin();
 void getConfigESP();
@@ -30,12 +32,13 @@ int win_melody[] = {262, 330, 294, 370, 392};
 int win_melody_durations[] = {8, 8, 8, 8, 2};
 int win_melody_len = 5;
 int lose_melody[] = {659, 622, 587, 554};
-int lose_melody_durations[] = {8,8,8,1};
+int lose_melody_durations[] = {8, 8, 8, 1};
 int lose_melody_len = 4;
-unsigned long num_minutes;
+int num_minutes;
 unsigned long currentMillis;
 unsigned long previousMillis = 0;
 
+unsigned long count = 0;
 
 //Class inits
 /*
@@ -47,7 +50,7 @@ unsigned long previousMillis = 0;
  pin 10 is connected to LOAD 
  We have only a single MAX72XX.
  */
-LedControl lc = LedControl(DATA_PIN,CLOCK_PIN,LOAD_PIN,1);
+LedControl lc = LedControl(DATA_PIN, CLOCK_PIN, LOAD_PIN, 1);
 config_t config;
 NeoICSerial serial_port;
 DSerialMaster master(serial_port);
@@ -59,14 +62,15 @@ int solves = 0;
 unsigned long dest_time;
 int num_modules;
 
-
-
-void toggleClockBlink() {
+void toggleClockBlink()
+{
   digitalWrite(CLOCK_DOT, !digitalRead(CLOCK_DOT));
 }
 
-void playMelody(int *melody, int* durations, int melody_len) {
-  for (int thisNote = 0; thisNote < melody_len; thisNote++) {
+void playMelody(int *melody, int *durations, int melody_len)
+{
+  for (int thisNote = 0; thisNote < melody_len; thisNote++)
+  {
 
     int noteDuration = 1000 / durations[thisNote];
     tone(SPEAKER_PIN, melody[thisNote], noteDuration);
@@ -80,9 +84,10 @@ void playMelody(int *melody, int* durations, int melody_len) {
   }
 }
 
-void youLose() {
+void youLose()
+{
   // Play lose music
-  Serial.println("Loose");
+  mySerial.println("Loose");
   lc.clearDisplay(0);
   lc.setChar(0, 4, 'd', false);
   lc.setChar(0, 5, 'e', false);
@@ -91,16 +96,18 @@ void youLose() {
   playMelody(lose_melody, lose_melody_durations, lose_melody_len);
 
   // Stop clock
-  while(1){
+  while (1)
+  {
     delayWithUpdates(controller, 10);
   }
 }
 
-void youWin() {
+void youWin()
+{
   // Play win music
-  Serial.println("Win");
+  mySerial.println("Win");
 
-  digitalWrite(CLEAR_PIN, false);
+  digitalWrite(CLEAR_PIN, HIGH);
 
   lc.clearDisplay(0);
   lc.setDigit(0, 4, 5, false);
@@ -110,111 +117,122 @@ void youWin() {
   playMelody(win_melody, win_melody_durations, win_melody_len);
 
   // Stop clock
-  while(1){
+  while (1)
+  {
     delayWithUpdates(controller, 10);
   }
 }
 
-void getConfigESP(){
+void getConfigESP()
+{
   raw_config_t recv_config;
 
-  Serial.write(1);
-  while (Serial.available() <= 0) {
+  Serial.write("yo");
+  while (Serial.available() <= 0)
+  {
     delay(10);
   }
-  for(int i = 0; i < 7; i++) {
+  for (int i = 0; i < 7; i++)
+  {
     ((char *)(&recv_config))[i] = Serial.read();
   }
   num_minutes = Serial.read();
   raw_to_config(&recv_config, &config);
 }
 
-void getConfigManual(){
+void getConfigManual()
+{
   config.ports = 3;
   config.batteries = 1;
   config.indicators = 0;
-  strncpy(config.serial, "HA69", 6);
+  strncpy(config.serial, "123456", 6);
   config.serial[6] = '\0';
   num_minutes = 6;
 }
 
-void setup() {
+void setup()
+{
   // Serial setup
   serial_port.begin(19200);
   Serial.begin(19200);
+  mySerial.begin(19200);
 
   delay(1000);
 
-  Serial.println("Getting config");
-  //getConfigESP();
-  getConfigManual();
-  Serial.println("Got config");
-  Serial.write((uint8_t *)(&config), 7);
-  Serial.write(num_minutes);
-  Serial.println("\n");
+  mySerial.println("Getting config");
+  getConfigESP();
+  //getConfigManual();
+  mySerial.println("Got config");
+  mySerial.write((uint8_t *)(&config), 7);
+  mySerial.println();
+  mySerial.println(num_minutes);
+  mySerial.println();
 
   delay(100);
 
-  Serial.println("Setting up I/O-pins");
+  mySerial.println("Setting up I/O-pins");
   // LED/Speaker setup
-  pinMode(STRIKE_1_PIN,  OUTPUT);
-  pinMode(STRIKE_2_PIN,  OUTPUT);
-  pinMode(CLEAR_PIN,  OUTPUT);
-  pinMode(CLOCK_DOT,  OUTPUT);
-  pinMode(SPEAKER_PIN,   OUTPUT);
+  pinMode(STRIKE_1_PIN, OUTPUT);
+  pinMode(STRIKE_2_PIN, OUTPUT);
+  pinMode(CLEAR_PIN, OUTPUT);
+  pinMode(CLOCK_DOT, OUTPUT);
+  pinMode(SPEAKER_PIN, OUTPUT);
+
+  digitalWrite(STRIKE_1_PIN, LOW);
+  digitalWrite(STRIKE_2_PIN, LOW);
+  digitalWrite(CLEAR_PIN, LOW);
 
   // 7-segment setup
   pinMode(DATA_PIN, OUTPUT);
-  pinMode(CLOCK_PIN,  OUTPUT);
-  pinMode(LOAD_PIN,   OUTPUT);
+  pinMode(CLOCK_PIN, OUTPUT);
+  pinMode(LOAD_PIN, OUTPUT);
 
-  digitalWrite(CLEAR_PIN, true);
-
-  Serial.println("Initializing display");
+  mySerial.println("Initializing display");
   /*
    The MAX72XX is in power-saving mode on startup,
    we have to do a wakeup call
    */
-  lc.shutdown(0,false);
+  lc.shutdown(0, false);
   /* Set the brightness to a medium values */
-  lc.setIntensity(0,8);
+  lc.setIntensity(0, 8);
   /* and clear the display */
   lc.clearDisplay(0);
 
   delay(500);
 
-  Serial.println("Writing serial-number");
+  mySerial.println("Writing serial-number");
   // Serial alphanumeric setup
   lc.setChar(0, 4, config.serial[0], false);
   lc.setChar(0, 5, config.serial[1], false);
   lc.setChar(0, 6, config.serial[2], false);
   lc.setChar(0, 7, config.serial[3], false);
 
-
   delay(1000);
 
-  Serial.println("Get modules");
+  mySerial.println("Get modules");
   num_modules = master.identifyClients();
 
-  Serial.print("Number of modules: ");
-  Serial.println(num_modules);
+  mySerial.print("Number of modules: ");
+  mySerial.println(num_modules);
 
   controller.sendReset();
   delayWithUpdates(controller, 500);
-  Serial.println("Sending config to clients");
+  mySerial.println("Sending config to clients");
   controller.sendConfig(&config);
-  while(!controller.clientsAreReady()) {
+  while (!controller.clientsAreReady())
+  {
     controller.interpretData();
   }
 
-  dest_time = millis() + num_minutes*60*1000;
+  dest_time = millis() + num_minutes * 60 * 1000;
 
   controller.setTime(dest_time);
 
-  Serial.println("Done setup");
+  mySerial.println("Done setup");
 }
 
-void loop() {
+void loop()
+{
   //Serial.println("Getting data");
   controller.interpretData();
 
@@ -224,7 +242,7 @@ void loop() {
   {
     // save the last time you blinked the LED
     previousMillis = currentMillis;
-    Serial.println("blink");
+    //mySerial.println("blink");
     // if the LED is off turn it on and vice-versa:
     toggleClockBlink();
 
@@ -238,20 +256,26 @@ void loop() {
     lc.setDigit(0, 2, (byte)(seconds / 10), false);
     lc.setDigit(0, 3, (byte)(seconds % 10), false);
   }
+
+  if (millis() > dest_time)
+  {
+    youLose();
   }
 
-  if(strikes < controller.getStrikes()){
+  if (strikes < controller.getStrikes())
+  {
     tone(5, 340, 150);
     delayWithUpdates(controller, 200);
     tone(5, 140, 150);
     delayWithUpdates(controller, 150);
     noTone(5);
     strikes = controller.getStrikes();
-    Serial.println("STRIKE!");
-    Serial.println(strikes);
+    mySerial.println("STRIKE!");
+    mySerial.println(strikes);
   }
 
-  if(solves < controller.getSolves()){
+  if (solves < controller.getSolves())
+  {
     tone(5, 140, 150);
     delayWithUpdates(controller, 200);
     tone(5, 340, 150);
@@ -260,14 +284,16 @@ void loop() {
     solves = controller.getSolves();
   }
 
-  digitalWrite(STRIKE_1_PIN, !(strikes >= 1));
-  digitalWrite(STRIKE_2_PIN, !(strikes >= 2));
+  digitalWrite(STRIKE_1_PIN, strikes >= 1);
+  digitalWrite(STRIKE_2_PIN, strikes >= 2);
 
-  if(strikes >= 3){
+  if (strikes >= 3)
+  {
     youLose();
   }
 
-  if(controller.getSolves() >= num_modules) {
+  if (controller.getSolves() >= num_modules)
+  {
     youWin();
   }
 }
