@@ -36,7 +36,7 @@ const char INDEX_HTML[] =
 "<meta name = \"viewport\" content = \"width = device-width, initial-scale = 1.0, maximum-scale = 1.0, user-scalable=0\">"
 "<title>KTANE SETUP</title>"
 "<style>"
-"\"body { background-color: #808080; font-family: Arial, Helvetica, Sans-Serif; Color: #000000; }\""
+"body { background-color: #101010; font-family: Arial, Helvetica, Sans-Serif; Color: #808080; }"
 "</style>"
 "</head>"
 "<body>"
