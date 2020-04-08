@@ -220,27 +220,24 @@ void loop() {
 
   currentMillis = millis();
 
-  if (currentMillis - previousMillis >= 1000) {
+  if (currentMillis - previousMillis >= 500)
+  {
     // save the last time you blinked the LED
     previousMillis = currentMillis;
     Serial.println("blink");
     // if the LED is off turn it on and vice-versa:
     toggleClockBlink();
-  }
 
-
-  if(millis() > dest_time) {
-    youLose();
-  } else {
     // Update clock
     unsigned long diff_time = dest_time - millis();
     controller.setTime(diff_time);
-    int seconds = (diff_time / 1000)%60;
+    int seconds = (diff_time / 1000) % 60;
     int minutes = diff_time / 60000;
-    lc.setDigit(0, 0, minutes / 10, false);
-    lc.setDigit(0, 1, minutes % 10, false);
-    lc.setDigit(0, 2, seconds / 10, false);
-    lc.setDigit(0, 3, seconds % 10, false);
+    lc.setDigit(0, 0, (byte)(minutes / 10), false);
+    lc.setDigit(0, 1, (byte)(minutes % 10), false);
+    lc.setDigit(0, 2, (byte)(seconds / 10), false);
+    lc.setDigit(0, 3, (byte)(seconds % 10), false);
+  }
   }
 
   if(strikes < controller.getStrikes()){
