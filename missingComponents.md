@@ -21,3 +21,4 @@
 - Big transparent button (3D-print)
 - Keyboard switches x~5
 - Small speaker
+- 16-segment x7
