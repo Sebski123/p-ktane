@@ -109,7 +109,7 @@ void youWin()
 
   digitalWrite(CLEAR_PIN, HIGH);
 
-  lc.clearDisplay(0);
+  //lc.clearDisplay(0);
   lc.setDigit(0, 4, 5, false);
   lc.setChar(0, 5, 'u', false);
   lc.setChar(0, 6, 'c', false);
