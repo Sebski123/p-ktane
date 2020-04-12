@@ -64,7 +64,7 @@ int readPacket(Stream &s, char *buffer){
         if(passed_parity){
           return 1;
         } else {
-          return 1; //should be -1
+          return -1;
         }
       }
     }

@@ -1,9 +1,8 @@
 {
-    "programmer": "Arduino as ISP",
-    "board": "MiniCore:avr:328",
+    "programmer": "AVRISP mkII",
+    "board": "arduino:avr:uno",
     "sketch": "Modules\\mainModule\\mainModule.ino",
     "output": "./build",
     "port": "COM3",
-    "prebuild": "bash moveLibs.sh",
-    "configuration": "bootloader=uart0,variant=modelNonP,BOD=2v7,LTO=Os,clock=8MHz_internal"
+    "prebuild": "bash moveLibs.sh"
 }
