@@ -152,13 +152,15 @@ void getConfigManual()
 
 void setup()
 {
-  // Serial setup
+  #pragma region Serial setup
   serial_port.begin(19200);
   Serial.begin(19200);
   mySerial.begin(19200);
 
   delay(1000);
-
+  #pragma endregion
+  
+  #pragma region Get config
   mySerial.println("Getting config");
   getConfigESP();
   //getConfigManual();
@@ -166,10 +168,11 @@ void setup()
   mySerial.write((uint8_t *)(&config), 7);
   mySerial.println();
   mySerial.println(num_minutes);
-  mySerial.println();
 
   delay(100);
+  #pragma endregion
 
+  #pragma region I/O setup
   mySerial.println("Setting up I/O-pins");
   // LED/Speaker setup
   pinMode(STRIKE_1_PIN, OUTPUT);
@@ -186,7 +189,9 @@ void setup()
   pinMode(DATA_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
   pinMode(LOAD_PIN, OUTPUT);
+  #pragma endregion
 
+  #pragma region Display setup
   mySerial.println("Initializing display");
   /*
    The MAX72XX is in power-saving mode on startup,
@@ -199,7 +204,9 @@ void setup()
   lc.clearDisplay(0);
 
   delay(500);
+  #pragma endregion
 
+  #pragma region Serial setup
   mySerial.println("Writing serial-number");
   // Serial alphanumeric setup
   lc.setChar(0, 4, config.serial[0], false);
@@ -208,6 +215,7 @@ void setup()
   lc.setChar(0, 7, config.serial[3], false);
 
   delay(1000);
+  #pragma endregion
 
   mySerial.println("Get modules");
   num_modules = master.identifyClients();
@@ -215,6 +223,7 @@ void setup()
   mySerial.print("Number of modules: ");
   mySerial.println(num_modules);
 
+  #pragma region Prepare modules
   controller.sendReset();
   delayWithUpdates(controller, 500);
   mySerial.println("Sending config to clients");
@@ -223,9 +232,8 @@ void setup()
   {
     controller.interpretData();
   }
-
-  dest_time = millis() + num_minutes * 60 * 1000;
-
+  #pragma endregion
+  
   controller.setTime(dest_time);
 
   mySerial.println("Done setup");
@@ -250,7 +258,7 @@ void loop()
     unsigned long diff_time = dest_time - millis();
     controller.setTime(diff_time);
     int seconds = (diff_time / 1000) % 60;
-    int minutes = diff_time / 60000;
+    int minutes = diff_time / 60000;  
     lc.setDigit(0, 0, (byte)(minutes / 10), false);
     lc.setDigit(0, 1, (byte)(minutes % 10), false);
     lc.setDigit(0, 2, (byte)(seconds / 10), false);
