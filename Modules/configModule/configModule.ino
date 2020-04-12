@@ -20,8 +20,8 @@
 int led_pin = LED_BUILTIN;
 
 // Fill in your WiFi router SSID and password
-const char* ssid = "Sebastian";
-const char* password = "12341234";
+const char* ssid = "KatjaKaj";
+const char* password = "Sebastianqaz";
 MDNSResponder mdns;
 
 ESP8266WebServer server(80);
