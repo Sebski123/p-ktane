@@ -13,11 +13,12 @@ KTANEModule module(client, 2, 3);
 #define WHITE 1
 #define BLUE 2
 #define YELLOW 3
-#define RED 4
-#define BLACK 5
+#define BLACK 4
+#define RED 5
 
+char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Red", "Black"};
 // Defines
-//Pin header A0     red, black, yellow, blue, white
+//Pin header A0 
 //Pin header A1     
 //Pin header A2
 //Pin header A3
@@ -42,23 +43,23 @@ int voltageToWire(int voltage)
   }
   else if (voltage < 138)
   {
-    return 1;
+    return WHITE;
   }
   else if (voltage < 384)
   {
-    return 2;
+    return BLUE;
   }
   else if (voltage < 640)
   {
-    return 3;
+    return YELLOW;
   }
   else if (voltage < 896)
   {
-    return 4;
+    return RED;
   }
   else
   {
-    return 5;
+    return BLACK;
   }
   return 0;
 }
@@ -121,7 +122,7 @@ void setup()
   pinMode(A5, INPUT);
 
 
-  Serial.print("wires: "); 
+  Serial.print("Raw:\t"); 
 
   for (int i = 0; i < 6; i++)
   {
@@ -139,7 +140,7 @@ void setup()
 
   Serial.println();
 
-  Serial.print("wires: "); 
+  Serial.print("wires:\t"); 
   for (int i = 0; i < 6; i++)
   {
     Serial.print(wires[i]);
@@ -147,14 +148,17 @@ void setup()
   }
   Serial.println();
 
-  Serial.print("num_wires: ");
-  Serial.println(num_wires);
 
-  for (int i = 0; i < 100; i++)
+  Serial.print("Color:\t"); 
+  for (int i = 0; i < 6; i++)
   {
-    //Serial.println(analogRead(3));
+    Serial.print(debug_color[wires[i]]);
+    Serial.print("\t");
   }
   Serial.println();
+
+  Serial.print("num_wires: ");
+  Serial.println(num_wires);
 
 
   Serial.println("Getting config");
