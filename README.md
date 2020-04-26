@@ -62,6 +62,7 @@
 
 ## How to upload sketches
 ### Wiring
+1. Remove ATmega328 from Arduino
 1. Connect Arduino to the ATMega as shown below.
 ![https://i.imgur.com/xxt5Faa.png](https://i.imgur.com/xxt5Faa.png)
 
