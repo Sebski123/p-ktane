@@ -3,7 +3,7 @@
 #include "NeoICSerial.h"
 
 NeoICSerial serial_port;
-DSerialClient client(serial_port, MY_ADDRESS);
+DSerialClient client(serial_port, 0x02);
 KTANEModule module(client, 2, 3);
 
 #define MAX_NUM_STAGES 5
@@ -53,11 +53,11 @@ void update_lights(){
     }
   } else {
     if((light_stage % 2 == 0) && (millis() - old_millis > 300)) {
-      digitalWrite(led_pins[stage_colors[light_stage/2]], HIGH);
+      digitalWrite(led_pins[stage_colors[light_stage/2]], LOW);
       old_millis = millis();
       light_stage++;
     } else if((light_stage % 2 == 1) && (millis() - old_millis > 700)) {
-      digitalWrite(led_pins[stage_colors[light_stage/2]], LOW);
+      digitalWrite(led_pins[stage_colors[light_stage/2]], HIGH);
       old_millis = millis();
       light_stage++;
     }
@@ -66,13 +66,13 @@ void update_lights(){
 
 int get_button(){
   int button_pressed = 0;
-  if(digitalRead(button_pins[0])) {
+  if(!digitalRead(button_pins[0])) {
     button_pressed = RED;
-  } else if(digitalRead(button_pins[1])) {
+  } else if(!digitalRead(button_pins[1])) {
     button_pressed = YELLOW;
-  } else if(digitalRead(button_pins[2])) {
+  } else if(!digitalRead(button_pins[2])) {
     button_pressed = GREEN;
-  } else if(digitalRead(button_pins[3])) {
+  } else if(!digitalRead(button_pins[3])) {
     button_pressed = BLUE;
   }
   return button_pressed;
@@ -82,6 +82,8 @@ void setup() {
   serial_port.begin(19200);
   Serial.begin(19200);
 
+  Serial.println("Begin setup");
+
   pinMode(button_pins[0], INPUT);
   pinMode(button_pins[1], INPUT);
   pinMode(button_pins[2], INPUT);
@@ -90,14 +92,18 @@ void setup() {
   pinMode(led_pins[1], OUTPUT);
   pinMode(led_pins[2], OUTPUT);
   pinMode(led_pins[3], OUTPUT);
-  digitalWrite(led_pins[0], LOW);
-  digitalWrite(led_pins[1], LOW);
-  digitalWrite(led_pins[2], LOW);
-  digitalWrite(led_pins[3], LOW);
+  digitalWrite(led_pins[0], HIGH);
+  digitalWrite(led_pins[1], HIGH);
+  digitalWrite(led_pins[2], HIGH);
+  digitalWrite(led_pins[3], HIGH);
+
+  Serial.println("Getting config");
 
   while(!module.getConfig()){
     module.interpretData();
   }
+
+  Serial.println("Got config");
 
   randomSeed(config_to_seed(module.getConfig()));
   num_stages = random(3, MAX_NUM_STAGES + 1);
@@ -107,11 +113,26 @@ void setup() {
   }
   stage = 0;
 
+  Serial.print("Num stages: ");
+  Serial.println(num_stages);
+  
+  for (int i = 0; i < num_stages; i++)
+  {
+    Serial.print(stage_colors[i]);
+    Serial.print("\t");
+  }
+  Serial.println();
+
+  Serial.print("Vowel? ");
+  Serial.println(module.serialContainsVowel());
+
+  Serial.println("Done with setup");
   module.sendReady();
 }
 
 void loop() {
   module.interpretData();
+
   if(!module.is_solved){
     int vowel = module.serialContainsVowel();
     int strikes = module.getNumStrikes();
@@ -140,10 +161,12 @@ void loop() {
           }
           if(stage == num_stages) {
             module.win();
+            Serial.println("win!");
           }
         } else {
           button_stage = 0;
           module.strike();
+          Serial.println("strike");
         }
       }
     }
