@@ -21202,17 +21202,11 @@ DIN A4, landscape with location and doc. field</description>
 <part name="U$2" library="ESP12E_DEVKIT" deviceset="ESP12E_DEVKIT" device=""/>
 <part name="S1" library="switch" deviceset="320-938" device=""/>
 <part name="R43" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="R-US_" device="0309/12" package3d_urn="urn:adsk.eagle:package:6240604/1" value="10k"/>
-<part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
 <part name="R44" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="R-US_" device="0309/12" package3d_urn="urn:adsk.eagle:package:6240604/1" value="10k"/>
-<part name="SUPPLY40" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
 <part name="R45" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="R-US_" device="0309/12" package3d_urn="urn:adsk.eagle:package:6240604/1" value="10k"/>
-<part name="SUPPLY41" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
 <part name="R46" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="R-US_" device="0309/12" package3d_urn="urn:adsk.eagle:package:6240604/1" value="10k"/>
-<part name="SUPPLY42" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
 <part name="R47" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="R-US_" device="0309/12" package3d_urn="urn:adsk.eagle:package:6240604/1" value="10k"/>
-<part name="SUPPLY43" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
 <part name="R48" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="R-US_" device="0309/12" package3d_urn="urn:adsk.eagle:package:6240604/1" value="10k"/>
-<part name="SUPPLY44" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
 <part name="CN7" library="con-hdrs40" deviceset="HDR-1X2" device="-MTA-100"/>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
 <part name="FRAME2" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
@@ -21220,6 +21214,12 @@ DIN A4, landscape with location and doc. field</description>
 <part name="FRAME4" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
 <part name="FRAME5" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
 <part name="FRAME6" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
+<part name="VCC6" library="m-pad-2.1" deviceset="VCC" device=""/>
+<part name="VCC20" library="m-pad-2.1" deviceset="VCC" device=""/>
+<part name="VCC21" library="m-pad-2.1" deviceset="VCC" device=""/>
+<part name="VCC22" library="m-pad-2.1" deviceset="VCC" device=""/>
+<part name="VCC23" library="m-pad-2.1" deviceset="VCC" device=""/>
+<part name="VCC24" library="m-pad-2.1" deviceset="VCC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -21356,9 +21356,6 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="-245.3386" y="123.19" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="-240.538" y="123.19" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY5" gate="G$1" x="-246.38" y="137.16" smashed="yes" rot="R270">
-<attribute name="VALUE" x="-249.555" y="137.16" size="1.778" layer="96" rot="R270" align="center"/>
-</instance>
 <instance part="CN7" gate="G$1" x="-233.68" y="22.86" smashed="yes" rot="R180">
 <attribute name="NAME" x="-231.775" y="20.32" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="-231.775" y="29.5275" size="1.778" layer="96" rot="R180"/>
@@ -21367,6 +21364,9 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="DRAWING_NAME" x="-41.91" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="-41.91" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="-28.575" y="5.08" size="2.54" layer="94"/>
+</instance>
+<instance part="VCC20" gate="1" x="-243.84" y="137.16" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-247.142" y="135.001" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -21863,11 +21863,6 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="-182.88" y1="22.86" x2="-180.34" y2="22.86" width="0.1524" layer="91"/>
 <label x="-180.34" y="22.86" size="1.778" layer="95" rot="MR180"/>
 </segment>
-<segment>
-<pinref part="SUPPLY5" gate="G$1" pin="GND"/>
-<pinref part="R43" gate="G$1" pin="2"/>
-<wire x1="-243.84" y1="137.16" x2="-243.84" y2="132.08" width="0.1524" layer="91"/>
-</segment>
 </net>
 <net name="VCC" class="0">
 <segment>
@@ -21891,6 +21886,11 @@ DIN A4, landscape with location and doc. field</description>
 <pinref part="CN6" gate="G$1" pin="5"/>
 <wire x1="-182.88" y1="33.02" x2="-180.34" y2="33.02" width="0.1524" layer="91"/>
 <label x="-180.34" y="33.02" size="1.778" layer="95" rot="MR180"/>
+</segment>
+<segment>
+<pinref part="R43" gate="G$1" pin="2"/>
+<wire x1="-243.84" y1="137.16" x2="-243.84" y2="132.08" width="0.1524" layer="91"/>
+<pinref part="VCC20" gate="1" pin="VCC"/>
 </segment>
 </net>
 <net name="N$115" class="0">
@@ -22145,13 +22145,13 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="-80.2386" y="36.83" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="-75.438" y="36.83" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY40" gate="G$1" x="-81.28" y="50.8" smashed="yes" rot="R270">
-<attribute name="VALUE" x="-84.455" y="50.8" size="1.778" layer="96" rot="R270" align="center"/>
-</instance>
 <instance part="FRAME2" gate="G$1" x="-127" y="-76.2" smashed="yes">
 <attribute name="DRAWING_NAME" x="90.17" y="-60.96" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="90.17" y="-66.04" size="2.286" layer="94"/>
 <attribute name="SHEET" x="103.505" y="-71.12" size="2.54" layer="94"/>
+</instance>
+<instance part="VCC6" gate="1" x="-78.74" y="50.8" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-82.042" y="48.641" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -22304,6 +22304,11 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="-109.22" y1="-15.24" x2="-106.68" y2="-15.24" width="0.1524" layer="91"/>
 <label x="-106.68" y="-15.24" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R44" gate="G$1" pin="2"/>
+<wire x1="-78.74" y1="50.8" x2="-78.74" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="VCC6" gate="1" pin="VCC"/>
+</segment>
 </net>
 <net name="N$70" class="0">
 <segment>
@@ -22370,11 +22375,6 @@ DIN A4, landscape with location and doc. field</description>
 <pinref part="CN5" gate="G$1" pin="1"/>
 <wire x1="-109.22" y1="-5.08" x2="-106.68" y2="-5.08" width="0.1524" layer="91"/>
 <label x="-106.68" y="-5.08" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="SUPPLY40" gate="G$1" pin="GND"/>
-<pinref part="R44" gate="G$1" pin="2"/>
-<wire x1="-78.74" y1="50.8" x2="-78.74" y2="45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$43" class="0">
@@ -22715,13 +22715,13 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="-100.5586" y="29.21" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="-95.758" y="29.21" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY41" gate="G$1" x="-101.6" y="43.18" smashed="yes" rot="R270">
-<attribute name="VALUE" x="-104.775" y="43.18" size="1.778" layer="96" rot="R270" align="center"/>
-</instance>
 <instance part="FRAME3" gate="G$1" x="-137.16" y="-88.9" smashed="yes">
 <attribute name="DRAWING_NAME" x="80.01" y="-73.66" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="80.01" y="-78.74" size="2.286" layer="94"/>
 <attribute name="SHEET" x="93.345" y="-83.82" size="2.54" layer="94"/>
+</instance>
+<instance part="VCC21" gate="1" x="-99.06" y="43.18" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-102.362" y="41.021" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -23171,11 +23171,6 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="-66.04" y1="-55.88" x2="-63.5" y2="-55.88" width="0.1524" layer="91"/>
 <label x="-63.5" y="-55.88" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="SUPPLY41" gate="G$1" pin="GND"/>
-<pinref part="R45" gate="G$1" pin="2"/>
-<wire x1="-99.06" y1="43.18" x2="-99.06" y2="38.1" width="0.1524" layer="91"/>
-</segment>
 </net>
 <net name="VCC" class="0">
 <segment>
@@ -23226,6 +23221,11 @@ DIN A4, landscape with location and doc. field</description>
 <pinref part="CN4" gate="G$1" pin="5"/>
 <wire x1="-66.04" y1="-66.04" x2="-63.5" y2="-66.04" width="0.1524" layer="91"/>
 <label x="-63.5" y="-66.04" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R45" gate="G$1" pin="2"/>
+<wire x1="-99.06" y1="43.18" x2="-99.06" y2="38.1" width="0.1524" layer="91"/>
+<pinref part="VCC21" gate="1" pin="VCC"/>
 </segment>
 </net>
 <net name="N$67" class="0">
@@ -23459,13 +23459,13 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="-90.17" y="-62.4586" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="-90.17" y="-57.658" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="SUPPLY42" gate="G$1" x="-104.14" y="-63.5" smashed="yes">
-<attribute name="VALUE" x="-104.14" y="-66.675" size="1.778" layer="96" align="center"/>
-</instance>
 <instance part="FRAME4" gate="G$1" x="-129.54" y="-93.98" smashed="yes">
 <attribute name="DRAWING_NAME" x="87.63" y="-78.74" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="87.63" y="-83.82" size="2.286" layer="94"/>
 <attribute name="SHEET" x="100.965" y="-88.9" size="2.54" layer="94"/>
+</instance>
+<instance part="VCC22" gate="1" x="-104.14" y="-60.96" smashed="yes" rot="R180">
+<attribute name="VALUE" x="-101.981" y="-64.262" size="1.778" layer="96" rot="R180"/>
 </instance>
 </instances>
 <busses>
@@ -23520,11 +23520,6 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="15.24" y1="-22.86" x2="17.78" y2="-22.86" width="0.1524" layer="91"/>
 <label x="17.78" y="-22.86" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="SUPPLY42" gate="G$1" pin="GND"/>
-<pinref part="R46" gate="G$1" pin="2"/>
-<wire x1="-104.14" y1="-60.96" x2="-99.06" y2="-60.96" width="0.1524" layer="91"/>
-</segment>
 </net>
 <net name="VCC" class="0">
 <segment>
@@ -23566,6 +23561,11 @@ DIN A4, landscape with location and doc. field</description>
 <pinref part="CN3" gate="G$1" pin="5"/>
 <wire x1="15.24" y1="-33.02" x2="17.78" y2="-33.02" width="0.1524" layer="91"/>
 <label x="17.78" y="-33.02" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R46" gate="G$1" pin="2"/>
+<wire x1="-104.14" y1="-60.96" x2="-99.06" y2="-60.96" width="0.1524" layer="91"/>
+<pinref part="VCC22" gate="1" pin="VCC"/>
 </segment>
 </net>
 <net name="N$21" class="0">
@@ -23841,13 +23841,13 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="-70.0786" y="49.53" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="-65.278" y="49.53" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY43" gate="G$1" x="-71.12" y="63.5" smashed="yes" rot="R270">
-<attribute name="VALUE" x="-74.295" y="63.5" size="1.778" layer="96" rot="R270" align="center"/>
-</instance>
 <instance part="FRAME5" gate="G$1" x="-129.54" y="-91.44" smashed="yes">
 <attribute name="DRAWING_NAME" x="87.63" y="-76.2" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="87.63" y="-81.28" size="2.286" layer="94"/>
 <attribute name="SHEET" x="100.965" y="-86.36" size="2.54" layer="94"/>
+</instance>
+<instance part="VCC23" gate="1" x="-68.58" y="63.5" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-71.882" y="61.341" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -23903,11 +23903,6 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="-104.14" y1="17.78" x2="-101.6" y2="17.78" width="0.1524" layer="91"/>
 <label x="-101.6" y="17.78" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="SUPPLY43" gate="G$1" pin="GND"/>
-<pinref part="R47" gate="G$1" pin="2"/>
-<wire x1="-68.58" y1="63.5" x2="-68.58" y2="58.42" width="0.1524" layer="91"/>
-</segment>
 </net>
 <net name="VCC" class="0">
 <segment>
@@ -23943,6 +23938,11 @@ DIN A4, landscape with location and doc. field</description>
 <pinref part="CN2" gate="G$1" pin="5"/>
 <wire x1="-104.14" y1="7.62" x2="-101.6" y2="7.62" width="0.1524" layer="91"/>
 <label x="-101.6" y="7.62" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R47" gate="G$1" pin="2"/>
+<wire x1="-68.58" y1="63.5" x2="-68.58" y2="58.42" width="0.1524" layer="91"/>
+<pinref part="VCC23" gate="1" pin="VCC"/>
 </segment>
 </net>
 <net name="N$77" class="0">
@@ -24381,13 +24381,13 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="-110.7186" y="-21.59" size="1.778" layer="95" rot="MR270"/>
 <attribute name="VALUE" x="-105.918" y="-21.59" size="1.778" layer="96" rot="MR270"/>
 </instance>
-<instance part="SUPPLY44" gate="G$1" x="-111.76" y="-35.56" smashed="yes" rot="MR90">
-<attribute name="VALUE" x="-114.935" y="-35.56" size="1.778" layer="96" rot="MR90" align="center"/>
-</instance>
 <instance part="FRAME6" gate="G$1" x="-127" y="-83.82" smashed="yes">
 <attribute name="DRAWING_NAME" x="90.17" y="-68.58" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="90.17" y="-73.66" size="2.286" layer="94"/>
 <attribute name="SHEET" x="103.505" y="-78.74" size="2.54" layer="94"/>
+</instance>
+<instance part="VCC24" gate="1" x="-109.22" y="-35.56" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-112.522" y="-37.719" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -24444,11 +24444,6 @@ DIN A4, landscape with location and doc. field</description>
 <pinref part="CN1" gate="G$1" pin="1"/>
 <wire x1="-38.1" y1="60.96" x2="-35.56" y2="60.96" width="0.1524" layer="91"/>
 <label x="-35.56" y="60.96" size="1.778" layer="95" rot="MR180"/>
-</segment>
-<segment>
-<pinref part="SUPPLY44" gate="G$1" pin="GND"/>
-<pinref part="R48" gate="G$1" pin="2"/>
-<wire x1="-109.22" y1="-35.56" x2="-109.22" y2="-30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -24511,6 +24506,11 @@ DIN A4, landscape with location and doc. field</description>
 <pinref part="CN1" gate="G$1" pin="5"/>
 <wire x1="-38.1" y1="71.12" x2="-35.56" y2="71.12" width="0.1524" layer="91"/>
 <label x="-35.56" y="71.12" size="1.778" layer="95" rot="MR180"/>
+</segment>
+<segment>
+<pinref part="R48" gate="G$1" pin="2"/>
+<wire x1="-109.22" y1="-35.56" x2="-109.22" y2="-30.48" width="0.1524" layer="91"/>
+<pinref part="VCC24" gate="1" pin="VCC"/>
 </segment>
 </net>
 <net name="N$90" class="0">
