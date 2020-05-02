@@ -3,8 +3,9 @@
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
 #include "LedControl.h"
+#include "MAX6954.h"
 #include <SoftwareSerial.h>
-SoftwareSerial mySerial(14, 15); // RX, TX
+
 
 // Defines
 #define SPEAKER_PIN 3
@@ -14,9 +15,17 @@ SoftwareSerial mySerial(14, 15); // RX, TX
 #define CLOCK_DOT 7
 //NeoICSerial RX-pin 8
 //NeoICSerial TX-pin 9
-#define CLOCK_PIN 10
-#define LOAD_PIN 11
-#define DATA_PIN 12
+#define CLOCK_CLK 10
+#define CLOCK_LOAD 11
+#define CLOCK_DATA 12
+
+#define DBG_RX  14
+#define DBG_TX  15
+#define SERIAL_CS      16   // Chip Select
+#define SERIAL_DATAOUT 17   // MOSI
+#define SERIAL_CLK     18   // SCK
+
+
 
 //Function prototypes
 void toggleClockBlink();
@@ -50,7 +59,9 @@ unsigned long count = 0;
  pin 10 is connected to LOAD 
  We have only a single MAX72XX.
  */
-LedControl lc = LedControl(DATA_PIN, CLOCK_PIN, LOAD_PIN, 1);
+SoftwareSerial mySerial(DBG_RX, DBG_TX);
+MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
+LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
 config_t config;
 NeoICSerial serial_port;
 DSerialMaster master(serial_port);
@@ -88,11 +99,11 @@ void youLose()
 {
   // Play lose music
   mySerial.println("Loose");
-  lc.clearDisplay(0);
-  lc.setChar(0, 4, 'd', false);
-  lc.setChar(0, 5, 'e', false);
-  lc.setChar(0, 6, 'a', false);
-  lc.setChar(0, 7, 'd', false);
+  clock.clearDisplay(0);
+  clock.setChar(0, 4, 'd', false);
+  clock.setChar(0, 5, 'e', false);
+  clock.setChar(0, 6, 'a', false);
+  clock.setChar(0, 7, 'd', false);
   playMelody(lose_melody, lose_melody_durations, lose_melody_len);
 
   // Stop clock
@@ -110,10 +121,10 @@ void youWin()
   digitalWrite(CLEAR_PIN, HIGH);
 
   //lc.clearDisplay(0);
-  lc.setDigit(0, 4, 5, false);
-  lc.setChar(0, 5, 'u', false);
-  lc.setChar(0, 6, 'c', false);
-  lc.setChar(0, 7, 'c', false);
+  clock.setDigit(0, 4, 5, false);
+  clock.setChar(0, 5, 'u', false);
+  clock.setChar(0, 6, 'c', false);
+  clock.setChar(0, 7, 'c', false);
   playMelody(win_melody, win_melody_durations, win_melody_len);
 
   // Stop clock
@@ -185,10 +196,6 @@ void setup()
   digitalWrite(STRIKE_2_PIN, LOW);
   digitalWrite(CLEAR_PIN, LOW);
 
-  // 7-segment setup
-  pinMode(DATA_PIN, OUTPUT);
-  pinMode(CLOCK_PIN, OUTPUT);
-  pinMode(LOAD_PIN, OUTPUT);
   #pragma endregion
 
   #pragma region Display setup
@@ -197,11 +204,17 @@ void setup()
    The MAX72XX is in power-saving mode on startup,
    we have to do a wakeup call
    */
-  lc.shutdown(0, false);
+  serialnr.begin();
+  clock.shutdown(0, false);
   /* Set the brightness to a medium values */
-  lc.setIntensity(0, 8);
+  serialnr.set_global_brightness(8);
+  clock.setIntensity(0, 8);
   /* and clear the display */
-  lc.clearDisplay(0);
+  clock.clearDisplay(0);
+  serialnr.clear();
+
+  // Write serial
+  serialnr.write_string(config.serial);
 
   delay(500);
   #pragma endregion
@@ -209,10 +222,10 @@ void setup()
   #pragma region Serial setup
   mySerial.println("Writing serial-number");
   // Serial alphanumeric setup
-  lc.setChar(0, 4, config.serial[0], false);
-  lc.setChar(0, 5, config.serial[1], false);
-  lc.setChar(0, 6, config.serial[2], false);
-  lc.setChar(0, 7, config.serial[3], false);
+  clock.setChar(0, 4, config.serial[0], false);
+  clock.setChar(0, 5, config.serial[1], false);
+  clock.setChar(0, 6, config.serial[2], false);
+  clock.setChar(0, 7, config.serial[3], false);
 
   delay(1000);
   #pragma endregion
@@ -225,9 +238,10 @@ void setup()
 
   #pragma region Prepare modules
   controller.sendReset();
-  delayWithUpdates(controller, 500);
+  delayWithUpdates(controller, 1000);
   mySerial.println("Sending config to clients");
-  controller.sendConfig(&config);
+  int test = controller.sendConfig(&config);
+  mySerial.println(test);
   while (!controller.clientsAreReady())
   {
     controller.interpretData();
@@ -260,10 +274,10 @@ void loop()
     controller.setTime(diff_time);
     int seconds = (diff_time / 1000) % 60;
     int minutes = diff_time / 60000;  
-    lc.setDigit(0, 0, (minutes / 10), false);
-    lc.setDigit(0, 1, (minutes % 10), false);
-    lc.setDigit(0, 2, (seconds / 10), false);
-    lc.setDigit(0, 3, (seconds % 10), false);
+    clock.setDigit(0, 0, (minutes / 10), false);
+    clock.setDigit(0, 1, (minutes % 10), false);
+    clock.setDigit(0, 2, (seconds / 10), false);
+    clock.setDigit(0, 3, (seconds % 10), false);
   }
 
   if (millis() > dest_time)
