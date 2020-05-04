@@ -15,9 +15,9 @@
 #define CLOCK_DOT 7
 //NeoICSerial RX-pin 8
 //NeoICSerial TX-pin 9
-#define CLOCK_CLK 10
+#define CLOCK_DATA 10
 #define CLOCK_LOAD 11
-#define CLOCK_DATA 12
+#define CLOCK_CLK 12
 
 #define DBG_RX  14
 #define DBG_TX  15
