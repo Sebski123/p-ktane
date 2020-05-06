@@ -99,11 +99,7 @@ void youLose()
 {
   // Play lose music
   mySerial.println("Loose");
-  clock.clearDisplay(0);
-  clock.setChar(0, 4, 'd', false);
-  clock.setChar(0, 5, 'e', false);
-  clock.setChar(0, 6, 'a', false);
-  clock.setChar(0, 7, 'd', false);
+  serialnr.write_string(" boom ");
   playMelody(lose_melody, lose_melody_durations, lose_melody_len);
 
   // Stop clock
@@ -120,11 +116,7 @@ void youWin()
 
   digitalWrite(CLEAR_PIN, HIGH);
 
-  //lc.clearDisplay(0);
-  clock.setDigit(0, 4, 5, false);
-  clock.setChar(0, 5, 'u', false);
-  clock.setChar(0, 6, 'c', false);
-  clock.setChar(0, 7, 'c', false);
+  serialnr.write_string("winner");
   playMelody(win_melody, win_melody_durations, win_melody_len);
 
   // Stop clock
@@ -212,9 +204,7 @@ void setup()
   /* and clear the display */
   clock.clearDisplay(0);
   serialnr.clear();
-
-  // Write serial
-  serialnr.write_string(config.serial);
+ 
 
   delay(500);
   #pragma endregion
@@ -222,10 +212,7 @@ void setup()
   #pragma region Serial setup
   mySerial.println("Writing serial-number");
   // Serial alphanumeric setup
-  clock.setChar(0, 4, config.serial[0], false);
-  clock.setChar(0, 5, config.serial[1], false);
-  clock.setChar(0, 6, config.serial[2], false);
-  clock.setChar(0, 7, config.serial[3], false);
+  serialnr.write_string(config.serial);
 
   delay(1000);
   #pragma endregion
