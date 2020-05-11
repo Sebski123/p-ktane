@@ -16,7 +16,7 @@ KTANEModule module(client, 2, 3);
 #define BLACK 4
 #define RED 5
 
-char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Red", "Black"};
+char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
 // Defines
 //Pin header A0 
 //Pin header A1     
@@ -55,11 +55,11 @@ int voltageToWire(int voltage)
   }
   else if (voltage < 896)
   {
-    return RED;
+    return BLACK;
   }
   else
   {
-    return BLACK;
+    return RED;
   }
   return 0;
 }
@@ -113,7 +113,7 @@ void setup()
 
   Serial.println("Begin setup");
 
-  // Detect wires:
+  #pragma region Detect wires:
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
   pinMode(A2, INPUT);
@@ -137,6 +137,7 @@ void setup()
     }
     delay(10);
   }
+  #pragma endregion
 
   Serial.println();
 
@@ -294,10 +295,12 @@ void loop()
             if (i == cut_index)
             {
               module.win();
+              Serial.println("WIN");
             }
             else
             {
               module.strike();
+              Serial.println("Strike");
               wires[i] = voltageToWire(analogRead(i));
             }
           }
