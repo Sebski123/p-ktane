@@ -138,7 +138,7 @@ void setup()
     delay(10);
   }
   #pragma endregion
-
+  
   Serial.println();
 
   Serial.print("wires:\t"); 
@@ -287,10 +287,10 @@ void loop()
     {
       if (wires[i] != 0)
       {
-        if (wires[i] != voltageToWire(analogRead(i)))
+        if ((wires[i] != voltageToWire(analogRead(i)) && (analogRead(i) < 10)))
         {
           delayWithUpdates(module, 100);
-          if (wires[i] != voltageToWire(analogRead(i)))
+          if ((wires[i] != voltageToWire(analogRead(i)) && (analogRead(i) < 10)))
           { // Check again for debouncing reasons
             if (i == cut_index)
             {
