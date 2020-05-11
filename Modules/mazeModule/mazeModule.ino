@@ -46,7 +46,7 @@ int dir;
  */
 LedControl lc = LedControl(DATA_PIN,CLOCK_PIN,LOAD_PIN,1);
 NeoICSerial serial_port;
-DSerialClient client(serial_port, MY_ADDRESS);
+DSerialClient client(serial_port, 0x02);
 KTANEModule module(client, 2, 3);
 
 int getBtnDir(){
