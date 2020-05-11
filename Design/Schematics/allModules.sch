@@ -23928,6 +23928,10 @@ distributor RS Components</description>
 <pinref part="LED34" gate="G$1" pin="C"/>
 <pinref part="LED35" gate="G$1" pin="C"/>
 <pinref part="LED36" gate="G$1" pin="C"/>
+<pinref part="IC2" gate="G$1" pin="DIG4"/>
+<wire x1="25.4" y1="15.24" x2="99.06" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="99.06" y1="15.24" x2="99.06" y2="2.54" width="0.1524" layer="91"/>
+<junction x="99.06" y="2.54"/>
 </segment>
 </net>
 <net name="N$58" class="0">
@@ -23947,9 +23951,6 @@ distributor RS Components</description>
 <wire x1="104.14" y1="-10.16" x2="111.76" y2="-10.16" width="0.1524" layer="91"/>
 <junction x="111.76" y="-10.16"/>
 <wire x1="104.14" y1="2.54" x2="111.76" y2="2.54" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="DIG4"/>
-<wire x1="25.4" y1="15.24" x2="111.76" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="111.76" y1="15.24" x2="111.76" y2="2.54" width="0.1524" layer="91"/>
 <junction x="111.76" y="2.54"/>
 <pinref part="LED15" gate="G$1" pin="C"/>
 <pinref part="LED16" gate="G$1" pin="C"/>
@@ -23957,6 +23958,9 @@ distributor RS Components</description>
 <pinref part="LED18" gate="G$1" pin="C"/>
 <pinref part="LED19" gate="G$1" pin="C"/>
 <pinref part="LED20" gate="G$1" pin="C"/>
+<pinref part="IC2" gate="G$1" pin="DIG5"/>
+<wire x1="111.76" y1="12.7" x2="111.76" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="25.4" y1="12.7" x2="111.76" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$61" class="0">
