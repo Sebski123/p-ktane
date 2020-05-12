@@ -1,3 +1,4 @@
 *.s#*
 build/**
 .vscode/c_cpp_properties.json
+Modules/configModule/config.html

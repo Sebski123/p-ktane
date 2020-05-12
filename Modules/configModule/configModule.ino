@@ -16,6 +16,9 @@
 #include <ESP8266mDNS.h>
 #include "KTANECommon.h"
 #include <EEPROM.h>
+#include "configModule.h"
+
+extern const char INDEX_HTML[];
 
 int led_pin = LED_BUILTIN;
 
@@ -29,58 +32,7 @@ ESP8266WebServer server(80);
 raw_config_t stored_config;
 int num_minutes;
 
-const char INDEX_HTML[] =
-"<!DOCTYPE HTML>"
-"<html>"
-"<head>"
-"<meta name = \"viewport\" content = \"width = device-width, initial-scale = 1.0, maximum-scale = 1.0, user-scalable=0\">"
-"<title>KTANE SETUP</title>"
-"<style>"
-"body { background-color: #101010; font-family: Arial, Helvetica, Sans-Serif; Color: #808080; }"
-"</style>"
-"</head>"
-"<body>"
-"<h1>KTANE setup</h1>"
-"<FORM action=\"/\" method=\"post\">"
-"<P>"
-"<b>Configure external features</b><br><br>"
-"Serial Number: <INPUT type=\"text\" name=\"serial_num\"><BR>"
-"Defuse time in minutes: "
-"<select name=\"num_minutes\">"
-"  <option value=\"0\">0</option>"
-"  <option value=\"1\">1</option>"
-"  <option value=\"2\">2</option>"
-"  <option value=\"3\">3</option>"
-"  <option value=\"4\">4</option>"
-"  <option value=\"5\">5</option>"
-"  <option value=\"6\" selected>6</option>"
-"  <option value=\"7\">7</option>"
-"  <option value=\"8\">8</option>"
-"  <option value=\"9\">9</option>"
-"</select><BR>"
-"Number of batteries: "
-"<select name=\"num_batteries\">"
-"  <option value=\"0\">0</option>"
-"  <option value=\"1\">1</option>"
-"  <option value=\"2\">2</option>"
-"  <option value=\"3\">3</option>"
-"  <option value=\"4\">4</option>"
-"  <option value=\"5\">5</option>"
-"  <option value=\"6\">6</option>"
-"  <option value=\"7\">7</option>"
-"</select><BR>"
-"Other items: <br>"
-"<input type=\"checkbox\" name=\"port1\" value=\"port1\"> Lit FRK indicator<br>"
-"<input type=\"checkbox\" name=\"port2\" value=\"port2\"> Lit CAR indicator<br>"
-"<input type=\"checkbox\" name=\"port3\" value=\"port3\"> Parallel port<br>"
-"<input type=\"checkbox\" name=\"port4\" value=\"port4\"> RJ45 port<br>"
-"<input type=\"checkbox\" name=\"port5\" value=\"port5\"> Stereo RCA port<br>"
-"<br>"
-"<INPUT type=\"submit\" value=\"Send\"> <INPUT type=\"reset\">"
-"</P>"
-"</FORM>"
-"</body>"
-"</html>";
+
 
 void returnFail(String msg)
 {
