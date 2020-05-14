@@ -73,9 +73,13 @@ int getBtnDir()
   }
 }
 
-void move(int direction){
+void move(int direction)
+{
+  Serial.print("Trying to move ");
+
   switch (direction)
   {
+
     case UP:
     Serial.println("up");
     if (mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1]])
@@ -172,8 +176,15 @@ void setup() {
   Serial.println("Choosing maze");
   mazeNum = random(0,9);
 
-  Serial.println("Getting marker locations");
-  memcpy(markerLocations,markers[mazeNum],sizeof(markerLocations));
+  Serial.print("Marker 1 location: ");
+  Serial.print(markerLocations[0][0]);
+  Serial.print("\t");
+  Serial.println(markerLocations[0][1]);
+
+  Serial.print("Marker 2 location: ");
+  Serial.print(markerLocations[1][0]);
+  Serial.print("\t");
+  Serial.println(markerLocations[1][1]);
 
   Serial.println("Choosing player location");
   playerLocation[0] = random(0,6);
@@ -229,6 +240,8 @@ void loop() {
     if(playerLocation == goalLocation) {
       module.win();
       Serial.println("Win");
+      while (1)
+      {
         delayWithUpdates(module, 10);
       }
     } 
