@@ -77,33 +77,53 @@ void move(int direction){
   switch (direction)
   {
     case UP:
-      if(mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1]]){
+    Serial.println("up");
+    if (mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1]])
+    {
         module.strike();
-      } else {
+      Serial.println("Strike");
+    }
+    else
+    {
         playerLocation[1] -= 1;
       }
       break;
     
     case DOWN:
-      if(mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1]+1]){
+    Serial.println("down");
+    if (mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1] + 1])
+    {
         module.strike();
-      } else {
+      Serial.println("Strike");
+    }
+    else
+    {
         playerLocation[1] += 1;
       }
       break;
     
     case LEFT:
-      if(mazeVerticalWalls[mazeNum][playerLocation[1]][playerLocation[0]]){
+    Serial.println("left");
+    if (mazeVerticalWalls[mazeNum][playerLocation[1]][playerLocation[0]])
+    {
         module.strike();
-      } else {
+      Serial.println("Strike");
+    }
+    else
+    {
         playerLocation[0] -= 1;
       }
       break;
     
     case RIGHT:
-      if(mazeVerticalWalls[mazeNum][playerLocation[1]][playerLocation[0]+1]){
+    Serial.println("right");
+    if (mazeVerticalWalls[mazeNum][playerLocation[1]][playerLocation[0] + 1])
+    {
         module.strike();
-      } else {
+      Serial.println("Strike");
+    }
+    else
+    {
         playerLocation[0] += 1;
       }
       break;
@@ -208,7 +228,7 @@ void loop() {
     //Check if player reached the goal
     if(playerLocation == goalLocation) {
       module.win();
-      while (1){
+      Serial.println("Win");
         delayWithUpdates(module, 10);
       }
     } 
