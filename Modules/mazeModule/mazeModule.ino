@@ -246,26 +246,31 @@ void setup() {
 void loop() {
   module.interpretData();
 
+  if (!module.is_solved)
+  {
   //Blink maze markers and player location with different intervals
   currentMillis = millis();
   
-  if (currentMillis - previousMarkerMillis >= 500) {
-    // save the last time you blinked the markers
-    previousMarkerMillis = currentMillis;
+    if (currentMillis - previousPlayerMillis >= 100)
+    {
+      // save the last time you blinked the player
+      if (markerBlinkCount >= 5)
+      {
     markerBlinkState = !markerBlinkState;
+        markerBlinkCount = 0;
+      }
+      else
+      {
+        markerBlinkCount++;
   }
 
-  if (currentMillis - previousPlayerMillis >= 100) {
-    // save the last time you blinked the player
     previousPlayerMillis = currentMillis;
-    markerBlinkState = !markerBlinkState;
-  }
+      playerBlinkState = !playerBlinkState;
 
-  lc.setLed(0, goalLocation[0], goalLocation[1], true);
   lc.setLed(0, markerLocations[0][0], markerLocations[0][1], markerBlinkState);
   lc.setLed(0, markerLocations[1][0], markerLocations[1][1], markerBlinkState);
   lc.setLed(0, playerLocation[0], playerLocation[1], playerBlinkState);
-
+    }
 
 
     if (millis() - lastDebounceTime >= 200)
