@@ -49,6 +49,8 @@ unsigned long currentMillis;
 unsigned long previousMarkerMillis = 0;
 unsigned long previousPlayerMillis = 0;
 int dir;
+int markerBlinkCount = 0;
+unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 
 //Class inits
 /*
@@ -258,14 +260,26 @@ void loop() {
 
 
 
-  if(!module.is_solved){
+    if (millis() - lastDebounceTime >= 200)
+    {
     
     //Read button press
     dir = getBtnDir();
+      if (dir >= 0)
+      {
+        lastDebounceTime = millis();
+        Serial.print("Pressed: ");
+        Serial.println(dir);
 
     //Try to move the player, gave a strike if a wall is hit
     move(dir);
 
+        Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 8));
+        Serial.print(playerLocation[0]);
+        Serial.print("\t");
+        Serial.println(playerLocation[1]);
+      }
+    }
     //Check if player reached the goal
     if ((playerLocation[0] == goalLocation[0]) && (playerLocation[1] == goalLocation[1]))
     {
