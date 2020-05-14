@@ -49,16 +49,26 @@ NeoICSerial serial_port;
 DSerialClient client(serial_port, 0x02);
 KTANEModule module(client, 2, 3);
 
-int getBtnDir(){
-  if (analogRead(UP_BTN) == 0){
+int getBtnDir()
+{
+  if (digitalRead(UP_BTN) == 0)
+  {
     return UP;
-  } else if (analogRead(DOWN_BTN) == 0){
+  }
+  else if (digitalRead(DOWN_BTN) == 0)
+  {
     return DOWN;
-  } else if (analogRead(LEFT_BTN) == 0){
+  }
+  else if (digitalRead(LEFT_BTN) == 0)
+  {
     return LEFT;
-  } else if (analogRead(RIGHT_BTN) == 0){
+  }
+  else if (digitalRead(RIGHT_BTN) == 0)
+  {
     return RIGHT;
-  } else {
+  }
+  else
+  {
     return -1;
   }
 }
