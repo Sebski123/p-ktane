@@ -107,7 +107,9 @@ void move(int direction)
     }
     else
     {
+      lc.setLed(0, playerLocation[0], playerLocation[1], false);
         playerLocation[1] -= 1;
+      lc.setLed(0, playerLocation[0], playerLocation[1], playerBlinkState);
       }
       break;
     
@@ -120,7 +122,9 @@ void move(int direction)
     }
     else
     {
+      lc.setLed(0, playerLocation[0], playerLocation[1], false);
         playerLocation[1] += 1;
+      lc.setLed(0, playerLocation[0], playerLocation[1], playerBlinkState);
       }
       break;
     
@@ -133,7 +137,9 @@ void move(int direction)
     }
     else
     {
+      lc.setLed(0, playerLocation[0], playerLocation[1], false);
         playerLocation[0] -= 1;
+      lc.setLed(0, playerLocation[0], playerLocation[1], playerBlinkState);
       }
       break;
     
@@ -146,7 +152,9 @@ void move(int direction)
     }
     else
     {
+      lc.setLed(0, playerLocation[0], playerLocation[1], false);
         playerLocation[0] += 1;
+      lc.setLed(0, playerLocation[0], playerLocation[1], playerBlinkState);
       }
       break;
     
@@ -291,6 +299,4 @@ void loop() {
       }
     } 
   }
-
-  lc.clearDisplay(0);
 }
