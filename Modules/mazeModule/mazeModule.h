@@ -5,7 +5,7 @@
 #define LEFT 2
 #define RIGHT 3
 
-int markers[9][2][2] = {
+byte markers[9][2][2] = {
     {
         {0, 1},
         {5, 2}
@@ -44,7 +44,7 @@ int markers[9][2][2] = {
     }
 };
 
-int mazeVerticalWalls[9][6][7] = {
+bool mazeVerticalWalls[9][6][7] = {
     {
         {1,0,0,1,0,0,1},
         {1,1,0,1,0,0,1},
@@ -119,7 +119,7 @@ int mazeVerticalWalls[9][6][7] = {
     }
 };
 
-int mazeHorizontalWalls[9][6][7] = {
+bool mazeHorizontalWalls[9][6][7] = {
     {
         {1,0,0,0,0,0,1},
         {1,1,0,1,1,1,1},
