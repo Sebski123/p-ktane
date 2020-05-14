@@ -25,7 +25,7 @@ void move(int direction);
 //Variables
 int playerLocation[2];
 int goalLocation[2];
-int markerLocations[2][2];
+byte markerLocations[2][2];
 int mazeNum;
 bool markerBlinkState = true;
 bool playerBlinkState = true;
@@ -237,7 +237,8 @@ void loop() {
     move(dir);
 
     //Check if player reached the goal
-    if(playerLocation == goalLocation) {
+    if ((playerLocation[0] == goalLocation[0]) && (playerLocation[1] == goalLocation[1]))
+    {
       module.win();
       Serial.println("Win");
       while (1)
