@@ -1,4 +1,20 @@
 
+const char string_0[] PROGMEM = "Getting config";
+const char string_1[] PROGMEM = "Got config";
+const char string_2[] PROGMEM = "Setting random seed";
+const char string_3[] PROGMEM = "Setting up I/O-pins";
+const char string_4[] PROGMEM = "Choosing maze";
+const char string_5[] PROGMEM = "Choose maze nr: ";
+const char string_6[] PROGMEM = "Getting marker locations";
+const char string_7[] PROGMEM = "Choosing player location";
+const char string_8[] PROGMEM = "Player location: ";
+const char string_9[] PROGMEM = "Choosing goal location";
+const char string_10[] PROGMEM = "Goal location: ";
+const char string_11[] PROGMEM = "Showing goal location";
+const char string_12[] PROGMEM = "Setup done";
+
+const char *const string_table[] PROGMEM = {string_0, string_1, string_2, string_3, string_4, string_5, string_6, string_7, string_8, string_9, string_10, string_11, string_12};
+
 #include "DSerial.h"
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
@@ -142,16 +158,16 @@ void setup() {
   serial_port.begin(19200);
   Serial.begin(19200);
 
-  Serial.println("Getting config");
-  while(!module.getConfig()){
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 0));
+  while (!module.getConfig())
     module.interpretData();
   }
-  Serial.println("Got config");
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 1));
 
-  Serial.println("Setting random seed");
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 2));
   randomSeed(config_to_seed(module.getConfig()));
 
-  Serial.println("Setting up I/O-pins");
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 3));
   // 8x8 Led-matrix setup
   pinMode(DATA_PIN, OUTPUT);
   pinMode(CLOCK_PIN,  OUTPUT);
@@ -173,9 +189,13 @@ void setup() {
   /* and clear the display */
   lc.clearDisplay(0);
 
-  Serial.println("Choosing maze");
-  mazeNum = random(0,9);
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 4));
+  mazeNum = random(0, 9);
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 5));
+  Serial.println(mazeNum);
 
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 6));
+  memcpy(markerLocations, markers[mazeNum], sizeof(markerLocations));
   Serial.print("Marker 1 location: ");
   Serial.print(markerLocations[0][0]);
   Serial.print("\t");
@@ -186,20 +206,30 @@ void setup() {
   Serial.print("\t");
   Serial.println(markerLocations[1][1]);
 
-  Serial.println("Choosing player location");
-  playerLocation[0] = random(0,6);
-  playerLocation[1] = random(0,6);
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 7));
+  playerLocation[0] = random(0, 6);
+  playerLocation[1] = random(0, 6);
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 8));
+  Serial.print(playerLocation[0]);
+  Serial.print("\t");
+  Serial.println(playerLocation[1]);
 
-  Serial.println("Choosing goal location");
-  while (goalLocation != playerLocation)
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 9));
+  while ((goalLocation[0] == playerLocation[0]) && (goalLocation[1] == playerLocation[1]))
   {
     goalLocation[0] = random(0,6);
     goalLocation[1] = random(0,6);
   }
 
-  Serial.println("Showing goal location");
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 10));
+  Serial.print(goalLocation[0]);
+  Serial.print("\t");
+  Serial.println(goalLocation[1]);
+
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 11));
   lc.setLed(0, goalLocation[0], goalLocation[1], true);
 
+  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 12));
   module.sendReady();
 }
 
