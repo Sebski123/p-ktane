@@ -15,10 +15,11 @@ KTANEModule module(client, 2, 3);
 // Defines
 //Green clear Led 2
 //Red strike Led 3
-int button_pins[4] = {4, 5, 6, 7};
+#define BUZZER 5
 //NeoICSerial RX-pin 8
 //NeoICSerial TX-pin 9
 int led_pins[4] = {10, 11, 12, 13};
+int button_pins[4] = {14, 15, 16, 17};
 
 
 unsigned long last_button_action = 0;
@@ -29,56 +30,89 @@ int button_stage = 0;
 int stage;
 int num_stages;
 int stage_colors[MAX_NUM_STAGES];
+int colorFrequency[4] = {
+    880, //Red
+    400, //Yellow
+    450, //Green
+    305  //Blue
+};
 int mapping[2][3][4] = {
-  { // No Vowel
-    {BLUE, RED, GREEN, YELLOW}, // No Strikes
-    {RED, GREEN, YELLOW, BLUE}, // One Strike
-    {YELLOW, RED, BLUE, GREEN}, // Two Strikes
-  },
-  { // Vowel
-    {BLUE, GREEN, YELLOW, RED}, // No Strikes
-    {YELLOW, RED, BLUE, GREEN}, // One Strike
-    {GREEN, BLUE, YELLOW, RED}, // Two Strikes
-  },
+    {
+        // No Vowel
+        {BLUE, RED, GREEN, YELLOW}, // No Strikes
+        {RED, GREEN, YELLOW, BLUE}, // One Strike
+        {YELLOW, RED, BLUE, GREEN}, // Two Strikes
+    },
+    {
+        // Vowel
+        {BLUE, GREEN, YELLOW, RED}, // No Strikes
+        {YELLOW, RED, BLUE, GREEN}, // One Strike
+        {GREEN, BLUE, YELLOW, RED}, // Two Strikes
+    },
 };
 
-void update_lights(){
+void update_lights()
+{
   static unsigned long old_millis = 0;
   static int light_stage = 0;
 
-  if(light_stage >= ((stage + 1)*2)) {
-    if(millis() - old_millis > 700) {
+  if (light_stage >= ((stage + 1) * 2))
+  {
+    if (millis() - old_millis > 700)
+    {
       old_millis = millis();
       light_stage = 0;
     }
-  } else {
-    if((light_stage % 2 == 0) && (millis() - old_millis > 300)) {
-      digitalWrite(led_pins[stage_colors[light_stage/2]], LOW);
+  }
+  else
+  {
+    if ((light_stage % 2 == 0) && (millis() - old_millis > 300))
+    {
+      digitalWrite(led_pins[stage_colors[light_stage / 2]], LOW);
+      if (stage > 0)
+      {
+        tone(BUZZER, colorFrequency[stage_colors[light_stage / 2]], 700);
+      }
       old_millis = millis();
       light_stage++;
-    } else if((light_stage % 2 == 1) && (millis() - old_millis > 700)) {
-      digitalWrite(led_pins[stage_colors[light_stage/2]], HIGH);
+    }
+    else if ((light_stage % 2 == 1) && (millis() - old_millis > 700))
+    {
+      digitalWrite(led_pins[stage_colors[light_stage / 2]], HIGH);
       old_millis = millis();
       light_stage++;
     }
   }
 }
 
-int get_button(){
+int get_button()
+{
   int button_pressed = 0;
-  if(!digitalRead(button_pins[0])) {
+  if (!digitalRead(button_pins[0]))
+  {
     button_pressed = RED;
-  } else if(!digitalRead(button_pins[1])) {
+    tone(BUZZER, colorFrequency[RED - 1], 700);
+  }
+  else if (!digitalRead(button_pins[1]))
+  {
     button_pressed = YELLOW;
-  } else if(!digitalRead(button_pins[2])) {
+    tone(BUZZER, colorFrequency[YELLOW - 1], 700);
+  }
+  else if (!digitalRead(button_pins[2]))
+  {
     button_pressed = GREEN;
-  } else if(!digitalRead(button_pins[3])) {
+    tone(BUZZER, colorFrequency[GREEN - 1], 700);
+  }
+  else if (!digitalRead(button_pins[3]))
+  {
     button_pressed = BLUE;
+    tone(BUZZER, colorFrequency[BLUE - 1], 700);
   }
   return button_pressed;
 }
 
-void setup() {
+void setup()
+{
   serial_port.begin(19200);
   Serial.begin(19200);
 
@@ -99,23 +133,24 @@ void setup() {
 
   Serial.println("Getting config");
 
-  while(!module.getConfig()){
+  /*while(!module.getConfig()){
     module.interpretData();
-  }
+  }*/
 
   Serial.println("Got config");
 
-  randomSeed(config_to_seed(module.getConfig()));
+  randomSeed(1234); //config_to_seed(module.getConfig()));
   num_stages = random(3, MAX_NUM_STAGES + 1);
 
-  for(int i = 0; i < num_stages; i++) {
+  for (int i = 0; i < num_stages; i++)
+  {
     stage_colors[i] = random(0, 4);
   }
   stage = 0;
 
   Serial.print("Num stages: ");
   Serial.println(num_stages);
-  
+
   for (int i = 0; i < num_stages; i++)
   {
     Serial.print(stage_colors[i]);
@@ -124,46 +159,53 @@ void setup() {
   Serial.println();
 
   Serial.print("Vowel? ");
-  Serial.println(module.serialContainsVowel());
+  Serial.println(false); //module.serialContainsVowel());
 
   Serial.println("Done with setup");
   module.sendReady();
 }
 
-void loop() {
+void loop()
+{
   module.interpretData();
 
-  if(!module.is_solved){
-    int vowel = module.serialContainsVowel();
-    int strikes = module.getNumStrikes();
+  if (!module.is_solved)
+  {
+    int vowel = 0;   //module.serialContainsVowel();
+    int strikes = 0; //module.getNumStrikes();
     update_lights();
-    if(millis()-last_button_action > (10 * last_action_multiplier)) {
+    if (millis() - last_button_action > (10 * last_action_multiplier))
+    {
       button_state = get_button();
       last_button_action = millis();
       last_action_multiplier = 1;
     }
-    if(button_state != old_button_state) {
+    if (button_state != old_button_state)
+    {
       old_button_state = button_state;
 
-      if(button_state != 0){
-        if(button_state == mapping[vowel][strikes][stage_colors[button_stage]]) {
-          if(button_stage == stage) {
+      if (button_state != 0)
+      {
+        if (button_state == mapping[vowel][strikes][stage_colors[button_stage]])
+        {
+          if (button_stage == stage)
+          {
             stage++;
             button_stage = 0;
-            // tone(SPEAKER_PIN, 140, 150);
-            // delayWithUpdates(module, 200);
-            // tone(SPEAKER_PIN, 340, 150);
-            // delayWithUpdates(module, 150);
-            // noTone(SPEAKER_PIN);
             last_action_multiplier = 100;
-          } else {
+          }
+          else
+          {
             button_stage++;
           }
-          if(stage == num_stages) {
+          if (stage == num_stages)
+          {
             module.win();
             Serial.println("win!");
           }
-        } else {
+        }
+        else
+        {
           button_stage = 0;
           module.strike();
           Serial.println("strike");
