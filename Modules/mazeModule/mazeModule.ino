@@ -301,10 +301,6 @@ void loop()
     {
       module.win();
       Serial.println("Win");
-      while (1)
-      {
-        delayWithUpdates(module, 10);
-      }
     }
   }
 }
