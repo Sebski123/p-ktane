@@ -7,23 +7,24 @@
 
 
 ## Modules
-* [Wires](https://i.imgur.com/xLXpCYH.png)              (MAIN)
-* [Button](https://i.imgur.com/Leew7du.png)             (MAIN)
-* [Keypads](https://i.imgur.com/Zy6ScEo.png)
-* [Simon Says](https://i.imgur.com/uX7BzED.png)         (MAIN)
-* [Who's on First](https://i.imgur.com/YisE1go.png)
-* [Memory](https://i.imgur.com/bvGt5gz.png)             (MAIN)
-* [Morse Code](https://i.imgur.com/V4XAdVZ.png)
-* [Complicated Wires](https://i.imgur.com/jJb2Kp9.png)
-* [Wire Sequences](https://i.imgur.com/1drzKTO.png)
-* [Mazes](https://i.imgur.com/xXMdvLr.png)              (MAIN)
-* [Passwords](https://i.imgur.com/us0XRBs.png)
-
-
-### Needy Modules
-* [Venting Gas](https://i.imgur.com/f2eua3p.png)
-* [Capacitor Discharge](https://i.imgur.com/Q0VJkoo.png)
-* [Knobs](https://i.imgur.com/hlpkEUD.png)
+| Module                                                 | Coded | Built | Tested | I2C addr |
+|--------------------------------------------------------|-------|-------|--------|----------|
+| Main (Controller)                                      | ✔️     |       |        | 1        |
+| Config (ESP8266)                                       | ✔️     | ✔️     | ✔️      | 2        |
+| [Wires](https://i.imgur.com/xLXpCYH.png)               | ✔️     | ✔️     | ✔️      | 3        |
+| [Button](https://i.imgur.com/Leew7du.png)              | ✔️     |       |        | 4        |
+| [Keypads](https://i.imgur.com/Zy6ScEo.png)             |       |       |        |          |
+| [Simon Says](https://i.imgur.com/uX7BzED.png)          | ✔️     | ✔️     |        | 5        |
+| [Who's on First](https://i.imgur.com/YisE1go.png)      |       |       |        |          |
+| [Memory](https://i.imgur.com/bvGt5gz.png)              | ✔️     | ✔️     |        | 6        |
+| [Morse Code](https://i.imgur.com/V4XAdVZ.png)          |       |       |        |          |
+| [Complicated Wires](https://i.imgur.com/jJb2Kp9.png)   |       |       |        |          |
+| [Wire Sequences](https://i.imgur.com/1drzKTO.png)      |       |       |        |          |
+| [Mazes](https://i.imgur.com/xXMdvLr.png)               | ✔️     | ✔️     | ✔️      | 7        |
+| [Passwords](https://i.imgur.com/us0XRBs.png)           | ✔️     |       |        |          |
+| [Venting Gas](https://i.imgur.com/f2eua3p.png)         |       |       |        |          |
+| [Capacitor Discharge](https://i.imgur.com/Q0VJkoo.png) |       |       |        |          |
+| [Knobs](https://i.imgur.com/hlpkEUD.png)               |       |       |        |          |
 
 # How to burn bootloader and upload sketches for ATMega328
 ## How to burn bootloader
