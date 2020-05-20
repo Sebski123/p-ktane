@@ -85,11 +85,13 @@ void generateRandomNumbers() {
   int r1, r2;
   uint8_t temp;
   for(int i = 0; i < 5; i++){
+    //Insert 1-4 in each row
     bottom_nums[i][0] = 1;
     bottom_nums[i][1] = 2;
     bottom_nums[i][2] = 3;
     bottom_nums[i][3] = 4;
 
+    //Swap random numbers in row 20 times to scramble them
     for(int j = 0; j < 20; j++){
       r1 = random(0, 4);
       r2 = random(0, 4);
@@ -179,16 +181,6 @@ void generateRandomNumbers() {
       buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[3][buttons_to_press[2]]);
       break;
   }
-
-  // for(int i = 0; i < 5; i++) {
-  //   Serial.println("");
-  //   Serial.println("");
-  //   Serial.println(top_nums[i]);
-  //   Serial.println(buttons_to_press[i]);
-  //   for(int j = 0; j < 4; j++){
-  //     Serial.print(bottom_nums[i][j]);
-  //   }
-  // }
 }
 
 void setup() {
