@@ -205,14 +205,45 @@ void setup() {
   lc.shutdown(0,false);    // not in shutdown mode
   lc.clearDisplay(0);
   lc.setIntensity(0,8); 
+
+  Serial.println("Getting config");
+
+  while(!module.getConfig()){
     module.interpretData();
   }
 
+  Serial.println("Got config");
+
   randomSeed(config_to_seed(module.getConfig()));
+
+  Serial.println("Generateing numbers");
 
   // Generate numbers
   generateRandomNumbers();
   updateDisplays();
+
+
+  for(int i = 0; i < 5; i++){
+    Serial.print("Stage");
+    Serial.print(i);
+    Serial.print(": ");
+    for(int j = 0; j < 4; j++){
+      Serial.print(bottom_nums[i][j]);
+      Serial.print("\t");
+    }
+    Serial.print("\t");
+    Serial.print(top_nums[i]);
+    Serial.println();
+  }
+
+  Serial.print("Buttons to press: ");
+  for(int i = 0; i < 5; i++){
+    Serial.print(buttons_to_press[i]);
+    Serial.print(" ");
+  }
+  Serial.println();
+
+  Serial.println("Done setup");
 
   module.sendReady();
 }
