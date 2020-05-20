@@ -1,6 +1,7 @@
 #include "DSerial.h"
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
+#include "LedControl.h"
 
 
 // Defines
@@ -22,12 +23,10 @@
 #define LED4_PIN 17
 #define LED5_PIN 18
 
-#define DISP_SINGLE(x,y) maxSingle((x), (y), LOAD_PIN, CLOCK_PIN, DATA_IN_PIN)
-
-
+LedControl lc=LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 
 NeoICSerial serial_port;
-DSerialClient client(serial_port, MY_ADDRESS);
+DSerialClient client(serial_port, 0x04);
 KTANEModule module(client, 6, 7);
 
 uint8_t bottom_nums[5][4];
@@ -38,21 +37,7 @@ int stage = 0;
 // Has 6 elements to stop overflow when you win
 int led_pins[6] = {LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN, LED5_PIN, LED5_PIN};
 
-byte max7219_reg_decodeMode  = 0x09;
-byte max7219_reg_intensity   = 0x0a;
-byte max7219_reg_scanLimit   = 0x0b;
-byte max7219_reg_shutdown    = 0x0c;
-byte max7219_reg_displayTest = 0x0f;
-
-int constants[5] = {
-  0b10111110, // 0
-  0b00010010, // 1
-  0b11011100, // 2
-  0b11011010, // 3
-  0b01110010 // 4
-};
-
-int digits[5] = {3, 8, 6, 5, 4};
+int digits[5] = {0, 1, 2, 3, 4};
 
 uint8_t getIndexFromNumber(uint8_t *buttons, uint8_t num){
   for(int i = 0; i < 4; i++) {
@@ -64,11 +49,11 @@ uint8_t getIndexFromNumber(uint8_t *buttons, uint8_t num){
 }
 
 void updateDisplays() {
-  DISP_SINGLE(5, constants[bottom_nums[stage][0]]);
-  DISP_SINGLE(6, constants[bottom_nums[stage][1]]);
-  DISP_SINGLE(8, constants[bottom_nums[stage][2]]);
-  DISP_SINGLE(3, constants[bottom_nums[stage][3]]);
-  DISP_SINGLE(4, constants[top_nums[stage]]);
+  lc.setDigit(0, 0, bottom_nums[stage][0], false);
+  lc.setDigit(0, 1, bottom_nums[stage][1], false);
+  lc.setDigit(0, 2, bottom_nums[stage][2], false);
+  lc.setDigit(0, 3, bottom_nums[stage][3], false);
+  lc.setDigit(0, 4, top_nums[stage], false);
   for(int i = 0; i < 5; i++) {
     digitalWrite(led_pins[i], LOW);
   }
@@ -81,17 +66,17 @@ void displayWaitingScreen() {
 
   // needs to delay for a total of 2500
   for(int i = 0; i < 5; i++) {
-    DISP_SINGLE(digits[i], 0);
+    lc.setDigit(0, digits[i], 0, false);
     delayWithUpdates(module, 100);
   }
   for(int i = 0; i < 15; i++){
     for(int j = 0; j < 5; j++) {
-      DISP_SINGLE(digits[j], 1 << ((i+j)%7));
+      lc.setDigit(0, digits[j], 1 << ((i+j)%7), false);
     }
     delayWithUpdates(module, 100);
   }
   for(int i = 0; i < 5; i++) {
-    DISP_SINGLE(digits[i], 0);
+    lc.setDigit(0, digits[i], 0, false);
   }
   delayWithUpdates(module, 500);
 }
@@ -100,11 +85,13 @@ void generateRandomNumbers() {
   int r1, r2;
   uint8_t temp;
   for(int i = 0; i < 5; i++){
+    //Insert 1-4 in each row
     bottom_nums[i][0] = 1;
     bottom_nums[i][1] = 2;
     bottom_nums[i][2] = 3;
     bottom_nums[i][3] = 4;
 
+    //Swap random numbers in row 20 times to scramble them
     for(int j = 0; j < 20; j++){
       r1 = random(0, 4);
       r2 = random(0, 4);
@@ -194,16 +181,6 @@ void generateRandomNumbers() {
       buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[3][buttons_to_press[2]]);
       break;
   }
-
-  // for(int i = 0; i < 5; i++) {
-  //   Serial.println("");
-  //   Serial.println("");
-  //   Serial.println(top_nums[i]);
-  //   Serial.println(buttons_to_press[i]);
-  //   for(int j = 0; j < 4; j++){
-  //     Serial.print(bottom_nums[i][j]);
-  //   }
-  // }
 }
 
 void setup() {
@@ -223,24 +200,50 @@ void setup() {
   pinMode(LED4_PIN, OUTPUT);
   pinMode(LED5_PIN, OUTPUT);
 
-  DISP_SINGLE(max7219_reg_scanLimit, 0x07);
-  DISP_SINGLE(max7219_reg_decodeMode, 0x00);  // using an led matrix (not digits)
-  DISP_SINGLE(max7219_reg_shutdown, 0x01);    // not in shutdown mode
-  DISP_SINGLE(max7219_reg_displayTest, 0x00); // no display test
-   for (int e=1; e<=8; e++) {    // empty registers, turn all LEDs off
-    DISP_SINGLE(e,0);
-  }
-  DISP_SINGLE(max7219_reg_intensity, 0x0f & 0x0f); // the first 0x0f is the value you can set
+  Serial.println("Setting up displays");
+
+  lc.shutdown(0,false);    // not in shutdown mode
+  lc.clearDisplay(0);
+  lc.setIntensity(0,8); 
+
+  Serial.println("Getting config");
 
   while(!module.getConfig()){
     module.interpretData();
   }
 
+  Serial.println("Got config");
+
   randomSeed(config_to_seed(module.getConfig()));
+
+  Serial.println("Generateing numbers");
 
   // Generate numbers
   generateRandomNumbers();
   updateDisplays();
+
+
+  for(int i = 0; i < 5; i++){
+    Serial.print("Stage");
+    Serial.print(i);
+    Serial.print(": ");
+    for(int j = 0; j < 4; j++){
+      Serial.print(bottom_nums[i][j]);
+      Serial.print("\t");
+    }
+    Serial.print("\t");
+    Serial.print(top_nums[i]);
+    Serial.println();
+  }
+
+  Serial.print("Buttons to press: ");
+  for(int i = 0; i < 5; i++){
+    Serial.print(buttons_to_press[i]);
+    Serial.print(" ");
+  }
+  Serial.println();
+
+  Serial.println("Done setup");
 
   module.sendReady();
 }
@@ -251,13 +254,13 @@ void loop() {
   module.interpretData();
 
   if(!module.is_solved) {
-    if(digitalRead(BUTTON1_PIN)) {
+    if(!digitalRead(BUTTON1_PIN)) {
       button_pressed = 0;
-    } else if(digitalRead(BUTTON2_PIN)) {
+    } else if(!digitalRead(BUTTON2_PIN)) {
       button_pressed = 1;
-    } else if(digitalRead(BUTTON3_PIN)) {
+    } else if(!digitalRead(BUTTON3_PIN)) {
       button_pressed = 2;
-    } else if(digitalRead(BUTTON4_PIN)) {
+    } else if(!digitalRead(BUTTON4_PIN)) {
       button_pressed = 3;
     }
 

@@ -133,13 +133,13 @@ void setup()
 
   Serial.println("Getting config");
 
-  /*while(!module.getConfig()){
+  while(!module.getConfig()){
     module.interpretData();
-  }*/
+  }
 
   Serial.println("Got config");
 
-  randomSeed(1234); //config_to_seed(module.getConfig()));
+  randomSeed(config_to_seed(module.getConfig()));
   num_stages = random(3, MAX_NUM_STAGES + 1);
 
   for (int i = 0; i < num_stages; i++)

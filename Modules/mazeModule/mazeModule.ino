@@ -25,9 +25,9 @@ const char *const string_table[] PROGMEM = {string_0, string_1, string_2, string
 //Green clear Led 2
 //Red strike Led 3
 #define RIGHT_BTN 4
-#define LEFT_BTN 5
+#define UP_BTN 5
 #define DOWN_BTN 6
-#define UP_BTN 7
+#define LEFT_BTN 7
 //NeoICSerial RX-pin 8
 //NeoICSerial TX-pin 9
 #define CLOCK_PIN 10
@@ -301,10 +301,6 @@ void loop()
     {
       module.win();
       Serial.println("Win");
-      while (1)
-      {
-        delayWithUpdates(module, 10);
-      }
     }
   }
 }
