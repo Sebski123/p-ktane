@@ -254,13 +254,13 @@ void loop() {
   module.interpretData();
 
   if(!module.is_solved) {
-    if(digitalRead(BUTTON1_PIN)) {
+    if(!digitalRead(BUTTON1_PIN)) {
       button_pressed = 0;
-    } else if(digitalRead(BUTTON2_PIN)) {
+    } else if(!digitalRead(BUTTON2_PIN)) {
       button_pressed = 1;
-    } else if(digitalRead(BUTTON3_PIN)) {
+    } else if(!digitalRead(BUTTON3_PIN)) {
       button_pressed = 2;
-    } else if(digitalRead(BUTTON4_PIN)) {
+    } else if(!digitalRead(BUTTON4_PIN)) {
       button_pressed = 3;
     }
 
