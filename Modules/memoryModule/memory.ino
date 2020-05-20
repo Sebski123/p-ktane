@@ -26,7 +26,7 @@
 LedControl lc=LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 
 NeoICSerial serial_port;
-DSerialClient client(serial_port, MY_ADDRESS);
+DSerialClient client(serial_port, 0x04);
 KTANEModule module(client, 6, 7);
 
 uint8_t bottom_nums[5][4];
