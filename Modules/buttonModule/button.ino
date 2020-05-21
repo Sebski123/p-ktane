@@ -1,6 +1,7 @@
 #include "DSerial.h"
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
+#include "LedControl.h"
 
 // Defines
 //Green clear Led 2
@@ -19,10 +20,9 @@
 #define STRIP_LED_PIN_BLUE 18
 #define STRIP_LED_PIN_RED 19
 
-#define DISP_SINGLE(x, y) maxSingle((x), (y), LOAD_PIN, CLOCK_PIN, DATA_IN_PIN)
-
+LedControl lc = LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 NeoICSerial serial_port;
-DSerialClient client(serial_port, MY_ADDRESS);
+DSerialClient client(serial_port, 6);
 KTANEModule module(client, 2, 3);
 
 int buttonColor;
@@ -34,12 +34,6 @@ bool wasButtonHeld = false;
 int buttonState = 0;     // current state of the button
 int lastButtonState = 0; // previous state of the button
 int timer;
-
-byte max7219_reg_decodeMode = 0x09;
-byte max7219_reg_intensity = 0x0a;
-byte max7219_reg_scanLimit = 0x0b;
-byte max7219_reg_shutdown = 0x0c;
-byte max7219_reg_displayTest = 0x0f;
 
 int colors[5][2] = {
     {0, 4}, //Blue
@@ -54,7 +48,7 @@ int rgbValues[5][3] = {
     {1, 0, 0}, //Red
     {1, 1, 1}, //White
     {1, 1, 0}, //Yellow
-    {0, 0, 0}  //Transparent (buttons only, not  coloured strips)
+    {1, 0, 1}  //Purple (buttons only, not  coloured strips)
 };
 
 int constants[4] = {
@@ -133,6 +127,8 @@ void setup()
     serial_port.begin(19200);
     Serial.begin(19200);
 
+    Serial.println("Starting setup");
+
     pinMode(DATA_IN_PIN, OUTPUT);
     pinMode(LOAD_PIN, OUTPUT);
     pinMode(CLOCK_PIN, OUTPUT);
@@ -144,25 +140,40 @@ void setup()
     pinMode(STRIP_LED_PIN_BLUE, OUTPUT);
     pinMode(STRIP_LED_PIN_RED, OUTPUT);
 
-    DISP_SINGLE(max7219_reg_scanLimit, 0x07);
-    DISP_SINGLE(max7219_reg_decodeMode, 0x00);  // using an led matrix (not digits)
-    DISP_SINGLE(max7219_reg_shutdown, 0x01);    // not in shutdown mode
-    DISP_SINGLE(max7219_reg_displayTest, 0x00); // no display test
+    Serial.println("Preparing 7-segment");
+    lc.shutdown(0, false);
+    /* Set the brightness to a medium values */
+    lc.setIntensity(0, 8);
+    /* and clear the display */
+    lc.clearDisplay(0);
 
-    while (!module.getConfig())
+    Serial.println("Getting config");
+    /*while (!module.getConfig())
     {
         module.interpretData();
-    }
+    }*/
 
-    randomSeed(config_to_seed(module.getConfig()));
+    Serial.println("Got config");
 
+    randomSeed(1234); //config_to_seed(module.getConfig()));
+
+    Serial.println("Generating button");
     // Generate button
     generateButton();
 
+    Serial.print("Button color ");
+    Serial.println(buttonColor);
+    Serial.print("Strip color ");
+    Serial.println(stripColor);
+
+    Serial.print("Showing text ");
+    Serial.println(text);
     // Show text
-    DISP_SINGLE(0, constants[text]);
+    lc.setDigit(0, 0, text, false);
 
     timer = millis();
+
+    Serial.println("Finished setup");
 
     module.sendReady();
 }
