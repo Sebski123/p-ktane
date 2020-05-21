@@ -15,9 +15,8 @@ const char string_12[] PROGMEM = "Setup done";
 
 const char *const string_table[] PROGMEM = {string_0, string_1, string_2, string_3, string_4, string_5, string_6, string_7, string_8, string_9, string_10, string_11, string_12};
 
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
-#include "NeoICSerial.h"
 #include "LedControl.h"
 #include "mazeModule.h"
 
@@ -63,8 +62,7 @@ unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
  We have only a single MAX72XX.
  */
 LedControl lc = LedControl(DATA_PIN, CLOCK_PIN, LOAD_PIN, 1);
-NeoICSerial serial_port;
-DSerialClient client(serial_port, 0x02);
+SWireClient client(0x02);
 KTANEModule module(client, 2, 3);
 
 int getBtnDir()

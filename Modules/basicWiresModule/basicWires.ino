@@ -1,9 +1,7 @@
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
-#include "NeoICSerial.h"
 
-NeoICSerial serial_port;
-DSerialClient client(serial_port, 0x01);
+SWireClient client(0x03);
 KTANEModule module(client, 2, 3);
 
 // Resistor values  = 22000,  3300,  1000,   330,  33 
@@ -108,18 +106,17 @@ int relLastColorIndex(int color)
 
 void setup()
 {
-  serial_port.begin(19200);
   Serial.begin(19200);
 
   Serial.println("Begin setup");
 
   #pragma region Detect wires:
-  pinMode(A0, INPUT);
-  pinMode(A1, INPUT);
-  pinMode(A2, INPUT);
-  pinMode(A3, INPUT);
-  pinMode(A4, INPUT);
-  pinMode(A5, INPUT);
+  pinMode(14, INPUT);   //A0
+  pinMode(15, INPUT);   //A1
+  pinMode(16, INPUT);   //A2
+  pinMode(17, INPUT);   //A3
+  pinMode(18, INPUT);   //A4
+  pinMode(19, INPUT);   //A5
 
 
   Serial.print("Raw:\t"); 
@@ -166,7 +163,7 @@ void setup()
 
   while (!module.getConfig())
   {
-    module.interpretData();
+    module.interpretData(Serial);
   }
 
   Serial.println("Got config");
@@ -279,7 +276,7 @@ void setup()
 
 void loop()
 {
-  module.interpretData();
+  module.interpretData(Serial);
 
   if (!module.is_solved)
   {

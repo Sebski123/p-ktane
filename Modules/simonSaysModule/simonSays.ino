@@ -1,9 +1,8 @@
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
 
-NeoICSerial serial_port;
-DSerialClient client(serial_port, 0x02);
+SWireClient client(0x02);
 KTANEModule module(client, 2, 3);
 
 #define MAX_NUM_STAGES 5

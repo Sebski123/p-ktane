@@ -1,6 +1,5 @@
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
-#include "NeoICSerial.h"
 #include "LedControl.h"
 
 
@@ -25,8 +24,7 @@
 
 LedControl lc=LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 
-NeoICSerial serial_port;
-DSerialClient client(serial_port, 0x04);
+SWireClient client(0x04);
 KTANEModule module(client, 6, 7);
 
 uint8_t bottom_nums[5][4];

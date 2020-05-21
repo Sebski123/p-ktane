@@ -1,4 +1,4 @@
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
 
@@ -21,8 +21,7 @@
 
 #define DISP_SINGLE(x, y) maxSingle((x), (y), LOAD_PIN, CLOCK_PIN, DATA_IN_PIN)
 
-NeoICSerial serial_port;
-DSerialClient client(serial_port, MY_ADDRESS);
+SWireClient client( MY_ADDRESS);
 KTANEModule module(client, 2, 3);
 
 int buttonColor;
