@@ -1,14 +1,14 @@
-/** @file dserial.h
- *  @brief Headers and definitions for the DSerial Library
+/** @file swire.h
+ *  @brief Headers and definitions for the SWire Library
  *
- *  The DSerial library adds a layer-3/4 interface intended to be used on top
- *  of a serial UART multi-drop bus. DSerial adds addressing and message 
+ *  The SWire library adds a layer-3/4 interface intended to be used on top
+ *  of a I2C bus. SWire adds addressing and message 
  *  acknowledgment in a master/client configuration. Clients are polled for
  *  data. 
  *
  *  The library is divided into Master and Client classes. In order for constant
  *  data flow, all communicating parties should call "doSerial" often. Functions
- *  in the DSerial library do not block and all but getClients should be
+ *  in the SWire library do not block and all but getClients should be
  *  execute relatively quickly.
  *
  *  Currently, only bytes with values between 1 and 127 inclusive are allowed 
@@ -60,6 +60,7 @@
 #pragma once
 #include "Arduino.h"
 #include "stringQueue.h"
+#include <Wire.h>
 
 // Control characters
 // All of the form 0x80 + (most appropriate ascii character)
@@ -86,38 +87,36 @@
 #define CLIENT_WAITING 0
 #define CLIENT_SENT 1
 
-int readPacket(Stream *s, char *buffer);
-int sendPacket(Stream *s, char *message);
+int readPacket(char *buffer);
+int sendPacket(char *message);
+void receiveEvent(int howMany);
+void requestEvent();
 
-class DSerialMaster {
-  public:
-    DSerialMaster(Stream &port);
-    int sendData(uint8_t client_id, char *data);
-    int getData(char *buffer);
-    int doSerial();
-    int identifyClients();
-    int getClients(uint8_t *clients);
+extern stringQueue_t _in_messages;
+extern char currentCommand;
 
-  private:
-    Stream   &_stream;
-    uint8_t   _state;
-    stringQueue_t _in_messages;
-    stringQueue_t _out_messages;
-    uint8_t   _num_clients;
-    uint8_t   _clients[MAX_CLIENTS];
+class SWireMaster
+{
+public:
+  SWireMaster(int i2c_addr);
+  int sendData(uint8_t client_id, char *data);
+  int getData(char *buffer);
+  int identifyClients(Stream &s);
+  int identifyClients();
+  int getClients(uint8_t *clients);
+
+private:
+  uint8_t _num_clients;
+  uint8_t _clients[MAX_CLIENTS];
 };
 
-class DSerialClient {
-  public:
-    DSerialClient(Stream &port, uint8_t client_number);
-    int sendData(char *data);
-    int getData(char *buffer);
-    int doSerial();
+class SWireClient
+{
+public:
+  SWireClient(uint8_t client_number);
+  int sendData(char *data);
+  int getData(char *buffer);
 
-  private:
-    Stream   &_stream;
-    uint8_t   _state;
-    stringQueue_t _in_messages;
-    stringQueue_t _out_messages;
-    uint8_t   _client_number;
+private:
+  uint8_t _client_number;
 };
