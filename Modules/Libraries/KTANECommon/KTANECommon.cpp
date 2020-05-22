@@ -70,37 +70,6 @@ void delayWithUpdates(KTANEController &controller, unsigned int length)
   }
 }
 
-void putByte(byte data, int clock_pin, int data_pin)
-{
-  byte i = 8;
-  byte mask;
-  while (i > 0)
-  {
-    mask = 0x01 << (i - 1);       // get bitmask
-    digitalWrite(clock_pin, LOW); // tick
-    if (data & mask)
-    {                               // choose bit
-      digitalWrite(data_pin, HIGH); // send 1
-    }
-    else
-    {
-      digitalWrite(data_pin, LOW); // send 0
-    }
-    digitalWrite(clock_pin, HIGH); // tock
-    --i;                           // move to lesser bit
-  }
-}
-
-void maxSingle(byte reg, byte col, int load_pin, int clock_pin, int data_pin)
-{
-  //maxSingle is the "easy"  function to use for a single max7219
-  digitalWrite(load_pin, LOW);       // begin
-  putByte(reg, clock_pin, data_pin); // specify register
-  putByte(col, clock_pin, data_pin); // put data
-  digitalWrite(load_pin, LOW);       // and load da stuff
-  digitalWrite(load_pin, HIGH);
-}
-
 void (*softwareReset)(void) = 0;
 
 KTANEModule::KTANEModule(SWireClient &swire, int green_led_pin, int red_led_pin) : _swire(swire)
@@ -117,45 +86,6 @@ KTANEModule::KTANEModule(SWireClient &swire, int green_led_pin, int red_led_pin)
   is_solved = 0;
 }
 
-void KTANEModule::interpretData(Stream &s)
-{
-  char out_message[MAX_MSG_LEN];
-  unsigned long start_millis;
-
-  if (_swire.getData(out_message))
-  {
-    if (out_message[0] == CONFIG && strlen(out_message) == 8)
-    {
-      _got_config = 1;
-      raw_to_config((raw_config_t *)(out_message + 1), &_config);
-    }
-    else if (out_message[0] == RESET)
-    {
-      // All of the stuff before softwareReset() is currently useless
-      //  but is kept in case the hard-reset call is removed.
-      is_solved = 0;
-      _num_strikes = 0;
-      _got_config = 0;
-      memset(&_config, 0, sizeof(config_t));
-      _got_reset = 1;
-      digitalWrite(_green_led_pin, LOW);
-
-      // Delay for a small bit to allow client to ACK the reset.
-      start_millis = millis();
-      while (millis() - start_millis < 300){}
-      softwareReset();
-    }
-    else if (out_message[0] == NUM_STRIKES)
-    {
-      _num_strikes = out_message[1];
-    }
-    else if (out_message[0] == TIME)
-    {
-      saveTimeLeft((out_message + 1), _timeLeft);
-    }
-  }
-}
-
 void KTANEModule::interpretData()
 {
   char out_message[MAX_MSG_LEN];
@@ -163,6 +93,7 @@ void KTANEModule::interpretData()
 
   if (_swire.getData(out_message))
   {
+    Serial.println("Got data");
     if (out_message[0] == CONFIG && strlen(out_message) == 8)
     {
       _got_config = 1;
@@ -360,6 +291,7 @@ void KTANEController::interpretData()
   int client_id = _swire.getData(out_message);
   if (client_id)
   {
+    Serial.println("Got data");
     if (out_message[0] == STRIKE)
     {
       _strikes[client_id] = _strikes[client_id] + 1;
@@ -448,7 +380,7 @@ int KTANEController::sendReset()
   uint8_t clients[MAX_CLIENTS];
   int num_clients = 0;
   num_clients = _swire.getClients(clients);
-
+  
   for (int i = 0; i < num_clients; i++)
   {
     if (!_swire.sendData(clients[i], msg)) 
