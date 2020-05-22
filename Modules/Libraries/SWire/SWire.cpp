@@ -12,6 +12,10 @@
 stringQueue_t _in_messages;
 char currentCommand;
 
+const byte numChars = 32;
+char receivedChars[numChars];
+boolean newData = false;
+
 /** @brief Reads a packet from the specified stream if one is available
  *
  *  If the data in the stream contains a full packet, the packet will be put
@@ -52,19 +56,18 @@ int readPacket(char *buffer)
       data_parity ^= rc;
       if (rc != END)
       {
-        /*if(rc == ESC) { // next char was greater than 0x7F, add 0x80 to it.
-          escape_next = 1;
-        } else {*/
-        buf[index] = rc; //| (escape_next << 7);
+
+        buf[index] = rc;
         escape_next = 0;
         index++;
-        //}
       }
       if (rc == END || index >= MAX_MSG_LEN)
       {
         index--;
         buf[index] = '\0'; //purposefully overwrite parity byte.
         strcpy(buffer, buf);
+        //strcpy(receivedChars, buf);
+        //newData = true;
         passed_parity = ((data_parity & 0x7F) == 0);
         index = 0;
         in_packet = 0;
@@ -75,63 +78,7 @@ int readPacket(char *buffer)
         }
         else
         {
-          return -1; //should be -1
-        }
-      }
-    }
-  }
-  return 0;
-}
-
-int readPacket(char *buffer, Stream &s)
-{
-  static int in_packet = 0;
-  static int index = 0;
-  static char buf[MAX_MSG_LEN + 1];
-  static char data_parity = 0;
-  static int escape_next = 0;
-  char rc;
-  int passed_parity = 0;
-
-  while (Wire.available() > 0)
-  {
-    s.println("Reading");
-    rc = Wire.read();
-    if (rc == START)
-    {
-      in_packet = 1;
-      data_parity = START;
-      index = 0;
-    }
-    else if (in_packet == 1)
-    {
-      data_parity ^= rc;
-      if (rc != END)
-      {
-        /*if(rc == ESC) { // next char was greater than 0x7F, add 0x80 to it.
-          escape_next = 1;
-        } else {*/
-        buf[index] = rc; //| (escape_next << 7);
-        escape_next = 0;
-        index++;
-        //}
-      }
-      if (rc == END || index >= MAX_MSG_LEN)
-      {
-        index--;
-        buf[index] = '\0'; //purposefully overwrite parity byte.
-        strcpy(buffer, buf);
-        passed_parity = ((data_parity & 0x7F) == 0);
-        index = 0;
-        in_packet = 0;
-        data_parity = 0;
-        if (passed_parity)
-        {
-          return 1;
-        }
-        else
-        {
-          return -1; //should be -1
+          return -1;
         }
       }
     }
@@ -147,41 +94,6 @@ int readPacket(char *buffer, Stream &s)
  *  @return A status code indicating the whether or not the message was sent
  *            - Currently this function will always succeed
  */
-int sendPacket(char *message, Stream &_s)
-{
-  char data_parity = 0;
-  _s.print("Message lenght: ");
-  _s.println((int)strlen(message));
-
-  if (strlen(message) == 0)
-  {
-    return 0; // Should only happen on library failure
-  }
-  for (int i = 0; message[i] != 0; i++)
-  {
-    data_parity = data_parity ^ (uint8_t)message[i];
-  }
-
-  _s.print("Data parity: ");
-  _s.println(data_parity);
-
-  _s.print("Data recipient: ");
-  _s.println((int)message[0]);
-
-  Wire.beginTransmission(message[0]);
-  Wire.write(START);
-  for (int i = 0; message[i] != 0; i++)
-  {
-    Wire.write(message[i]);
-  }
-  Wire.write((START ^ data_parity ^ END));
-  Wire.write(END);
-  Wire.endTransmission();
-  _s.println("Endded transmission");
-  _s.println();
-  return 1;
-}
-
 int sendPacket(char *message)
 {
   char data_parity = 0;
@@ -209,6 +121,10 @@ int sendPacket(char *message)
 
 void receiveEvent(int howMany)
 {
+  receivedChars[0] = 'a';
+  receivedChars[1] = '\0';
+  newData = true;
+
   char *buffer = (char *)malloc(MAX_MSG_LEN + 1);
   if (buffer == NULL)
   { // Fail if buffer allocation failed
@@ -234,9 +150,6 @@ void requestEvent()
 {
   switch (currentCommand)
   {
-  case PING:
-    Wire.write(ACK);
-    break;
   case NAK:
     Wire.write(NAK);
     break;
@@ -246,7 +159,7 @@ void requestEvent()
     Wire.write(ACK);
     break;
 
-  } // end of switch
+  } // end of switch*/
 
 } // end of requestEvent
 
@@ -275,10 +188,8 @@ SWireMaster::SWireMaster(int i2c_addr)
  *  @param data       The data to write to the given client
  *  @return A status code indicating success or failure
  */
-int SWireMaster::sendData(uint8_t client_id, char *data) //3, {RESET, '\0'}
+int SWireMaster::sendData(uint8_t client_id, char *data)
 {
-  byte timeOutCounter = 0;
-  bool success = true;
   char *new_message = (char *)malloc(MAX_MSG_LEN + 1);
   if (new_message == NULL)
   {
@@ -287,18 +198,8 @@ int SWireMaster::sendData(uint8_t client_id, char *data) //3, {RESET, '\0'}
   strcpy(new_message + 1, data);
   new_message[0] = (char)client_id;
 
-  do
-  {
-    sendPacket(new_message);
-    timeOutCounter++;
-    if (timeOutCounter > 10)
-    {
-      success = false;
-      break;
-    }
-  } while (Wire.requestFrom((int)client_id, 1) > 0);
-
-  if (success)
+  sendPacket(new_message);
+  if (Wire.requestFrom((int)client_id, 1) != 0)
   {
     return 1;
   }
@@ -318,6 +219,7 @@ int SWireMaster::getData(char *buffer)
   {
     return 0;
   }
+  Serial.println("queue is not empty");
   message = stringQueueRemove(&_in_messages);
   client_id = message[1];
   strcpy(buffer, message + 2);
@@ -332,28 +234,6 @@ int SWireMaster::getData(char *buffer)
  *
  *  @return The number of clients found
  */
-int SWireMaster::identifyClients(Stream &s)
-{
-  //_s = s;
-  unsigned long start_millis;
-  char temp[MAX_MSG_LEN];
-  char message[3] = {(char)1, PING, '\0'};
-  _num_clients = 0;
-  memset(_clients, 0, MAX_CLIENTS);
-
-  for (int i = 1; i < MAX_CLIENTS; i++)
-  {
-    message[0] = (char)i;
-    sendPacket(message, s);
-    if (Wire.requestFrom(i, 1) != 0)
-    {
-      _clients[_num_clients] = i;
-      _num_clients++;
-    }
-  }
-  return _num_clients;
-}
-
 int SWireMaster::identifyClients()
 {
   //_s = s;
@@ -369,13 +249,14 @@ int SWireMaster::identifyClients()
     sendPacket(message);
     if (Wire.requestFrom(i, 1) != 0)
     {
+      Serial.print("Req data is: ");
+      Serial.println(Wire.read());
       _clients[_num_clients] = i;
       _num_clients++;
     }
   }
   return _num_clients;
 }
-
 
 /** @brief gets the client array and number of clients
  *
@@ -406,6 +287,8 @@ SWireClient::SWireClient(uint8_t client_number)
   _client_number = client_number;
   stringQueueInit(&_in_messages, MAX_CLIENT_QUEUE_SIZE);
   Wire.begin(client_number);
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
 }
 
 /** @brief sends a data string to the master.
@@ -436,10 +319,11 @@ int SWireClient::sendData(char *data)
     timeOutCounter++;
     if (timeOutCounter > 10)
     {
+      Serial.println("Timed out");
       success = false;
       break;
     }
-  } while (Wire.requestFrom(1, 1) > 0);
+  } while (Wire.requestFrom(1, 1) <= 0);
 
   if (success)
   {
