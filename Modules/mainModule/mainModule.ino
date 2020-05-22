@@ -234,6 +234,8 @@ void setup()
   {
     controller.interpretData();
   }
+
+  Serial.println("Clients are ready");
 #pragma endregion
 
   dest_time = millis() + (long)num_minutes * 60 * 1000;
