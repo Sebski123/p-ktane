@@ -81,12 +81,6 @@
 #define MAX_CLIENT_QUEUE_SIZE 20
 #define MAX_RETRIES 3
 
-#define MASTER_WAITING 0
-#define MASTER_SENT 1
-#define MASTER_ACK 2
-#define CLIENT_WAITING 0
-#define CLIENT_SENT 1
-
 int readPacket(char *buffer);
 int sendPacket(char *message);
 void receiveEvent(int howMany);
@@ -101,7 +95,6 @@ public:
   SWireMaster(int i2c_addr);
   int sendData(uint8_t client_id, char *data);
   int getData(char *buffer);
-  int identifyClients(Stream &s);
   int identifyClients();
   int getClients(uint8_t *clients);
 
