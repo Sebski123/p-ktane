@@ -66,8 +66,6 @@ int readPacket(char *buffer)
         index--;
         buf[index] = '\0'; //purposefully overwrite parity byte.
         strcpy(buffer, buf);
-        //strcpy(receivedChars, buf);
-        //newData = true;
         passed_parity = ((data_parity & 0x7F) == 0);
         index = 0;
         in_packet = 0;
@@ -121,10 +119,6 @@ int sendPacket(char *message)
 
 void receiveEvent(int howMany)
 {
-  receivedChars[0] = 'a';
-  receivedChars[1] = '\0';
-  newData = true;
-
   char *buffer = (char *)malloc(MAX_MSG_LEN + 1);
   if (buffer == NULL)
   { // Fail if buffer allocation failed
@@ -197,6 +191,9 @@ int SWireMaster::sendData(uint8_t client_id, char *data)
   }
   strcpy(new_message + 1, data);
   new_message[0] = (char)client_id;
+
+  Serial.print("Sending: ");
+  Serial.println(new_message);
 
   sendPacket(new_message);
   if (Wire.requestFrom((int)client_id, 1) != 0)
@@ -302,8 +299,6 @@ SWireClient::SWireClient(uint8_t client_number)
  */
 int SWireClient::sendData(char *data)
 {
-  byte timeOutCounter = 0;
-  bool success = true;
   char *new_message = (char *)malloc(MAX_MSG_LEN + 2);
   if (new_message == NULL)
   {
@@ -313,20 +308,14 @@ int SWireClient::sendData(char *data)
   new_message[0] = 1; //Master id
   new_message[1] = (char)_client_number;
 
-  do
-  {
-    sendPacket(new_message);
-    timeOutCounter++;
-    if (timeOutCounter > 10)
-    {
-      Serial.println("Timed out");
-      success = false;
-      break;
-    }
-  } while (Wire.requestFrom(1, 1) <= 0);
+  Serial.print("Sending: ");
+  Serial.println(new_message);
 
-  if (success)
+  sendPacket(new_message);
+  if (Wire.requestFrom(1, 1) != 0)
   {
+    Serial.print("Req data is: ");
+    Serial.println(Wire.read());
     return 1;
   }
   return 0;
