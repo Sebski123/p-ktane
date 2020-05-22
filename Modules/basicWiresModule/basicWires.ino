@@ -163,10 +163,11 @@ void setup()
 
   while (!module.getConfig())
   {
-    module.interpretData(Serial);
+    module.interpretData();
   }
 
   Serial.println("Got config");
+  Serial.println(module.getConfig()->serial);
 
   // Detect Solution:
   switch (num_wires)
@@ -271,12 +272,13 @@ void setup()
   }
 
   Serial.println("Done with setup");
-  module.sendReady();
+  Serial.println(module.sendReady());
+
 }
 
 void loop()
 {
-  module.interpretData(Serial);
+  module.interpretData();
 
   if (!module.is_solved)
   {
