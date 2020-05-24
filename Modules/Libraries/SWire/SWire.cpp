@@ -219,8 +219,8 @@ int SWireMaster::getData(char *buffer)
   }
   Serial.println("queue is not empty");
   message = stringQueueRemove(&_in_messages);
-  client_id = message[1];
-  strcpy(buffer, message + 2);
+  client_id = message[0];
+  strcpy(buffer, message + 1);
   free(message);
   return client_id;
 }
