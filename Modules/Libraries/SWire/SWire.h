@@ -100,6 +100,7 @@ public:
   int getClients(uint8_t *clients);
 
 private:
+  void scanMessages();
   uint8_t _num_clients;
   uint8_t _clients[MAX_CLIENTS];
 };

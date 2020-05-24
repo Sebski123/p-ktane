@@ -211,6 +211,8 @@ int SWireMaster::sendData(uint8_t client_id, char *data)
  */
 int SWireMaster::getData(char *buffer)
 {
+  scanMessages();
+
   int client_id;
   char *message;
   if (stringQueueIsEmpty(&_in_messages))
@@ -277,6 +279,44 @@ int SWireMaster::getClients(uint8_t *clients)
     memcpy(clients, _clients, _num_clients);
   }
   return _num_clients;
+}
+
+void SWireMaster::scanMessages()
+{
+  char rc;
+  char message[MAX_MSG_LEN + 1];
+
+  char msg[3] = {(char)1, READ, '\0'};
+
+  for (byte i = 0; i < _num_clients; i++)
+  {
+    msg[0] = (char)_clients[i];
+    sendPacket(msg);
+    if (Wire.requestFrom((int)_clients[i], 8) > 1)
+    {
+      rc = Wire.read();
+
+      if (rc != '\0' && rc != ACK)
+      {
+        Serial.println("Got some good data");
+        for (byte idx = 0; idx < MAX_MSG_LEN; idx++)
+        {
+          message[idx] = rc;
+          rc = Wire.read();
+          if (rc == (char)0xff)
+          {
+            message[idx + 1] = '\0';
+            Serial.print("Stopped at: ");
+            Serial.println(idx + 1);
+            break;
+          }
+        }
+        Serial.print("Recieved:");
+        Serial.println(message);
+        stringQueueAdd(&_in_messages, message);
+      }
+    }
+  }
 }
 
 /** @brief Creates a new SWireClient object
