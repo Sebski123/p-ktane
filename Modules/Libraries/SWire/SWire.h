@@ -87,7 +87,8 @@ void receiveEvent(int howMany);
 void requestEvent();
 
 extern stringQueue_t _in_messages;
-extern char currentCommand;
+extern stringQueue_t _out_messages;
+extern volatile char currentCommand;
 
 class SWireMaster
 {

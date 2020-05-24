@@ -10,7 +10,8 @@
 #include "stringQueue.h"
 
 stringQueue_t _in_messages;
-char currentCommand;
+stringQueue_t _out_messages;
+volatile char currentCommand = NO_DATA;
 
 const byte numChars = 32;
 char receivedChars[numChars];
@@ -124,38 +125,40 @@ void receiveEvent(int howMany)
   { // Fail if buffer allocation failed
     return;
   }
-  int result = readPacket(buffer);
-  if (result == -1)
+
+  int result = readPacket(buffer); //TO DO: do something with result
+
+  currentCommand = buffer[1];
+
+  if (currentCommand != PING && currentCommand != READ)
   {
-    currentCommand == NAK;
-  }
-  else if (result == 0)
-  {
-    currentCommand == NO_DATA;
-  }
-  else
-  {
-    currentCommand = buffer[1]; // remember command for when we get request
     stringQueueAdd(&_in_messages, buffer);
   }
-} // end of receiveEvent
+}
 
 void requestEvent()
 {
-  switch (currentCommand)
+  if (currentCommand == NO_DATA)
   {
-  case NAK:
-    Wire.write(NAK);
-    break;
-  case NO_DATA:
-    break;
-  default:
+    Wire.write(NO_DATA);
+  }
+  else if (currentCommand != READ)
+  {
     Wire.write(ACK);
-    break;
+  }
+  else if (stringQueueIsEmpty(&_out_messages))
+  {
+    Wire.write('\0');
+  }
+  else
+  {
+    char *message;
+    message = stringQueueRemove(&_out_messages);
+    Wire.write(message, sizeof message);
+  }
 
-  } // end of switch*/
-
-} // end of requestEvent
+  currentCommand = NO_DATA;
+}
 
 /** @brief Creates a new SWireMaster object
  * 
@@ -281,6 +284,7 @@ SWireClient::SWireClient(uint8_t client_number)
 {
   _client_number = client_number;
   stringQueueInit(&_in_messages, MAX_CLIENT_QUEUE_SIZE);
+  stringQueueInit(&_out_messages, MAX_CLIENT_QUEUE_SIZE);
   Wire.begin(client_number);
   Wire.onReceive(receiveEvent);
   Wire.onRequest(requestEvent);
@@ -297,26 +301,19 @@ SWireClient::SWireClient(uint8_t client_number)
  */
 int SWireClient::sendData(char *data)
 {
-  char *new_message = (char *)malloc(MAX_MSG_LEN + 2);
+  char *new_message = (char *)malloc(MAX_MSG_LEN + 1);
   if (new_message == NULL)
   {
     return 0;
   }
-  strcpy(new_message + 2, data);
-  new_message[0] = 1; //Master id
-  new_message[1] = (char)_client_number;
+  strcpy(new_message + 1, data);
+  new_message[0] = (char)_client_number;
 
   Serial.print("Sending: ");
   Serial.println(new_message);
 
-  sendPacket(new_message);
-  if (Wire.requestFrom(1, 1) != 0)
-  {
-    Serial.print("Req data is: ");
-    Serial.println(Wire.read());
-    return 1;
-  }
-  return 0;
+  stringQueueAdd(&_out_messages, new_message);
+  return 1;
 }
 
 /** @brief Retrieve data if there is any to get
