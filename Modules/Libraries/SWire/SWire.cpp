@@ -234,7 +234,7 @@ int SWireMaster::getData(char *buffer)
  */
 int SWireMaster::identifyClients()
 {
-  //_s = s;
+  char rc;
   unsigned long start_millis;
   char temp[MAX_MSG_LEN];
   char message[3] = {(char)1, PING, '\0'};
@@ -247,10 +247,15 @@ int SWireMaster::identifyClients()
     sendPacket(message);
     if (Wire.requestFrom(i, 1) != 0)
     {
+      rc = Wire.read();
       Serial.print("Req data is: ");
-      Serial.println(Wire.read());
-      _clients[_num_clients] = i;
-      _num_clients++;
+      Serial.println(rc);
+
+      if (rc == ACK)
+      {
+        _clients[_num_clients] = i;
+        _num_clients++;
+      }
     }
   }
   return _num_clients;
