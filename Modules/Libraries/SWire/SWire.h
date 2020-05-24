@@ -2,12 +2,11 @@
  *  @brief Headers and definitions for the SWire Library
  *
  *  The SWire library adds a layer-3/4 interface intended to be used on top
- *  of a I2C bus. SWire adds addressing and message 
- *  acknowledgment in a master/client configuration. Clients are polled for
- *  data. 
+ *  of a I2C bus. SWire adds message acknowledgment in a master/client configuration. 
+ *  Clients are polled for data. 
  *
  *  The library is divided into Master and Client classes. In order for constant
- *  data flow, all communicating parties should call "doSerial" often. Functions
+ *  data flow, the master should call "getData" often. Functions
  *  in the SWire library do not block and all but getClients should be
  *  execute relatively quickly.
  *
@@ -30,10 +29,6 @@
  *  (Internally however, a "message" always contains the destination client id
  *   as the first byte)
  *
- *  At because it is impossible to know which client a corrupted packet was
- *  intended for, clients to not NAK corrupt packets, instead the transaction
- *  will just time out and the master node will retry the transaction. This 
- *  takes longer, but because the whole library is non-blocking it's fine.
  *
  *  Future improvements:
  *    - Switch to all length based binary processing to allow nulls
