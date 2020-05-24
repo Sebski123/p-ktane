@@ -93,7 +93,8 @@ void KTANEModule::interpretData()
 
   if (_swire.getData(out_message))
   {
-    Serial.println("Got data");
+    Serial.print("Got data");
+    Serial.println(out_message);
     if (out_message[0] == CONFIG && strlen(out_message) == 8)
     {
       _got_config = 1;
@@ -126,8 +127,6 @@ void KTANEModule::interpretData()
   }
 }
 
-// TODO: make non-blocking
-// currently will block non-communication code for 500ms
 int KTANEModule::strike()
 {
   int result = sendStrike();
@@ -156,7 +155,6 @@ int KTANEModule::sendSolve()
   return _swire.sendData(str);
 }
 
-// TODO: maybe make non-blocking
 int KTANEModule::sendReady()
 {
   char str[2] = {READY, '\0'};
