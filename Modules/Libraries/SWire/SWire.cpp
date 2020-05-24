@@ -162,14 +162,12 @@ void requestEvent()
  *  @param i2c_addr I2C address of SWireMaster device
  *  @return A new initialized SWireMaster object
  */
-SWireMaster::SWireMaster(int i2c_addr)
+SWireMaster::SWireMaster()
 {
   _num_clients = 0;
   memset(_clients, 0, MAX_CLIENTS);
   stringQueueInit(&_in_messages, MAX_MASTER_QUEUE_SIZE);
-  Wire.begin(i2c_addr);
-  Wire.onReceive(receiveEvent);
-  Wire.onRequest(requestEvent);
+  Wire.begin();
 }
 
 /** @brief sends a data string to the specified client.

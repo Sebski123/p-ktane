@@ -58,7 +58,7 @@ unsigned long count = 0;
 MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
 LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
 config_t config;
-SWireMaster master(0x01);
+SWireMaster master;
 KTANEController controller(master);
 
 // Globals
