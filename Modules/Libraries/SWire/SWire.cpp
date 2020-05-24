@@ -130,7 +130,7 @@ void receiveEvent(int howMany)
 
   currentCommand = buffer[1];
 
-  if (currentCommand != PING && currentCommand != READ)
+  if (currentCommand != PING && currentCommand != READ && currentCommand != NO_DATA)
   {
     stringQueueAdd(&_in_messages, buffer);
   }
@@ -305,7 +305,7 @@ void SWireMaster::scanMessages()
       Serial.print("Request yielded ");
       Serial.println(rc);
 
-      if (rc != '\0' && rc != ACK)
+      if (rc != '\0' && rc != ACK && rc != NO_DATA)
       {
         for (byte idx = 0; idx < MAX_MSG_LEN; idx++)
         {
