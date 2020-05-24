@@ -289,7 +289,8 @@ void KTANEController::interpretData()
   int client_id = _swire.getData(out_message);
   if (client_id)
   {
-    Serial.println("Got data");
+    Serial.print("Got data from ");
+    Serial.println((char)client_id);
     if (out_message[0] == STRIKE)
     {
       _strikes[client_id] = _strikes[client_id] + 1;
