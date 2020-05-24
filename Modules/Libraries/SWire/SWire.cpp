@@ -211,7 +211,13 @@ int SWireMaster::sendData(uint8_t client_id, char *data)
  */
 int SWireMaster::getData(char *buffer)
 {
-  scanMessages();
+  static unsigned long lastTime = 0;
+
+  if (millis() - lastTime > 100)
+  {
+    lastTime = millis();
+    scanMessages();
+  }
 
   int client_id;
   char *message;
@@ -219,7 +225,6 @@ int SWireMaster::getData(char *buffer)
   {
     return 0;
   }
-  Serial.println("queue is not empty");
   message = stringQueueRemove(&_in_messages);
   client_id = message[0];
   strcpy(buffer, message + 1);
