@@ -296,14 +296,17 @@ void SWireMaster::scanMessages()
   for (byte i = 0; i < _num_clients; i++)
   {
     msg[0] = (char)_clients[i];
+    Serial.print("Sending ");
+    Serial.println(msg);
     sendPacket(msg);
     if (Wire.requestFrom((int)_clients[i], 8) > 1)
     {
       rc = Wire.read();
+      Serial.print("Request yielded ");
+      Serial.println(rc);
 
       if (rc != '\0' && rc != ACK)
       {
-        Serial.println("Got some good data");
         for (byte idx = 0; idx < MAX_MSG_LEN; idx++)
         {
           message[idx] = rc;
@@ -311,12 +314,10 @@ void SWireMaster::scanMessages()
           if (rc == (char)0xff)
           {
             message[idx + 1] = '\0';
-            Serial.print("Stopped at: ");
-            Serial.println(idx + 1);
             break;
           }
         }
-        Serial.print("Recieved:");
+        Serial.print("Received:");
         Serial.println(message);
         stringQueueAdd(&_in_messages, message);
       }
