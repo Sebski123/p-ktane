@@ -2,9 +2,7 @@
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
 
-SWireClient client(0x02);
-KTANEModule module(client, 2, 3);
-
+// Defines
 #define MAX_NUM_STAGES 5
 #define RED 1
 #define YELLOW 2
@@ -20,7 +18,11 @@ int button_pins[4] = {14, 15, 16, 17};
 //I2C SDA 18
 //I2C SCL 19
 
+//Class inits
+SWireClient client(0x05);
+KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
+//Variables
 unsigned long last_button_action = 0;
 int last_action_multiplier;
 int button_state = 0;
@@ -112,7 +114,6 @@ int get_button()
 
 void setup()
 {
-  serial_port.begin(19200);
   Serial.begin(19200);
 
   Serial.println("Begin setup");

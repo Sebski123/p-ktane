@@ -21,19 +21,13 @@
 //I2C SDA 18
 //I2C SCL 19
 
-#define DBG_RX 14
-#define DBG_TX 15
-#define SERIAL_CS 16      // Chip Select
-#define SERIAL_DATAOUT 17 // MOSI
-#define SERIAL_CLK 18     // SCK
+//Class inits
+MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
+LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
+config_t config;
+SWireMaster master;
+KTANEController controller(master);
 
-//Function prototypes
-void toggleClockBlink();
-void playMelody(int *melody, int *durations, int melody_len);
-void youLose();
-void youWin();
-void getConfigESP();
-void getConfigManual();
 
 //Variables
 int brightness = 4;
@@ -46,26 +40,9 @@ int lose_melody_len = 4;
 int num_minutes;
 unsigned long currentMillis;
 unsigned long previousMillis = 0;
-
 unsigned long count = 0;
 
-//Class inits
-/*
- Now we need a LedControl to work with.
- ***** These pin numb
- ers will probably not work with your hardware *****
- pin 12 is connected to the DataIn 
- pin 11 is connected to the CLK 
- pin 10 is connected to LOAD 
- We have only a single MAX72XX.
- */
-MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
-LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
-config_t config;
-SWireMaster master;
-KTANEController controller(master);
-
-// Globals
+//  Globals
 int strikes = 0;
 int solves = 0;
 unsigned long dest_time;

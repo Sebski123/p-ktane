@@ -19,9 +19,11 @@
 //I2C SDA 18
 //I2C SCL 19
 
-SWireClient client( MY_ADDRESS);
-KTANEModule module(client, 2, 3);
+//Class inits
+SWireClient client(0x04);
+KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
+//Variables
 int buttonColor;
 int stripColor;
 int text;
@@ -127,7 +129,6 @@ void checkSolution(bool held)
 
 void setup()
 {
-    serial_port.begin(19200);
     Serial.begin(19200);
 
     pinMode(DATA_IN_PIN, OUTPUT);

@@ -22,10 +22,8 @@
 
 LedControl lc = LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 
-LedControl lc=LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
-
-SWireClient client(0x04);
-KTANEModule module(client, 6, 7);
+SWireClient client(0x06);
+KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
 uint8_t bottom_nums[5][4];
 uint8_t top_nums[5];
