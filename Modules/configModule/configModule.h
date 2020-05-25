@@ -105,4 +105,4 @@ const char INDEX_HTML[] =
 "    </script>"
 "</body>"
 ""
-"</html>"
+"</html>";
