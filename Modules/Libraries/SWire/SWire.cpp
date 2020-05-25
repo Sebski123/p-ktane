@@ -197,10 +197,6 @@ int SWireMaster::sendData(uint8_t client_id, char *data)
   }
   strcpy(new_message + 1, data);
   new_message[0] = (char)client_id;
-
-  Serial.print("Sending: ");
-  Serial.println(new_message);
-
   sendPacket(new_message);
   if (Wire.requestFrom((int)client_id, 1) != 0)
   {
@@ -260,9 +256,6 @@ int SWireMaster::identifyClients()
     if (Wire.requestFrom(i, 1) != 0)
     {
       rc = Wire.read();
-      Serial.print("Req data is: ");
-      Serial.println(rc);
-
       if (rc == ACK)
       {
         _clients[_num_clients] = i;
@@ -294,8 +287,6 @@ int SWireMaster::getClients(uint8_t *clients)
 void SWireMaster::scanMessages()
 {
   char rc;
-  char message[MAX_MSG_LEN + 1];
-
   char msg[3] = {(char)1, READ, '\0'};
 
   for (byte i = 0; i < _num_clients; i++)
@@ -306,9 +297,6 @@ void SWireMaster::scanMessages()
     if (Wire.requestFrom((int)_clients[i], 8) > 1)
     {
       rc = Wire.read();
-      //Serial.print("Request yielded ");
-      //Serial.println(rc);
-
       if (rc != '\0' && rc != ACK && rc != NO_DATA)
       {
         for (byte idx = 0; idx < MAX_MSG_LEN; idx++)
@@ -321,8 +309,6 @@ void SWireMaster::scanMessages()
             break;
           }
         }
-        Serial.print("Received:");
-        Serial.println(message);
         stringQueueAdd(&_in_messages, message);
         continue;
       }
@@ -366,10 +352,6 @@ int SWireClient::sendData(char *data)
   }
   strcpy(new_message + 1, data);
   new_message[0] = (char)_client_number;
-
-  Serial.print("Sending: ");
-  Serial.println(new_message);
-
   stringQueueAdd(&_out_messages, new_message);
   return 1;
 }
