@@ -3,7 +3,6 @@
 #include "KTANECommon.h"
 #include "LedControl.h"
 #include "MAX6954.h"
-#include <SoftwareSerial.h>
 
 // Defines
 //  Pins
