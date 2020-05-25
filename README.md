@@ -9,7 +9,7 @@
 ## Modules
 | Module                                                 | Coded | Built | Tested | I2C addr |
 |--------------------------------------------------------|-------|-------|--------|----------|
-| Main (Controller)                                      | ✔️     |       |        | 1        |
+| Main (Controller)                                      | ✔️     |       |        | MASTER        |
 | Config (ESP8266)                                       | ✔️     | ✔️     | ✔️      | 2        |
 | [Wires](https://i.imgur.com/xLXpCYH.png)               | ✔️     | ✔️     | ✔️      | 3        |
 | [Button](https://i.imgur.com/Leew7du.png)              | ✔️     |       |        | 4        |
