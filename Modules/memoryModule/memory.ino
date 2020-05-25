@@ -44,7 +44,9 @@ uint8_t getIndexFromNumber(uint8_t *buttons, uint8_t num){
   return 255;
 }
 
-void updateDisplays() {
+void updateDisplays()
+{
+  lc.clearDisplay(0);
   lc.setDigit(0, 0, bottom_nums[stage][0], false);
   lc.setDigit(0, 1, bottom_nums[stage][1], false);
   lc.setDigit(0, 2, bottom_nums[stage][2], false);
@@ -58,21 +60,27 @@ void updateDisplays() {
   }
 }
 
-void displayWaitingScreen() {
+void displayWaitingScreen()
+{
 
   // needs to delay for a total of 2500
-  for(int i = 0; i < 5; i++) {
-    lc.setDigit(0, digits[i], 0, false);
+  for (int i = 0; i < 5; i++)
+  {
+    lc.setDigit(0, digits[i], ' ', false);
     delayWithUpdates(module, 100);
   }
-  for(int i = 0; i < 15; i++){
-    for(int j = 0; j < 5; j++) {
-      lc.setDigit(0, digits[j], 1 << ((i+j)%7), false);
+  for (int i = 0; i < 15; i++)
+  {
+    for (int j = 0; j < 5; j++)
+    {
+      lc.setLed(0, digits[j], 1 << ((i + j) % 7), true);
     }
     delayWithUpdates(module, 100);
+    lc.clearDisplay(0);
   }
-  for(int i = 0; i < 5; i++) {
-    lc.setDigit(0, digits[i], 0, false);
+  for (int i = 0; i < 5; i++)
+  {
+    lc.setDigit(0, digits[i], ' ', false);
   }
   delayWithUpdates(module, 500);
 }
