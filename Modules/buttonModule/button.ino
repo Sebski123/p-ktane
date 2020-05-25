@@ -3,23 +3,21 @@
 #include "NeoICSerial.h"
 
 // Defines
-//Green clear Led 2
-//Red strike Led 3
+//  Pins
+#define GREEN_CLEAR_LED 2
+#define BUTTON_LED_PIN_GREEN 3
 #define BUTTON_PIN 4
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
-#define CLOCK_PIN 11
+#define BUTTON_LED_PIN_BLUE 5
+#define BUTTON_LED_PIN_RED 6
+#define RED_STRIKE_LED 7
+#define CLOCK_PIN 8
+#define STRIP_LED_PIN_GREEN 9
+#define STRIP_LED_PIN_BLUE 10
+#define STRIP_LED_PIN_RED 11
 #define LOAD_PIN 12
 #define DATA_IN_PIN 13
-
-#define BUTTON_LED_PIN_GREEN 14
-#define BUTTON_LED_PIN_BLUE 15
-#define BUTTON_LED_PIN_RED 16
-#define STRIP_LED_PIN_GREEN 17
-#define STRIP_LED_PIN_BLUE 18
-#define STRIP_LED_PIN_RED 19
-
-#define DISP_SINGLE(x, y) maxSingle((x), (y), LOAD_PIN, CLOCK_PIN, DATA_IN_PIN)
+//I2C SDA 18
+//I2C SCL 19
 
 SWireClient client( MY_ADDRESS);
 KTANEModule module(client, 2, 3);
