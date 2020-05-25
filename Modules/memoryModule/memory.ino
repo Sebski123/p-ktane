@@ -2,25 +2,25 @@
 #include "KTANECommon.h"
 #include "LedControl.h"
 
-
 // Defines
 #define BUTTON1_PIN 2
 #define BUTTON2_PIN 3
 #define BUTTON3_PIN 4
 #define BUTTON4_PIN 5
-//Green clear Led 6
-//Red strike Led 7
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
+#define GREEN_CLEAR_LED 6
+#define RED_STRIKE_LED 7
 #define CLOCK_PIN 10
 #define LOAD_PIN 11
 #define DATA_IN_PIN 12
+#define LED1_PIN 13
+#define LED2_PIN 14
+#define LED3_PIN 15
+#define LED4_PIN 16
+#define LED5_PIN 17
+//I2C SDA 18
+//I2C SCL 19
 
-#define LED1_PIN 14
-#define LED2_PIN 15
-#define LED3_PIN 16
-#define LED4_PIN 17
-#define LED5_PIN 18
+LedControl lc = LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 
 LedControl lc=LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 
