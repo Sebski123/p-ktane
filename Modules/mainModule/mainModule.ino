@@ -6,16 +6,20 @@
 #include <SoftwareSerial.h>
 
 // Defines
+//  Pins
 #define SPEAKER_PIN 3
 #define STRIKE_1_PIN 4
 #define STRIKE_2_PIN 5
 #define CLEAR_PIN 6
 #define CLOCK_DOT 7
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
 #define CLOCK_DATA 10
 #define CLOCK_LOAD 11
 #define CLOCK_CLK 12
+#define SERIAL_CS 14      
+#define SERIAL_DATAOUT 15 
+#define SERIAL_CLK 16     
+//I2C SDA 18
+//I2C SCL 19
 
 #define DBG_RX 14
 #define DBG_TX 15
