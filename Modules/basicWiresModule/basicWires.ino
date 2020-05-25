@@ -22,10 +22,11 @@ char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
 //Pin header A3
 //Pin header A4
 //Pin header A5
-//Green clear Led 2
-//Red strike Led 3
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
+#define GREEN_CLEAR_LED 2
+#define RED_STRIKE_LED 3
+//I2C SDA 18
+//I2C SCL 19
+
 
 int wires[6] = {0, 0, 0, 0, 0, 0};
 int color_count[6] = {0, 0, 0, 0, 0, 0};
