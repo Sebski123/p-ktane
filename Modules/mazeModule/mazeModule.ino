@@ -1,20 +1,3 @@
-
-const char string_0[] PROGMEM = "Getting config";
-const char string_1[] PROGMEM = "Got config";
-const char string_2[] PROGMEM = "Setting random seed";
-const char string_3[] PROGMEM = "Setting up I/O-pins";
-const char string_4[] PROGMEM = "Choosing maze";
-const char string_5[] PROGMEM = "Choose maze nr: ";
-const char string_6[] PROGMEM = "Getting marker locations";
-const char string_7[] PROGMEM = "Choosing player location";
-const char string_8[] PROGMEM = "Player location: ";
-const char string_9[] PROGMEM = "Choosing goal location";
-const char string_10[] PROGMEM = "Goal location: ";
-const char string_11[] PROGMEM = "Showing goal location";
-const char string_12[] PROGMEM = "Setup done";
-
-const char *const string_table[] PROGMEM = {string_0, string_1, string_2, string_3, string_4, string_5, string_6, string_7, string_8, string_9, string_10, string_11, string_12};
-
 #include "SWire.h"
 #include "KTANECommon.h"
 #include "LedControl.h"
@@ -97,11 +80,11 @@ void move(int direction)
   {
 
   case UP:
-    Serial.println("up");
+    Serial.println(F("up"));
     if (mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1]])
     {
       module.strike();
-      Serial.println("Strike");
+      Serial.println(F("Strike"));
     }
     else
     {
@@ -112,11 +95,11 @@ void move(int direction)
     break;
 
   case DOWN:
-    Serial.println("down");
+    Serial.println(F("down"));
     if (mazeHorizontalWalls[mazeNum][playerLocation[0]][playerLocation[1] + 1])
     {
       module.strike();
-      Serial.println("Strike");
+      Serial.println(F("Strike"));
     }
     else
     {
@@ -127,11 +110,11 @@ void move(int direction)
     break;
 
   case LEFT:
-    Serial.println("left");
+    Serial.println(F("left"));
     if (mazeVerticalWalls[mazeNum][playerLocation[1]][playerLocation[0]])
     {
       module.strike();
-      Serial.println("Strike");
+      Serial.println(F("Strike"));
     }
     else
     {
@@ -142,11 +125,11 @@ void move(int direction)
     break;
 
   case RIGHT:
-    Serial.println("right");
+    Serial.println(F("right"));
     if (mazeVerticalWalls[mazeNum][playerLocation[1]][playerLocation[0] + 1])
     {
       module.strike();
-      Serial.println("Strike");
+      Serial.println(F("Strike"));
     }
     else
     {
@@ -164,20 +147,19 @@ void move(int direction)
 
 void setup()
 {
-  serial_port.begin(19200);
   Serial.begin(19200);
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 0));
+  Serial.println(F("Getting config"));
   while (!module.getConfig())
   {
     module.interpretData();
   }
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 1));
+  Serial.println(F("Got config"));
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 2));
+  Serial.println(F("Setting random seed"));
   randomSeed(config_to_seed(module.getConfig()));
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 3));
+  Serial.println(F("Setting up I/O-pins"));
   // 8x8 Led-matrix setup
   pinMode(DATA_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
@@ -199,47 +181,47 @@ void setup()
   /* and clear the display */
   lc.clearDisplay(0);
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 4));
+  Serial.println(F("Choosing maze"));
   mazeNum = random(0, 9);
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 5));
+  Serial.println(F("Choose maze nr: "));
   Serial.println(mazeNum);
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 6));
+  Serial.println(F("Getting marker locations"));
   memcpy(markerLocations, markers[mazeNum], sizeof(markerLocations));
-  Serial.print("Marker 1 location: ");
+  Serial.print(F("Marker 1 location: "));
   Serial.print(markerLocations[0][0]);
   Serial.print("\t");
   Serial.println(markerLocations[0][1]);
 
-  Serial.print("Marker 2 location: ");
+  Serial.print(F("Marker 2 location: "));
   Serial.print(markerLocations[1][0]);
   Serial.print("\t");
   Serial.println(markerLocations[1][1]);
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 7));
+  Serial.println(F("Choosing player location"));
   playerLocation[0] = random(0, 6);
   playerLocation[1] = random(0, 6);
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 8));
+  Serial.println(F("Player location: "));
   Serial.print(playerLocation[0]);
   Serial.print("\t");
   Serial.println(playerLocation[1]);
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 9));
+  Serial.println(F("Choosing goal location"));
   while ((goalLocation[0] == playerLocation[0]) && (goalLocation[1] == playerLocation[1]))
   {
     goalLocation[0] = random(0, 6);
     goalLocation[1] = random(0, 6);
   }
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 10));
+  Serial.println(F("Goal location: "));
   Serial.print(goalLocation[0]);
   Serial.print("\t");
   Serial.println(goalLocation[1]);
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 11));
+  Serial.println(F("Showing goal location"));
   lc.setLed(0, goalLocation[0], goalLocation[1], true);
 
-  Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 12));
+  Serial.println(F("Setup done"));
   module.sendReady();
 }
 
@@ -282,13 +264,13 @@ void loop()
       if (dir >= 0)
       {
         lastDebounceTime = millis();
-        Serial.print("Pressed: ");
+        Serial.print(F("Pressed: "));
         Serial.println(dir);
 
         //Try to move the player, gave a strike if a wall is hit
         move(dir);
 
-        Serial.println((__FlashStringHelper *)pgm_read_word(string_table + 8));
+        Serial.println(F("Player location: "));
         Serial.print(playerLocation[0]);
         Serial.print("\t");
         Serial.println(playerLocation[1]);
@@ -298,7 +280,7 @@ void loop()
     if ((playerLocation[0] == goalLocation[0]) && (playerLocation[1] == goalLocation[1]))
     {
       module.win();
-      Serial.println("Win");
+      Serial.println(F("Win"));
     }
   }
 }
