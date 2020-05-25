@@ -1,5 +1,6 @@
 #include "SWire.h"
 #include "KTANECommon.h"
+#include "Adafruit_MCP3008.h"
 
 // Resistor values  = 22000,  3300,  1000,   330,  33 
 // Wire colors      = White, Blue, Yellow, Black, Red
@@ -14,18 +15,17 @@
 #define RED 5
 
 //  Pins
-//Pin header A0 
-//Pin header A1     
-//Pin header A2
-//Pin header A3
-//Pin header A4
-//Pin header A5
 #define GREEN_CLEAR_LED 2
 #define RED_STRIKE_LED 3
+#define ADC_SCK 4
+#define ADC_MISO 5
+#define ADC_MOSI 6
+#define ADC_CS 7
 //I2C SDA 18
 //I2C SCL 19
 
 //Class inits
+Adafruit_MCP3008 adc;
 SWireClient client(0x03);
 KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
@@ -115,19 +115,13 @@ void setup()
   Serial.println("Begin setup");
 
   #pragma region Detect wires:
-  pinMode(14, INPUT);   //A0
-  pinMode(15, INPUT);   //A1
-  pinMode(16, INPUT);   //A2
-  pinMode(17, INPUT);   //A3
-  pinMode(18, INPUT);   //A4
-  pinMode(19, INPUT);   //A5
-
+  adc.begin(ADC_SCK, ADC_MOSI, ADC_MISO, ADC_CS);
 
   Serial.print("Raw:\t"); 
 
   for (int i = 0; i < 6; i++)
   {
-    int reading = analogRead(i);
+    int reading = adc.readADC(i);
     wires[i] = voltageToWire(reading);
     Serial.print(reading);
     Serial.print("\t");
