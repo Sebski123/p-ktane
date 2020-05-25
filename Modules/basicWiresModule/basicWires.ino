@@ -1,21 +1,19 @@
 #include "SWire.h"
 #include "KTANECommon.h"
 
-SWireClient client(0x03);
-KTANEModule module(client, 2, 3);
-
 // Resistor values  = 22000,  3300,  1000,   330,  33 
 // Wire colors      = White, Blue, Yellow, Black, Red
 // Wire int         =   1     2       3      4     5
 // 0 indicates no wire
+
+// Defines
 #define WHITE 1
 #define BLUE 2
 #define YELLOW 3
 #define BLACK 4
 #define RED 5
 
-char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
-// Defines
+//  Pins
 //Pin header A0 
 //Pin header A1     
 //Pin header A2
@@ -27,7 +25,12 @@ char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
 //I2C SDA 18
 //I2C SCL 19
 
+//Class inits
+SWireClient client(0x03);
+KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
+//Variables
+char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
 int wires[6] = {0, 0, 0, 0, 0, 0};
 int color_count[6] = {0, 0, 0, 0, 0, 0};
 int wire_to_cut; // One indexed and relative
