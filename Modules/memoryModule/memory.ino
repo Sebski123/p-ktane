@@ -185,6 +185,29 @@ void generateRandomNumbers() {
       buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[3][buttons_to_press[2]]);
       break;
   }
+
+  for (int i = 0; i < 5; i++)
+  {
+    Serial.print("Stage");
+    Serial.print(i);
+    Serial.print(": ");
+    for (int j = 0; j < 4; j++)
+    {
+      Serial.print(bottom_nums[i][j]);
+      Serial.print("\t");
+    }
+    Serial.print("\t");
+    Serial.print(top_nums[i]);
+    Serial.println();
+  }
+
+  Serial.print("Buttons to press: ");
+  for (int i = 0; i < 5; i++)
+  {
+    Serial.print(buttons_to_press[i]);
+    Serial.print(" ");
+  }
+  Serial.println();
 }
 
 void setup() {
@@ -225,27 +248,6 @@ void setup() {
   // Generate numbers
   generateRandomNumbers();
   updateDisplays();
-
-
-  for(int i = 0; i < 5; i++){
-    Serial.print("Stage");
-    Serial.print(i);
-    Serial.print(": ");
-    for(int j = 0; j < 4; j++){
-      Serial.print(bottom_nums[i][j]);
-      Serial.print("\t");
-    }
-    Serial.print("\t");
-    Serial.print(top_nums[i]);
-    Serial.println();
-  }
-
-  Serial.print("Buttons to press: ");
-  for(int i = 0; i < 5; i++){
-    Serial.print(buttons_to_press[i]);
-    Serial.print(" ");
-  }
-  Serial.println();
 
   Serial.println("Done setup");
 
