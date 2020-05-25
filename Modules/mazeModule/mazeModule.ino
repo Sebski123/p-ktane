@@ -17,9 +17,11 @@
 //I2C SDA 18
 //I2C SCL 19
 
-//Function prototypes
-int getBtnDir();
-void move(int direction);
+//Class inits
+LedControl lc = LedControl(DATA_PIN, CLOCK_PIN, LOAD_PIN, 1);
+SWireClient client(0x07);
+KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
+
 
 //Variables
 int playerLocation[2];
@@ -35,19 +37,6 @@ int dir;
 int markerBlinkCount = 0;
 unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 
-//Class inits
-/*
- Now we need a LedControl to work with.
- ***** These pin numb
- ers will probably not work with your hardware *****
- pin 12 is connected to the DataIn 
- pin 11 is connected to the CLK 
- pin 10 is connected to LOAD 
- We have only a single MAX72XX.
- */
-LedControl lc = LedControl(DATA_PIN, CLOCK_PIN, LOAD_PIN, 1);
-SWireClient client(0x02);
-KTANEModule module(client, 2, 3);
 
 int getBtnDir()
 {
