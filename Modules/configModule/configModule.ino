@@ -1,15 +1,3 @@
-/*
-  TODO:
-    - Get time for disarm
-    - Send config/time to controller module
-    - Reset controller module?
-    - Communication options:
-      - I2C
-      - Normal Serial
-      - DSerial
-      - Shared memory?
-*/
-
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
@@ -123,16 +111,17 @@ void setup(void)
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  if (mdns.begin("ktane-setup", WiFi.localIP())) {
-    //Serial.println("MDNS responder started");
+  if (mdns.begin("ktane-setup", WiFi.localIP()))
+  {
+    Serial.println("MDNS responder started");
   }
 
   server.on("/", handleRoot);
   server.onNotFound(handleNotFound);
 
   server.begin();
-  //Serial.print("Connect to http://ktane-setup.local or http://");
-  //Serial.println(WiFi.localIP());
+  Serial.print("Connect to http://ktane-setup.local or http://");
+  Serial.println(WiFi.localIP());
 
   // Add service to MDNS-SD
   mdns.addService("http", "tcp", 80);
