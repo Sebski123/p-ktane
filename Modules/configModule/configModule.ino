@@ -2,23 +2,21 @@
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
-#include "KTANECommon.h"
 #include <EEPROM.h>
+#include "KTANECommon.h"
 #include "configModule.h"
 
 extern const char INDEX_HTML[];
 
 // Fill in your WiFi router SSID and password
-const char* ssid = "Sebastian";
-const char* password = "12341234";
+const char *ssid = "Sebastian";
+const char *password = "12341234";
 MDNSResponder mdns;
 
 ESP8266WebServer server(80);
 
 raw_config_t stored_config;
 int num_minutes;
-
-
 
 void returnFail(String msg)
 {
@@ -32,22 +30,22 @@ void handleSubmit()
   config_t config;
   int addr = 0;
 
-  if (!server.hasArg("serial_num") || !server.hasArg("num_batteries")) {
+  if (!server.hasArg("serial_num") || !server.hasArg("num_batteries"))
+  {
     return returnFail("BAD ARGS");
   }
   server.arg("serial_num").toCharArray(config.serial, 7);
   num_minutes = server.arg("num_minutes").toInt();
   config.batteries = server.arg("num_batteries").toInt();
-  config.indicators = ((!!server.hasArg("port1")) || 
-                       ((!!server.hasArg("port2")) << 1)
-                      );
-  config.ports = (!!server.hasArg("port3") || 
+  config.indicators = ((!!server.hasArg("port1")) ||
+                       ((!!server.hasArg("port2")) << 1));
+  config.ports = (!!server.hasArg("port3") ||
                   ((!!server.hasArg("port4")) << 1) ||
-                  ((!!server.hasArg("port5")) << 2)
-                 );
+                  ((!!server.hasArg("port5")) << 2));
   config_to_raw(&config, &stored_config);
 
-  for(int i = 0; i < 7; i++){
+  for (int i = 0; i < 7; i++)
+  {
     byte b = ((byte *)(&stored_config))[i];
     EEPROM.write(addr++, b);
   }
@@ -60,10 +58,12 @@ void handleSubmit()
 
 void handleRoot()
 {
-  if (server.hasArg("serial_num")) {
+  if (server.hasArg("serial_num"))
+  {
     handleSubmit();
   }
-  else {
+  else
+  {
     server.send(200, "text/html", INDEX_HTML);
   }
 }
@@ -74,11 +74,12 @@ void handleNotFound()
   message += "URI: ";
   message += server.uri();
   message += "\nMethod: ";
-  message += (server.method() == HTTP_GET)?"GET":"POST";
+  message += (server.method() == HTTP_GET) ? "GET" : "POST";
   message += "\nArguments: ";
   message += server.args();
   message += "\n";
-  for (uint8_t i=0; i<server.args(); i++){
+  for (uint8_t i = 0; i < server.args(); i++)
+  {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
   server.send(404, "text/plain", message);
@@ -90,7 +91,8 @@ void setup(void)
 
   EEPROM.begin(512);
   int addr = 0;
-  for(int i = 0; i < 7; i++){
+  for (int i = 0; i < 7; i++)
+  {
     byte b = EEPROM.read(addr++);
     ((byte *)(&stored_config))[i] = b;
   }
@@ -101,7 +103,8 @@ void setup(void)
   //Serial.println("");
 
   // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
   }
@@ -125,16 +128,17 @@ void setup(void)
 
   // Add service to MDNS-SD
   mdns.addService("http", "tcp", 80);
-  
 }
 
 void loop(void)
 {
   mdns.update();
-  
+
   server.handleClient();
-  if(Serial.available() > 0) {
-    while(Serial.available() > 0){
+  if (Serial.available() > 0)
+  {
+    while (Serial.available() > 0)
+    {
       // Throw away data
       Serial.read();
     }
