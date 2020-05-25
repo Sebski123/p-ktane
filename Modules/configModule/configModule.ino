@@ -20,8 +20,6 @@
 
 extern const char INDEX_HTML[];
 
-int led_pin = LED_BUILTIN;
-
 // Fill in your WiFi router SSID and password
 const char* ssid = "Sebastian";
 const char* password = "12341234";
@@ -110,8 +108,6 @@ void setup(void)
   }
   // Read time
   num_minutes = EEPROM.read(addr++);
-
-  pinMode(led_pin,  OUTPUT);
 
   WiFi.begin(ssid, password);
   //Serial.println("");
