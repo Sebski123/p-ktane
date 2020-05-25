@@ -6,10 +6,10 @@
 //  Pins
 #define GREEN_CLEAR_LED 2
 #define BUTTON_LED_PIN_GREEN 3
-#define BUTTON_PIN 4
+#define RED_STRIKE_LED 4
 #define BUTTON_LED_PIN_BLUE 5
 #define BUTTON_LED_PIN_RED 6
-#define RED_STRIKE_LED 7
+#define BUTTON_PIN 7
 #define CLOCK_PIN 8
 #define STRIP_LED_PIN_GREEN 9
 #define STRIP_LED_PIN_BLUE 10
@@ -20,6 +20,7 @@
 //I2C SCL 19
 
 //Class inits
+LedControl lc = LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 SWireClient client(0x04);
 KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
