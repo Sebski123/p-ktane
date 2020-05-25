@@ -134,6 +134,10 @@ void receiveEvent(int howMany)
   {
     stringQueueAdd(&_in_messages, buffer);
   }
+  else
+  {
+    free(buffer);
+  }
 }
 
 void requestEvent()
@@ -155,6 +159,7 @@ void requestEvent()
     char *message;
     message = stringQueueRemove(&_out_messages);
     Wire.write(message, sizeof message);
+    free(message);
   }
 
   currentCommand = NO_DATA;
@@ -295,9 +300,8 @@ void SWireMaster::scanMessages()
 
   for (byte i = 0; i < _num_clients; i++)
   {
+    char* message= (char*) malloc(MAX_MSG_LEN + 1);
     msg[0] = (char)_clients[i];
-    //Serial.print("Sending ");
-    //Serial.println(msg);
     sendPacket(msg);
     if (Wire.requestFrom((int)_clients[i], 8) > 1)
     {
@@ -320,8 +324,10 @@ void SWireMaster::scanMessages()
         Serial.print("Received:");
         Serial.println(message);
         stringQueueAdd(&_in_messages, message);
+        continue;
       }
     }
+    free(message);
   }
 }
 
