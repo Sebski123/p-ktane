@@ -35,9 +35,12 @@ int led_pins[6] = {LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN, LED5_PIN, LED5_PIN};
 
 int digits[5] = {0, 1, 2, 3, 4};
 
-uint8_t getIndexFromNumber(uint8_t *buttons, uint8_t num){
-  for(int i = 0; i < 4; i++) {
-    if(buttons[i] == num) {
+uint8_t getIndexFromNumber(uint8_t *buttons, uint8_t num)
+{
+  for (int i = 0; i < 4; i++)
+  {
+    if (buttons[i] == num)
+    {
       return i;
     }
   }
@@ -52,10 +55,12 @@ void updateDisplays()
   lc.setDigit(0, 2, bottom_nums[stage][2], false);
   lc.setDigit(0, 3, bottom_nums[stage][3], false);
   lc.setDigit(0, 4, top_nums[stage], false);
-  for(int i = 0; i < 5; i++) {
+  for (int i = 0; i < 5; i++)
+  {
     digitalWrite(led_pins[i], LOW);
   }
-  for(int i = 0; i <= stage; i++) {
+  for (int i = 0; i <= stage; i++)
+  {
     digitalWrite(led_pins[i], HIGH);
   }
 }
@@ -85,10 +90,12 @@ void displayWaitingScreen()
   delayWithUpdates(module, 500);
 }
 
-void generateRandomNumbers() {
+void generateRandomNumbers()
+{
   int r1, r2;
   uint8_t temp;
-  for(int i = 0; i < 5; i++){
+  for (int i = 0; i < 5; i++)
+  {
     //Insert 1-4 in each row
     bottom_nums[i][0] = 1;
     bottom_nums[i][1] = 2;
@@ -96,7 +103,8 @@ void generateRandomNumbers() {
     bottom_nums[i][3] = 4;
 
     //Swap random numbers in row 20 times to scramble them
-    for(int j = 0; j < 20; j++){
+    for (int j = 0; j < 20; j++)
+    {
       r1 = random(0, 4);
       r2 = random(0, 4);
       temp = bottom_nums[i][r1];
@@ -104,86 +112,91 @@ void generateRandomNumbers() {
       bottom_nums[i][r2] = temp;
     }
 
-    top_nums[i] = random(1,5);
+    top_nums[i] = random(1, 5);
   }
 
-  switch(top_nums[0]) {
-    case(1):
-      buttons_to_press[0] = 1; // Second Position
-      break;
-    case(2):
-      buttons_to_press[0] = 1; // Second Position
-      break;
-    case(3):
-      buttons_to_press[0] = 2; // Third Position
-      break;
-    case(4):
-      buttons_to_press[0] = 3; // Fourth Position
-      break;
+  switch (top_nums[0])
+  {
+  case (1):
+    buttons_to_press[0] = 1; // Second Position
+    break;
+  case (2):
+    buttons_to_press[0] = 1; // Second Position
+    break;
+  case (3):
+    buttons_to_press[0] = 2; // Third Position
+    break;
+  case (4):
+    buttons_to_press[0] = 3; // Fourth Position
+    break;
   }
-  switch(top_nums[1]) {
-    case(1):
-      // Button labeled 4
-      buttons_to_press[1] = getIndexFromNumber(bottom_nums[1], 4);
-      break;
-    case(2):
-      buttons_to_press[1] = buttons_to_press[0]; // Same position as stage 1
-      break;
-    case(3):
-      buttons_to_press[1] = 0; // First Position
-      break;
-    case(4):
-      buttons_to_press[1] = buttons_to_press[0]; // Same position as stage 1
-      break;
+  switch (top_nums[1])
+  {
+  case (1):
+    // Button labeled 4
+    buttons_to_press[1] = getIndexFromNumber(bottom_nums[1], 4);
+    break;
+  case (2):
+    buttons_to_press[1] = buttons_to_press[0]; // Same position as stage 1
+    break;
+  case (3):
+    buttons_to_press[1] = 0; // First Position
+    break;
+  case (4):
+    buttons_to_press[1] = buttons_to_press[0]; // Same position as stage 1
+    break;
   }
-  switch(top_nums[2]) {
-    case(1):
-      // Same label as stage 2
-      buttons_to_press[2] = getIndexFromNumber(bottom_nums[2], bottom_nums[1][buttons_to_press[1]]);
-      break;
-    case(2):
-      // Same label as stage 1
-      buttons_to_press[2] = getIndexFromNumber(bottom_nums[2], bottom_nums[0][buttons_to_press[0]]);
-      break;
-    case(3):
-      buttons_to_press[2] = 2;  // Third Position
-      break;
-    case(4):
-      // Button labeled 4
-      buttons_to_press[2] = getIndexFromNumber(bottom_nums[2], 4) ;
-      break;
+  switch (top_nums[2])
+  {
+  case (1):
+    // Same label as stage 2
+    buttons_to_press[2] = getIndexFromNumber(bottom_nums[2], bottom_nums[1][buttons_to_press[1]]);
+    break;
+  case (2):
+    // Same label as stage 1
+    buttons_to_press[2] = getIndexFromNumber(bottom_nums[2], bottom_nums[0][buttons_to_press[0]]);
+    break;
+  case (3):
+    buttons_to_press[2] = 2; // Third Position
+    break;
+  case (4):
+    // Button labeled 4
+    buttons_to_press[2] = getIndexFromNumber(bottom_nums[2], 4);
+    break;
   }
-  switch(top_nums[3]) {
-    case(1):
-      buttons_to_press[3] = buttons_to_press[0]; // Same position as stage 1
-      break;
-    case(2):
-      buttons_to_press[3] = 0;  // First Position
-      break;
-    case(3):
-      buttons_to_press[3] = buttons_to_press[1]; // Same position as stage 2
-      break;
-    case(4):
-      buttons_to_press[3] = buttons_to_press[1]; // Same position as stage 2
-      break;
+  switch (top_nums[3])
+  {
+  case (1):
+    buttons_to_press[3] = buttons_to_press[0]; // Same position as stage 1
+    break;
+  case (2):
+    buttons_to_press[3] = 0; // First Position
+    break;
+  case (3):
+    buttons_to_press[3] = buttons_to_press[1]; // Same position as stage 2
+    break;
+  case (4):
+    buttons_to_press[3] = buttons_to_press[1]; // Same position as stage 2
+    break;
   }
-  switch(top_nums[4]) {
-    case(1):
-      // Same label as stage 1
-      buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[0][buttons_to_press[0]]);
-      break;
-    case(2):
-      // Same label as stage 2
-      buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[1][buttons_to_press[1]]);
-      break;
-    case(3):
-      // Same label as stage 3
-      buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[2][buttons_to_press[3]]);
-      break;
-    case(4):
-      // Same label as stage 4
-      buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[3][buttons_to_press[2]]);
-      break;
+  switch (top_nums[4])
+  {
+  case (1):
+    // Same label as stage 1
+    buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[0][buttons_to_press[0]]);
+    break;
+  case (2):
+    // Same label as stage 2
+    buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[1][buttons_to_press[1]]);
+    break;
+  case (3):
+    // Same label as stage 3
+    buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[2][buttons_to_press[3]]);
+    break;
+  case (4):
+    // Same label as stage 4
+    buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[3][buttons_to_press[2]]);
+    break;
   }
 
   for (int i = 0; i < 5; i++)
@@ -210,8 +223,8 @@ void generateRandomNumbers() {
   Serial.println();
 }
 
-void setup() {
-  serial_port.begin(19200);
+void setup()
+{
   Serial.begin(19200);
 
   pinMode(DATA_IN_PIN, OUTPUT);
@@ -229,13 +242,14 @@ void setup() {
 
   Serial.println("Setting up displays");
 
-  lc.shutdown(0,false);    // not in shutdown mode
+  lc.shutdown(0, false); // not in shutdown mode
   lc.clearDisplay(0);
-  lc.setIntensity(0,8); 
+  lc.setIntensity(0, 8);
 
   Serial.println("Getting config");
 
-  while(!module.getConfig()){
+  while (!module.getConfig())
+  {
     module.interpretData();
   }
 
@@ -254,37 +268,54 @@ void setup() {
   module.sendReady();
 }
 
-void loop() {
+void loop()
+{
   int button_pressed = -1;
 
   module.interpretData();
 
-  if(!module.is_solved) {
-    if(!digitalRead(BUTTON1_PIN)) {
+  if (!module.is_solved)
+  {
+    if (!digitalRead(BUTTON1_PIN))
+    {
       button_pressed = 0;
-    } else if(!digitalRead(BUTTON2_PIN)) {
+    }
+    else if (!digitalRead(BUTTON2_PIN))
+    {
       button_pressed = 1;
-    } else if(!digitalRead(BUTTON3_PIN)) {
+    }
+    else if (!digitalRead(BUTTON3_PIN))
+    {
       button_pressed = 2;
-    } else if(!digitalRead(BUTTON4_PIN)) {
+    }
+    else if (!digitalRead(BUTTON4_PIN))
+    {
       button_pressed = 3;
     }
 
-    if(button_pressed != -1) {
-      if(button_pressed == buttons_to_press[stage]) {
+    if (button_pressed != -1)
+    {
+      Serial.print("Pressed ");
+      Serial.println(button_pressed);
+      if (button_pressed == buttons_to_press[stage])
+      {
         stage++;
-      } else {
+      }
+      else
+      {
         stage = 0;
         generateRandomNumbers();
         module.strike();
       }
-      if(stage == 5){
+      if (stage == 5)
+      {
         module.win();
-      } else {
-      displayWaitingScreen();
-      updateDisplays();
+      }
+      else
+      {
+        displayWaitingScreen();
+        updateDisplays();
       }
     }
   }
-
 }
