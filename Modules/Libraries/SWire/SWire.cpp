@@ -296,14 +296,14 @@ void SWireMaster::scanMessages()
   for (byte i = 0; i < _num_clients; i++)
   {
     msg[0] = (char)_clients[i];
-    Serial.print("Sending ");
-    Serial.println(msg);
+    //Serial.print("Sending ");
+    //Serial.println(msg);
     sendPacket(msg);
     if (Wire.requestFrom((int)_clients[i], 8) > 1)
     {
       rc = Wire.read();
-      Serial.print("Request yielded ");
-      Serial.println(rc);
+      //Serial.print("Request yielded ");
+      //Serial.println(rc);
 
       if (rc != '\0' && rc != ACK && rc != NO_DATA)
       {
@@ -355,6 +355,7 @@ int SWireClient::sendData(char *data)
   char *new_message = (char *)malloc(MAX_MSG_LEN + 1);
   if (new_message == NULL)
   {
+    Serial.println("Failed memory allocation");
     return 0;
   }
   strcpy(new_message + 1, data);
