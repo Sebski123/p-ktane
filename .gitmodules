@@ -7,3 +7,6 @@
 [submodule ".\\Modules\\Libraries\\SWire"]
 	path = .\\Modules\\Libraries\\SWire
 	url = git@github.com:Sebski123/SWire.git
+[submodule ".\\Modules\\Libraries\\Adafruit_MCP3008"]
+	path = .\\Modules\\Libraries\\Adafruit_MCP3008
+	url = git@github.com:adafruit/Adafruit_MCP3008.git
