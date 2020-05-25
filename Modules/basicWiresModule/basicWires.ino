@@ -1,34 +1,36 @@
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
-#include "NeoICSerial.h"
-
-NeoICSerial serial_port;
-DSerialClient client(serial_port, 0x01);
-KTANEModule module(client, 2, 3);
 
 // Resistor values  = 22000,  3300,  1000,   330,  33 
 // Wire colors      = White, Blue, Yellow, Black, Red
 // Wire int         =   1     2       3      4     5
 // 0 indicates no wire
+
+// Defines
 #define WHITE 1
 #define BLUE 2
 #define YELLOW 3
 #define BLACK 4
 #define RED 5
 
-char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
-// Defines
+//  Pins
 //Pin header A0 
 //Pin header A1     
 //Pin header A2
 //Pin header A3
 //Pin header A4
 //Pin header A5
-//Green clear Led 2
-//Red strike Led 3
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
+#define GREEN_CLEAR_LED 2
+#define RED_STRIKE_LED 3
+//I2C SDA 18
+//I2C SCL 19
 
+//Class inits
+SWireClient client(0x03);
+KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
+
+//Variables
+char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
 int wires[6] = {0, 0, 0, 0, 0, 0};
 int color_count[6] = {0, 0, 0, 0, 0, 0};
 int wire_to_cut; // One indexed and relative
@@ -108,18 +110,17 @@ int relLastColorIndex(int color)
 
 void setup()
 {
-  serial_port.begin(19200);
   Serial.begin(19200);
 
   Serial.println("Begin setup");
 
   #pragma region Detect wires:
-  pinMode(A0, INPUT);
-  pinMode(A1, INPUT);
-  pinMode(A2, INPUT);
-  pinMode(A3, INPUT);
-  pinMode(A4, INPUT);
-  pinMode(A5, INPUT);
+  pinMode(14, INPUT);   //A0
+  pinMode(15, INPUT);   //A1
+  pinMode(16, INPUT);   //A2
+  pinMode(17, INPUT);   //A3
+  pinMode(18, INPUT);   //A4
+  pinMode(19, INPUT);   //A5
 
 
   Serial.print("Raw:\t"); 
@@ -170,6 +171,7 @@ void setup()
   }
 
   Serial.println("Got config");
+  Serial.println(module.getConfig()->serial);
 
   // Detect Solution:
   switch (num_wires)
@@ -274,7 +276,8 @@ void setup()
   }
 
   Serial.println("Done with setup");
-  module.sendReady();
+  Serial.println(module.sendReady());
+
 }
 
 void loop()

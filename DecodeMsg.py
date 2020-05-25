@@ -42,7 +42,7 @@ byte_to_str_small={0x86: "A",
                    0xC5: "#S",
                    }
 
-def bytes_to_msgs(client_id, message_bytes):
+def bytes_to_msgs(message_bytes):
     converted_bytes = []
     short_converted_bytes = []
     for byte in message_bytes:
@@ -55,8 +55,8 @@ def bytes_to_msgs(client_id, message_bytes):
         else:
             short_converted_bytes.append(str(byte))
 
-    msg = str(client_id) + ":" + " ".join(converted_bytes)
-    short_msg = str(client_id) + ":" + " ".join(short_converted_bytes)
+    msg = " ".join(converted_bytes)
+    short_msg = " ".join(short_converted_bytes)
     return [msg, short_msg]
 
 def readPacket(msg: list):
@@ -92,7 +92,8 @@ def readPacket(msg: list):
       if(rc == END or index >= MAX_MSG_LEN):
         index -= 1
         buf[index] = '\0' #purposefully overwrite parity byte.
-        passed_parity = ((data_parity & 0x7F) == 0)
+        parity = (data_parity & 0x7F)
+        passed_parity = ( parity == 0)
         index = 0
         in_packet = 0
         data_parity = 0
@@ -100,7 +101,7 @@ def readPacket(msg: list):
           print("passed parity check")
           return buf
         else:
-          print("failed parity check") 
+          print("failed parity check\ngot " + str(parity)) 
           return buf #should be -1
   return 0
 
@@ -111,9 +112,9 @@ def convertToHex(str: str):
     fin_lst.append(int(byte, 16))
   return fin_lst
 
-string = "82 01 9B 52 52 83"
+string = "82 02 B1 B2 83"
 test = convertToHex(string)
 print(test)
 test2 = readPacket(test)
-test3 = bytes_to_msgs(1,test2)
+test3 = bytes_to_msgs(test2)
 print(test3[0])

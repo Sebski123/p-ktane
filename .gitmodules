@@ -1,9 +1,6 @@
 [submodule "Modules\\Libraries\\LedControl"]
 	path = Modules\\Libraries\\LedControl
 	url = https://github.com/wayoda/LedControl
-[submodule ".\\Modules\\Libraries\\NeoICSerial"]
-	path = .\\Modules\\Libraries\\NeoICSerial
-	url = https://github.com/Sebski123/NeoICSerial
 [submodule ".\\Modules\\Libraries\\MAX6954"]
 	path = .\\Modules\\Libraries\\MAX6954
 	url = https://github.com/Sebski123/MAX6954

@@ -1,30 +1,30 @@
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
 #include "NeoICSerial.h"
 #include "LedControl.h"
 
 // Defines
-//Green clear Led 2
-//Red strike Led 3
+//  Pins
+#define GREEN_CLEAR_LED 2
+#define BUTTON_LED_PIN_GREEN 3
 #define BUTTON_PIN 4
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
-#define CLOCK_PIN 11
+#define BUTTON_LED_PIN_BLUE 5
+#define BUTTON_LED_PIN_RED 6
+#define RED_STRIKE_LED 7
+#define CLOCK_PIN 8
+#define STRIP_LED_PIN_GREEN 9
+#define STRIP_LED_PIN_BLUE 10
+#define STRIP_LED_PIN_RED 11
 #define LOAD_PIN 12
 #define DATA_IN_PIN 13
+//I2C SDA 18
+//I2C SCL 19
 
-#define BUTTON_LED_PIN_GREEN 14
-#define BUTTON_LED_PIN_BLUE 15
-#define BUTTON_LED_PIN_RED 16
-#define STRIP_LED_PIN_GREEN 17
-#define STRIP_LED_PIN_BLUE 18
-#define STRIP_LED_PIN_RED 19
+//Class inits
+SWireClient client(0x04);
+KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
-LedControl lc = LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
-NeoICSerial serial_port;
-DSerialClient client(serial_port, 6);
-KTANEModule module(client, 2, 3);
-
+//Variables
 int buttonColor;
 int stripColor;
 int text;
@@ -124,7 +124,6 @@ void checkSolution(bool held)
 
 void setup()
 {
-    serial_port.begin(19200);
     Serial.begin(19200);
 
     Serial.println("Starting setup");

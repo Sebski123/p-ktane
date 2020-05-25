@@ -25807,34 +25807,26 @@ distributor RS Components</description>
 </net>
 <net name="N$114" class="0">
 <segment>
-<wire x1="-45.72" y1="-48.26" x2="-45.72" y2="-10.16" width="0.1524" layer="91"/>
+<wire x1="-45.72" y1="-48.26" x2="-45.72" y2="-12.7" width="0.1524" layer="91"/>
 <pinref part="R38" gate="G$1" pin="1"/>
-<pinref part="U6" gate="G$1" pin="PC4(ADC4/SDA)"/>
-<wire x1="-58.42" y1="-10.16" x2="-45.72" y2="-10.16" width="0.1524" layer="91"/>
+<pinref part="U6" gate="G$1" pin="PC3(ADC3)"/>
+<wire x1="-45.72" y1="-12.7" x2="-58.42" y2="-12.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="-53.34" y1="-40.64" x2="-53.34" y2="-17.78" width="0.1524" layer="91"/>
+<wire x1="-53.34" y1="-40.64" x2="-53.34" y2="-20.32" width="0.1524" layer="91"/>
 <wire x1="-53.34" y1="-40.64" x2="-76.2" y2="-40.64" width="0.1524" layer="91"/>
 <wire x1="-76.2" y1="-40.64" x2="-76.2" y2="-48.26" width="0.1524" layer="91"/>
 <pinref part="R36" gate="G$1" pin="1"/>
-<pinref part="U6" gate="G$1" pin="PC1(ADC1)"/>
-<wire x1="-53.34" y1="-17.78" x2="-58.42" y2="-17.78" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<wire x1="-55.88" y1="-38.1" x2="-55.88" y2="-20.32" width="0.1524" layer="91"/>
-<wire x1="-88.9" y1="-38.1" x2="-55.88" y2="-38.1" width="0.1524" layer="91"/>
-<wire x1="-88.9" y1="-48.26" x2="-88.9" y2="-38.1" width="0.1524" layer="91"/>
-<pinref part="R37" gate="G$1" pin="1"/>
 <pinref part="U6" gate="G$1" pin="PC0(ADC0)"/>
-<wire x1="-58.42" y1="-20.32" x2="-55.88" y2="-20.32" width="0.1524" layer="91"/>
+<wire x1="-58.42" y1="-20.32" x2="-53.34" y2="-20.32" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="-66.04" y1="-48.26" x2="-66.04" y2="-43.18" width="0.1524" layer="91"/>
 <wire x1="-66.04" y1="-43.18" x2="-50.8" y2="-43.18" width="0.1524" layer="91"/>
-<wire x1="-50.8" y1="-43.18" x2="-50.8" y2="-15.24" width="0.1524" layer="91"/>
+<wire x1="-50.8" y1="-43.18" x2="-50.8" y2="-17.78" width="0.1524" layer="91"/>
 <pinref part="R35" gate="G$1" pin="1"/>
-<pinref part="U6" gate="G$1" pin="PC2(ADC2)"/>
-<wire x1="-58.42" y1="-15.24" x2="-50.8" y2="-15.24" width="0.1524" layer="91"/>
+<pinref part="U6" gate="G$1" pin="PC1(ADC1)"/>
+<wire x1="-50.8" y1="-17.78" x2="-58.42" y2="-17.78" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$118" class="0">
@@ -25880,12 +25872,12 @@ distributor RS Components</description>
 </net>
 <net name="N$134" class="0">
 <segment>
-<wire x1="-48.26" y1="-45.72" x2="-48.26" y2="-12.7" width="0.1524" layer="91"/>
+<wire x1="-48.26" y1="-45.72" x2="-48.26" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="-48.26" y1="-45.72" x2="-55.88" y2="-45.72" width="0.1524" layer="91"/>
 <wire x1="-55.88" y1="-45.72" x2="-55.88" y2="-48.26" width="0.1524" layer="91"/>
 <pinref part="R34" gate="G$1" pin="1"/>
-<pinref part="U6" gate="G$1" pin="PC3(ADC3)"/>
-<wire x1="-48.26" y1="-12.7" x2="-58.42" y2="-12.7" width="0.1524" layer="91"/>
+<pinref part="U6" gate="G$1" pin="PC2(ADC2)"/>
+<wire x1="-58.42" y1="-15.24" x2="-48.26" y2="-15.24" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$136" class="0">
@@ -25947,25 +25939,11 @@ distributor RS Components</description>
 <wire x1="-22.86" y1="10.16" x2="-22.86" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="NICS_RX" class="0">
-<segment>
-<pinref part="U6" gate="G$1" pin="PB0(ICP)"/>
-<wire x1="-58.42" y1="25.4" x2="-55.88" y2="25.4" width="0.1524" layer="91"/>
-<label x="-55.88" y="25.4" size="1.778" layer="95" rot="MR180"/>
-</segment>
-</net>
-<net name="NICS_TX" class="0">
-<segment>
-<pinref part="U6" gate="G$1" pin="PB1(OC1A)"/>
-<wire x1="-58.42" y1="27.94" x2="-48.26" y2="27.94" width="0.1524" layer="91"/>
-<label x="-48.26" y="27.94" size="1.778" layer="95" rot="MR180"/>
-</segment>
-</net>
 <net name="MEM_RX" class="0">
 <segment>
 <pinref part="U6" gate="G$1" pin="PD0(RXD)"/>
-<wire x1="-58.42" y1="2.54" x2="-53.34" y2="2.54" width="0.1524" layer="91"/>
-<label x="-53.34" y="2.54" size="1.778" layer="95" rot="MR270"/>
+<wire x1="-58.42" y1="2.54" x2="-48.26" y2="2.54" width="0.1524" layer="91"/>
+<label x="-48.26" y="2.54" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
 <pinref part="CN1" gate="G$1" pin="2"/>
@@ -25977,7 +25955,7 @@ distributor RS Components</description>
 <segment>
 <pinref part="U6" gate="G$1" pin="PD1(TXD)"/>
 <wire x1="-58.42" y1="5.08" x2="-45.72" y2="5.08" width="0.1524" layer="91"/>
-<label x="-45.72" y="5.08" size="1.778" layer="95" rot="MR270"/>
+<label x="-45.72" y="5.08" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
 <pinref part="CN1" gate="G$1" pin="4"/>
@@ -26017,6 +25995,32 @@ distributor RS Components</description>
 <pinref part="STATUS_LED8" gate="G$1" pin="RED"/>
 <pinref part="R58" gate="G$1" pin="1"/>
 <wire x1="-5.08" y1="-15.24" x2="-12.7" y2="-15.24" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="PB5" class="0">
+<segment>
+<pinref part="U6" gate="G$1" pin="PB5(SCK)"/>
+<wire x1="-58.42" y1="38.1" x2="-55.88" y2="38.1" width="0.1524" layer="91"/>
+<label x="-55.88" y="38.1" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="-88.9" y1="-48.26" x2="-88.9" y2="-38.1" width="0.1524" layer="91"/>
+<pinref part="R37" gate="G$1" pin="1"/>
+<label x="-88.9" y="-38.1" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="SCL" class="0">
+<segment>
+<pinref part="U6" gate="G$1" pin="PC5(ADC5/SCL)"/>
+<wire x1="-58.42" y1="-7.62" x2="-55.88" y2="-7.62" width="0.1524" layer="91"/>
+<label x="-55.88" y="-7.62" size="1.778" layer="95" rot="MR180"/>
+</segment>
+</net>
+<net name="SDA" class="0">
+<segment>
+<pinref part="U6" gate="G$1" pin="PC4(ADC4/SDA)"/>
+<wire x1="-58.42" y1="-10.16" x2="-53.34" y2="-10.16" width="0.1524" layer="91"/>
+<label x="-53.34" y="-10.16" size="1.778" layer="95" rot="MR180"/>
 </segment>
 </net>
 </nets>
