@@ -4,17 +4,18 @@
 #include "mazeModule.h"
 
 // Defines
-//Green clear Led 2
-//Red strike Led 3
+//  Pins
+#define GREEN_CLEAR_LED 2
+#define RED_STRIKE_LED 3
 #define RIGHT_BTN 4
 #define UP_BTN 5
 #define DOWN_BTN 6
 #define LEFT_BTN 7
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
 #define CLOCK_PIN 10
 #define LOAD_PIN 11
 #define DATA_PIN 12
+//I2C SDA 18
+//I2C SCL 19
 
 //Function prototypes
 int getBtnDir();
