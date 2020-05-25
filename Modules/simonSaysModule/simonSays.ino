@@ -1,6 +1,5 @@
 #include "SWire.h"
 #include "KTANECommon.h"
-#include "NeoICSerial.h"
 
 // Defines
 #define MAX_NUM_STAGES 5

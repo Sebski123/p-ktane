@@ -1,6 +1,5 @@
 #include "SWire.h"
 #include "KTANECommon.h"
-#include "NeoICSerial.h"
 #include "LedControl.h"
 
 // Defines
