@@ -11,14 +11,14 @@ KTANEModule module(client, 2, 3);
 #define GREEN 3
 #define BLUE 4
 
-// Defines
-//Green clear Led 2
-//Red strike Led 3
+//  Pins
+#define GREEN_CLEAR_LED 2
+#define RED_STRIKE_LED 3
 #define BUZZER 5
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
 int led_pins[4] = {10, 11, 12, 13};
 int button_pins[4] = {14, 15, 16, 17};
+//I2C SDA 18
+//I2C SCL 19
 
 
 unsigned long last_button_action = 0;
