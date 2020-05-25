@@ -306,10 +306,12 @@ void loop()
         stage = 0;
         generateRandomNumbers();
         module.strike();
+        Serial.println("Strike");
       }
       if (stage == 5)
       {
         module.win();
+        Serial.println("Win");
       }
       else
       {
