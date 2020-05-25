@@ -4,3 +4,6 @@
 [submodule ".\\Modules\\Libraries\\MAX6954"]
 	path = .\\Modules\\Libraries\\MAX6954
 	url = https://github.com/Sebski123/MAX6954
+[submodule ".\\Modules\\Libraries\\SWire"]
+	path = .\\Modules\\Libraries\\SWire
+	url = git@github.com:Sebski123/SWire.git
