@@ -1,27 +1,27 @@
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
-#include "NeoICSerial.h"
 
-NeoICSerial serial_port;
-DSerialClient client(serial_port, 0x02);
-KTANEModule module(client, 2, 3);
-
+// Defines
 #define MAX_NUM_STAGES 5
 #define RED 1
 #define YELLOW 2
 #define GREEN 3
 #define BLUE 4
 
-// Defines
-//Green clear Led 2
-//Red strike Led 3
+//  Pins
+#define GREEN_CLEAR_LED 2
+#define RED_STRIKE_LED 3
 #define BUZZER 5
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
 int led_pins[4] = {10, 11, 12, 13};
 int button_pins[4] = {14, 15, 16, 17};
+//I2C SDA 18
+//I2C SCL 19
 
+//Class inits
+SWireClient client(0x05);
+KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
+//Variables
 unsigned long last_button_action = 0;
 int last_action_multiplier;
 int button_state = 0;
@@ -113,7 +113,6 @@ int get_button()
 
 void setup()
 {
-  serial_port.begin(19200);
   Serial.begin(19200);
 
   Serial.println("Begin setup");

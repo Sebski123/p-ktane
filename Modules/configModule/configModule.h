@@ -67,7 +67,7 @@ const char INDEX_HTML[] =
 "        }"
 ""
 "        function generateSerial() {"
-"            let serial = randomString(5, \"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\");"
+"            let serial = randomString(5, \"0123456789ABCDEFGHIJKLMNOPQRSTUVWXZ\");"
 "            let number = Math.round(Math.random() * (9)).toString();"
 "            console.log(number);"
 "            serial += number;"

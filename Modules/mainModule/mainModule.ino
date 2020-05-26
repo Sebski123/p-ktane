@@ -1,39 +1,33 @@
 
-#include "DSerial.h"
+#include "SWire.h"
 #include "KTANECommon.h"
-#include "NeoICSerial.h"
 #include "LedControl.h"
 #include "MAX6954.h"
 #include <SoftwareSerial.h>
 
-
 // Defines
+//  Pins
 #define SPEAKER_PIN 3
 #define STRIKE_1_PIN 4
 #define STRIKE_2_PIN 5
 #define CLEAR_PIN 6
 #define CLOCK_DOT 7
-//NeoICSerial RX-pin 8
-//NeoICSerial TX-pin 9
 #define CLOCK_DATA 10
 #define CLOCK_LOAD 11
 #define CLOCK_CLK 12
+#define SERIAL_CS 14      
+#define SERIAL_DATAOUT 15 
+#define SERIAL_CLK 16     
+//I2C SDA 18
+//I2C SCL 19
 
-#define DBG_RX  14
-#define DBG_TX  15
-#define SERIAL_CS      16   // Chip Select
-#define SERIAL_DATAOUT 17   // MOSI
-#define SERIAL_CLK     18   // SCK
+//Class inits
+MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
+LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
+config_t config;
+SWireMaster master;
+KTANEController controller(master);
 
-
-
-//Function prototypes
-void toggleClockBlink();
-void playMelody(int *melody, int *durations, int melody_len);
-void youLose();
-void youWin();
-void getConfigESP();
-void getConfigManual();
 
 //Variables
 int brightness = 4;
@@ -46,32 +40,14 @@ int lose_melody_len = 4;
 int num_minutes;
 unsigned long currentMillis;
 unsigned long previousMillis = 0;
-
 unsigned long count = 0;
 
-//Class inits
-/*
- Now we need a LedControl to work with.
- ***** These pin numb
- ers will probably not work with your hardware *****
- pin 12 is connected to the DataIn 
- pin 11 is connected to the CLK 
- pin 10 is connected to LOAD 
- We have only a single MAX72XX.
- */
-SoftwareSerial mySerial(DBG_RX, DBG_TX);
-MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
-LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
-config_t config;
-NeoICSerial serial_port;
-DSerialMaster master(serial_port);
-KTANEController controller(master);
-
-// Globals
+//  Globals
 int strikes = 0;
 int solves = 0;
 unsigned long dest_time;
 int num_modules;
+uint8_t clients[16];
 
 void toggleClockBlink()
 {
@@ -98,7 +74,7 @@ void playMelody(int *melody, int *durations, int melody_len)
 void youLose()
 {
   // Play lose music
-  mySerial.println("Loose");
+  Serial.println("Loose");
   serialnr.write_string(" boom ");
   playMelody(lose_melody, lose_melody_durations, lose_melody_len);
 
@@ -112,7 +88,7 @@ void youLose()
 void youWin()
 {
   // Play win music
-  mySerial.println("Win");
+  Serial.println("Win");
 
   digitalWrite(CLEAR_PIN, HIGH);
 
@@ -155,28 +131,26 @@ void getConfigManual()
 
 void setup()
 {
-  #pragma region Serial setup
-  serial_port.begin(19200);
+#pragma region Serial setup
   Serial.begin(19200);
-  mySerial.begin(19200);
 
   delay(1000);
-  #pragma endregion
-  
-  #pragma region Get config
-  mySerial.println("Getting config");
-  getConfigESP();
-  //getConfigManual();
-  mySerial.println("Got config");
-  mySerial.write((uint8_t *)(&config), 7);
-  mySerial.println();
-  mySerial.println(num_minutes);
+#pragma endregion
+
+#pragma region Get config
+  Serial.println("Getting config");
+  //getConfigESP();
+  getConfigManual();
+  Serial.println("Got config");
+  Serial.write((uint8_t *)(&config), 7);
+  Serial.println();
+  Serial.println(num_minutes);
 
   delay(100);
-  #pragma endregion
+#pragma endregion
 
-  #pragma region I/O setup
-  mySerial.println("Setting up I/O-pins");
+#pragma region I / O setup
+  Serial.println("Setting up I/O-pins");
   // LED/Speaker setup
   pinMode(STRIKE_1_PIN, OUTPUT);
   pinMode(STRIKE_2_PIN, OUTPUT);
@@ -188,10 +162,10 @@ void setup()
   digitalWrite(STRIKE_2_PIN, LOW);
   digitalWrite(CLEAR_PIN, LOW);
 
-  #pragma endregion
+#pragma endregion
 
-  #pragma region Display setup
-  mySerial.println("Initializing display");
+#pragma region Display setup
+  Serial.println("Initializing display");
   /*
    The MAX72XX is in power-saving mode on startup,
    we have to do a wakeup call
@@ -204,41 +178,51 @@ void setup()
   /* and clear the display */
   clock.clearDisplay(0);
   serialnr.clear();
- 
 
   delay(500);
-  #pragma endregion
+#pragma endregion
 
-  #pragma region Serial setup
-  mySerial.println("Writing serial-number");
+#pragma region Serial setup
+  Serial.println("Writing serial-number");
   // Serial alphanumeric setup
   serialnr.write_string(config.serial);
 
   delay(1000);
-  #pragma endregion
+#pragma endregion
 
-  mySerial.println("Get modules");
+  Serial.println("Get modules");
   num_modules = master.identifyClients();
 
-  mySerial.print("Number of modules: ");
-  mySerial.println(num_modules);
+  Serial.print("Number of modules: ");
+  Serial.println(num_modules);
 
-  #pragma region Prepare modules
+  Serial.print("Client id's: ");
+  master.getClients(clients);
+  for (size_t i = 0; i < num_modules; i++)
+  {
+    Serial.print(clients[i]);
+    Serial.print("\t");
+  }
+  Serial.println();
+
+#pragma region Prepare modules
   controller.sendReset();
   delayWithUpdates(controller, 1000);
-  mySerial.println("Sending config to clients");
+  Serial.println("Sending config to clients");
   int test = controller.sendConfig(&config);
-  mySerial.println(test);
+  Serial.println(test);
   while (!controller.clientsAreReady())
   {
     controller.interpretData();
   }
-  #pragma endregion
-  
+
+  Serial.println("Clients are ready");
+#pragma endregion
+
   dest_time = millis() + (long)num_minutes * 60 * 1000;
   controller.setTime(dest_time);
 
-  mySerial.println("Done setup");
+  Serial.println("Done setup");
 }
 
 void loop()
@@ -252,7 +236,7 @@ void loop()
   {
     // save the last time you blinked the LED
     previousMillis = currentMillis;
-    //mySerial.println("blink");
+    //Serial.println("blink");
     // if the LED is off turn it on and vice-versa:
     toggleClockBlink();
 
@@ -260,7 +244,7 @@ void loop()
     unsigned long diff_time = dest_time - millis();
     controller.setTime(diff_time);
     int seconds = (diff_time / 1000) % 60;
-    int minutes = diff_time / 60000;  
+    int minutes = diff_time / 60000;
     clock.setDigit(0, 0, (minutes / 10), false);
     clock.setDigit(0, 1, (minutes % 10), false);
     clock.setDigit(0, 2, (seconds / 10), false);
@@ -280,8 +264,8 @@ void loop()
     delayWithUpdates(controller, 150);
     noTone(5);
     strikes = controller.getStrikes();
-    mySerial.println("STRIKE!");
-    mySerial.println(strikes);
+    Serial.println("STRIKE!");
+    Serial.println(strikes);
   }
 
   if (solves < controller.getSolves())
