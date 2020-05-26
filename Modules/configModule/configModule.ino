@@ -37,11 +37,8 @@ void handleSubmit()
   server.arg("serial_num").toCharArray(config.serial, 7);
   num_minutes = server.arg("num_minutes").toInt();
   config.batteries = server.arg("num_batteries").toInt();
-  config.indicators = ((!!server.hasArg("port1")) ||
-                       ((!!server.hasArg("port2")) << 1));
-  config.ports = (!!server.hasArg("port3") ||
-                  ((!!server.hasArg("port4")) << 1) ||
-                  ((!!server.hasArg("port5")) << 2));
+  config.indicators = ((!!server.hasArg("port1")) | ((!!server.hasArg("port2")) << 1));
+  config.ports = (!!server.hasArg("port3") | ((!!server.hasArg("port4")) << 1) | ((!!server.hasArg("port5")) << 2));
   config_to_raw(&config, &stored_config);
 
   for (int i = 0; i < 7; i++)
