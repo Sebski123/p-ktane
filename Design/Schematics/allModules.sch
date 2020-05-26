@@ -22566,6 +22566,20 @@ DIN A4, landscape with location and doc. field</description>
 <label x="-195.58" y="101.6" size="1.778" layer="95"/>
 </segment>
 </net>
+<net name="ESP_RX" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="PB1(OC1A)"/>
+<wire x1="-200.66" y1="66.04" x2="-195.58" y2="66.04" width="0.1524" layer="91"/>
+<label x="-195.58" y="66.04" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="ESP_TX" class="0">
+<segment>
+<pinref part="U1" gate="G$1" pin="PB0(ICP)"/>
+<wire x1="-200.66" y1="68.58" x2="-198.12" y2="68.58" width="0.1524" layer="91"/>
+<label x="-198.12" y="68.58" size="1.778" layer="95"/>
+</segment>
+</net>
 </nets>
 </sheet>
 <sheet>
