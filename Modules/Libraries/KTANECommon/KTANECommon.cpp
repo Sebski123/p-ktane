@@ -217,12 +217,13 @@ int KTANEModule::getParallelPort()
   return _config.ports & 1;
 }
 
-int KTANEModule::getRCAPort()
+int KTANEModule::getRJ45Port()
 {
   return _config.ports & 2;
 }
 
-int KTANEModule::getRJ45Port()
+
+int KTANEModule::getRCAPort()
 {
   return _config.ports & 4;
 }
