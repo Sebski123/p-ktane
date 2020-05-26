@@ -3,6 +3,7 @@
 #include "KTANECommon.h"
 #include "LedControl.h"
 #include "MAX6954.h"
+#include <SoftwareSerial.h>
 
 // Defines
 //  Pins
@@ -11,16 +12,19 @@
 #define STRIKE_2_PIN 5
 #define CLEAR_PIN 6
 #define CLOCK_DOT 7
+#define CONF_RX 8
+#define CONF_TX 9
 #define CLOCK_DATA 10
 #define CLOCK_LOAD 11
 #define CLOCK_CLK 12
-#define SERIAL_CS 14      
-#define SERIAL_DATAOUT 15 
-#define SERIAL_CLK 16     
+#define SERIAL_CS 14
+#define SERIAL_DATAOUT 15
+#define SERIAL_CLK 16
 //I2C SDA 18
 //I2C SCL 19
 
 //Class inits
+SoftwareSerial configSerial = SoftwareSerial(CONF_RX, CONF_TX);
 MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
 LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
 config_t config;
@@ -105,16 +109,16 @@ void getConfigESP()
 {
   raw_config_t recv_config;
 
-  Serial.write("yo");
-  while (Serial.available() <= 0)
+  configSerial.write("1");
+  while (configSerial.available() <= 0)
   {
     delay(10);
   }
   for (int i = 0; i < 7; i++)
   {
-    ((char *)(&recv_config))[i] = Serial.read();
+    ((char *)(&recv_config))[i] = configSerial.read();
   }
-  num_minutes = Serial.read();
+  num_minutes = configSerial.read();
   raw_to_config(&recv_config, &config);
 }
 
@@ -132,6 +136,7 @@ void setup()
 {
 #pragma region Serial setup
   Serial.begin(19200);
+  configSerial.begin(19200);
 
   delay(1000);
 #pragma endregion
