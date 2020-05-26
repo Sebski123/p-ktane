@@ -143,12 +143,40 @@ void setup()
 
 #pragma region Get config
   Serial.println("Getting config");
-  //getConfigESP();
-  getConfigManual();
+  getConfigESP();
+  //getConfigManual();
   Serial.println("Got config");
-  Serial.write((uint8_t *)(&config), 7);
+  Serial.print("Serial nr. : ");
+  Serial.println(config.serial);
+  Serial.print("No. of Batteries: ");
+  Serial.println(config.batteries);
+  Serial.print("Lit indicators: ");
+  if (config.indicators & 1)
+  {
+    Serial.print("FRK\t");
+  }
+  if (config.indicators & 2)
+  {
+    Serial.print("CAR");
+  }
   Serial.println();
+  Serial.print("Ports: ");
+  if (config.ports & 1)
+  {
+    Serial.print("Parallel\t");
+  }
+  if (config.ports & 2)
+  {
+    Serial.print("RJ45\t");
+  }
+  if (config.ports & 4)
+  {
+    Serial.print("RCA");
+  }
+  Serial.println();
+  Serial.print("Minutes to beat: ");
   Serial.println(num_minutes);
+  Serial.println();
 
   delay(100);
 #pragma endregion
