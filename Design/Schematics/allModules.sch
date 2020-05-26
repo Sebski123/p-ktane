@@ -21466,6 +21466,10 @@ DIN A4, landscape with location and doc. field</description>
 <part name="BUTTON_LED3" library="SparkFun-LED" library_urn="urn:adsk.eagle:library:529" deviceset="LED-RGB-CC" device="CLEAR" package3d_urn="urn:adsk.eagle:package:39368/1" value="CLEAR"/>
 <part name="SUPPLY46" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
 <part name="IC5" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="MCP3008" device="" package3d_urn="urn:adsk.eagle:package:6240922/1"/>
+<part name="SUPPLY47" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
+<part name="SUPPLY48" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-EARTH" device="" value="GND"/>
+<part name="VCC27" library="m-pad-2.1" deviceset="VCC" device=""/>
+<part name="C3" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="C-US" device="025-024X044" package3d_urn="urn:adsk.eagle:package:6240324/1" value="100n"/>
 </parts>
 <sheets>
 <sheet>
@@ -24096,6 +24100,19 @@ DIN A4, landscape with location and doc. field</description>
 <instance part="IC5" gate="G$1" x="38.1" y="-5.08" smashed="yes" rot="MR0">
 <attribute name="NAME" x="27.94" y="7.62" size="1.778" layer="95" rot="MR180"/>
 </instance>
+<instance part="SUPPLY47" gate="G$1" x="10.16" y="-2.54" smashed="yes" rot="MR90">
+<attribute name="VALUE" x="6.985" y="-1.524" size="1.778" layer="96" rot="MR90" align="center"/>
+</instance>
+<instance part="SUPPLY48" gate="G$1" x="17.78" y="-15.24" smashed="yes" rot="MR90">
+<attribute name="VALUE" x="14.605" y="-14.224" size="1.778" layer="96" rot="MR90" align="center"/>
+</instance>
+<instance part="VCC27" gate="1" x="20.32" y="7.62" smashed="yes" rot="MR0">
+<attribute name="VALUE" x="22.479" y="10.922" size="1.778" layer="96" rot="MR0"/>
+</instance>
+<instance part="C3" gate="G$1" x="15.24" y="2.54" smashed="yes">
+<attribute name="NAME" x="19.685" y="1.016" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="11.811" y="-1.524" size="1.778" layer="96" rot="R90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -24144,6 +24161,19 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="-78.74" y1="-60.96" x2="-76.2" y2="-60.96" width="0.1524" layer="91"/>
 <label x="-76.2" y="-60.96" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="SUPPLY47" gate="G$1" pin="GND"/>
+<pinref part="IC5" gate="G$1" pin="AGND"/>
+<wire x1="12.7" y1="-2.54" x2="15.24" y2="-2.54" width="0.1524" layer="91"/>
+<pinref part="C3" gate="G$1" pin="2"/>
+<wire x1="15.24" y1="-2.54" x2="22.86" y2="-2.54" width="0.1524" layer="91"/>
+<junction x="15.24" y="-2.54"/>
+</segment>
+<segment>
+<pinref part="SUPPLY48" gate="G$1" pin="GND"/>
+<pinref part="IC5" gate="G$1" pin="GND"/>
+<wire x1="20.32" y1="-15.24" x2="22.86" y2="-15.24" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="VCC" class="0">
 <segment>
@@ -24190,6 +24220,20 @@ DIN A4, landscape with location and doc. field</description>
 <pinref part="R46" gate="G$1" pin="2"/>
 <wire x1="-101.6" y1="58.42" x2="-101.6" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="VCC22" gate="1" pin="VCC"/>
+</segment>
+<segment>
+<pinref part="VCC27" gate="1" pin="VCC"/>
+<wire x1="20.32" y1="7.62" x2="20.32" y2="5.08" width="0.1524" layer="91"/>
+<pinref part="IC5" gate="G$1" pin="VDD"/>
+<wire x1="20.32" y1="5.08" x2="20.32" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="2.54" x2="22.86" y2="2.54" width="0.1524" layer="91"/>
+<pinref part="IC5" gate="G$1" pin="VREF"/>
+<wire x1="22.86" y1="0" x2="20.32" y2="0" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="0" x2="20.32" y2="2.54" width="0.1524" layer="91"/>
+<junction x="20.32" y="2.54"/>
+<pinref part="C3" gate="G$1" pin="1"/>
+<wire x1="15.24" y1="5.08" x2="20.32" y2="5.08" width="0.1524" layer="91"/>
+<junction x="20.32" y="5.08"/>
 </segment>
 </net>
 <net name="N$21" class="0">
