@@ -51,11 +51,11 @@ int voltageToWire(int voltage)
   {
     return BLUE;
   }
-  else if (voltage < 640)
+  else if (voltage < 700)
   {
     return YELLOW;
   }
-  else if (voltage < 896)
+  else if (voltage < 1000)
   {
     return BLACK;
   }
