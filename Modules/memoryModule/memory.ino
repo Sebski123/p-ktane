@@ -5,8 +5,8 @@
 // Defines
 #define BUTTON1_PIN 2
 #define BUTTON2_PIN 3
-#define BUTTON3_PIN 4
-#define BUTTON4_PIN 5
+#define BUTTON4_PIN 4
+#define BUTTON3_PIN 5
 #define GREEN_CLEAR_LED 6
 #define RED_STRIKE_LED 7
 #define CLOCK_PIN 10
