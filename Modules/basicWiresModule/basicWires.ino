@@ -284,10 +284,10 @@ void loop()
     {
       if (wires[i] != 0)
       {
-        if ((wires[i] != voltageToWire(analogRead(i)) && (analogRead(i) < 10)))
+        if ((wires[i] != voltageToWire(adc.readADC(i)) && (adc.readADC(i) < 10)))
         {
           delayWithUpdates(module, 100);
-          if ((wires[i] != voltageToWire(analogRead(i)) && (analogRead(i) < 10)))
+          if ((wires[i] != voltageToWire(adc.readADC(i)) && (adc.readADC(i) < 10)))
           { // Check again for debouncing reasons
             if (i == cut_index)
             {
@@ -298,7 +298,7 @@ void loop()
             {
               module.strike();
               Serial.println("Strike");
-              wires[i] = voltageToWire(analogRead(i));
+              wires[i] = voltageToWire(adc.readADC(i));
             }
           }
         }
