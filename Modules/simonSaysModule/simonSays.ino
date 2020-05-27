@@ -158,7 +158,7 @@ void setup()
   Serial.println();
 
   Serial.print("Vowel? ");
-  Serial.println(false); //module.serialContainsVowel());
+  Serial.println(module.serialContainsVowel());
 
   Serial.println("Done with setup");
   module.sendReady();
@@ -170,8 +170,8 @@ void loop()
 
   if (!module.is_solved)
   {
-    int vowel = 0;   //module.serialContainsVowel();
-    int strikes = 0; //module.getNumStrikes();
+    int vowel = module.serialContainsVowel();
+    int strikes = module.getNumStrikes();
     update_lights();
     if (millis() - last_button_action > (10 * last_action_multiplier))
     {
