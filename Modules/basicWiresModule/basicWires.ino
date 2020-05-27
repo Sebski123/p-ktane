@@ -2,7 +2,7 @@
 #include "KTANECommon.h"
 #include "Adafruit_MCP3008.h"
 
-// Resistor values  = 22000,  3300,  1000,   330,  33 
+// Resistor values  = 22000,  3300,  1000,   330,  33
 // Wire colors      = White, Blue, Yellow, Black, Red
 // Wire int         =   1     2       3      4     5
 // 0 indicates no wire
@@ -30,7 +30,7 @@ SWireClient client(0x03);
 KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
 //Variables
-char* debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
+char *debug_color[] = {"NULL", "White", "Blue", "Yellow", "Black", "Red"};
 int wires[6] = {0, 0, 0, 0, 0, 0};
 int color_count[6] = {0, 0, 0, 0, 0, 0};
 int wire_to_cut; // One indexed and relative
@@ -114,10 +114,10 @@ void setup()
 
   Serial.println("Begin setup");
 
-  #pragma region Detect wires:
+#pragma region Detect wires:
   adc.begin(ADC_SCK, ADC_MOSI, ADC_MISO, ADC_CS);
 
-  Serial.print("Raw:\t"); 
+  Serial.print("Raw:\t");
 
   for (int i = 0; i < 6; i++)
   {
@@ -132,11 +132,11 @@ void setup()
     }
     delay(10);
   }
-  #pragma endregion
-  
+#pragma endregion
+
   Serial.println();
 
-  Serial.print("wires:\t"); 
+  Serial.print("wires:\t");
   for (int i = 0; i < 6; i++)
   {
     Serial.print(wires[i]);
@@ -144,8 +144,7 @@ void setup()
   }
   Serial.println();
 
-
-  Serial.print("Color:\t"); 
+  Serial.print("Color:\t");
   for (int i = 0; i < 6; i++)
   {
     Serial.print(debug_color[wires[i]]);
@@ -155,7 +154,6 @@ void setup()
 
   Serial.print("num_wires: ");
   Serial.println(num_wires);
-
 
   Serial.println("Getting config");
 
@@ -271,7 +269,6 @@ void setup()
 
   Serial.println("Done with setup");
   Serial.println(module.sendReady());
-
 }
 
 void loop()
