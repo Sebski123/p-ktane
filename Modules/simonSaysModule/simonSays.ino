@@ -22,6 +22,7 @@ SWireClient client(0x05);
 KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
 //Variables
+bool resetLightStage = false;
 unsigned long last_button_action = 0;
 int last_action_multiplier;
 int button_state = 0;
@@ -51,10 +52,23 @@ int mapping[2][3][4] = {
     },
 };
 
+void stopLights(){
+  noTone(BUZZER);
+  for(int i = 0; i < 4; i++){
+    digitalWrite(led_pins[i], HIGH);
+  }
+}
+
 void update_lights()
 {
   static unsigned long old_millis = 0;
   static int light_stage = 0;
+
+  if(resetLightStage) {
+    old_millis = 0;
+    light_stage = 0;
+    resetLightStage = false;
+  }
 
   if (light_stage >= ((stage + 1) * 2))
   {
@@ -91,21 +105,25 @@ int get_button()
   if (!digitalRead(button_pins[0]))
   {
     button_pressed = RED;
+    stopLights();
     tone(BUZZER, colorFrequency[RED - 1], 700);
   }
   else if (!digitalRead(button_pins[1]))
   {
     button_pressed = YELLOW;
+    stopLights();
     tone(BUZZER, colorFrequency[YELLOW - 1], 700);
   }
   else if (!digitalRead(button_pins[2]))
   {
     button_pressed = GREEN;
+    stopLights();
     tone(BUZZER, colorFrequency[GREEN - 1], 700);
   }
   else if (!digitalRead(button_pins[3]))
   {
     button_pressed = BLUE;
+    stopLights();
     tone(BUZZER, colorFrequency[BLUE - 1], 700);
   }
   return button_pressed;
@@ -185,6 +203,7 @@ void loop()
 
       if (button_state != 0)
       {
+        resetLightStage = true;
         if (button_state == mapping[vowel][strikes][stage_colors[button_stage]])
         {
           if (button_stage == stage)
