@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.1">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -20623,8 +20623,8 @@ DIN A4, landscape with location and doc. field</description>
 <pin name="GND@1" x="-15.24" y="17.78" length="middle"/>
 <pin name="GND@2" x="-15.24" y="15.24" length="middle"/>
 <pin name="GND@3" x="-15.24" y="12.7" length="middle"/>
-<pin name="CLK" x="-15.24" y="5.08" length="middle"/>
-<pin name="DIN" x="-15.24" y="2.54" length="middle"/>
+<pin name="CLK" x="-15.24" y="2.54" length="middle"/>
+<pin name="DIN" x="-15.24" y="5.08" length="middle"/>
 <pin name="DOUT" x="-15.24" y="0" length="middle"/>
 <pin name="CS" x="-15.24" y="-2.54" length="middle"/>
 <pin name="BLINK" x="-15.24" y="-10.16" length="middle"/>
@@ -22241,13 +22241,6 @@ DIN A4, landscape with location and doc. field</description>
 <label x="-38.1" y="132.08" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="O7" class="0">
-<segment>
-<wire x1="-149.86" y1="119.38" x2="-149.86" y2="116.84" width="0.1524" layer="91"/>
-<pinref part="MAX6954" gate="G$1" pin="O7"/>
-<label x="-149.86" y="119.38" size="1.778" layer="95" rot="R90"/>
-</segment>
-</net>
 <net name="O8" class="0">
 <segment>
 <wire x1="-147.32" y1="119.38" x2="-147.32" y2="116.84" width="0.1524" layer="91"/>
@@ -22484,26 +22477,26 @@ DIN A4, landscape with location and doc. field</description>
 </net>
 <net name="SERIAL_CLK" class="0">
 <segment>
-<pinref part="MAX6954" gate="G$1" pin="CLK"/>
-<wire x1="-144.78" y1="86.36" x2="-144.78" y2="83.82" width="0.1524" layer="91"/>
-<label x="-144.78" y="83.82" size="1.778" layer="95" rot="R270"/>
-</segment>
-<segment>
 <pinref part="U1" gate="G$1" pin="PC2(ADC2)"/>
 <wire x1="-200.66" y1="109.22" x2="-193.04" y2="109.22" width="0.1524" layer="91"/>
 <label x="-193.04" y="109.22" size="1.778" layer="95" rot="R90"/>
 </segment>
-</net>
-<net name="SERIAL_DIN" class="0">
 <segment>
-<pinref part="MAX6954" gate="G$1" pin="DIN"/>
+<pinref part="MAX6954" gate="G$1" pin="CLK"/>
 <wire x1="-142.24" y1="86.36" x2="-142.24" y2="83.82" width="0.1524" layer="91"/>
 <label x="-142.24" y="83.82" size="1.778" layer="95" rot="R270"/>
 </segment>
+</net>
+<net name="SERIAL_DIN" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="PC1(ADC1)"/>
 <wire x1="-200.66" y1="111.76" x2="-195.58" y2="111.76" width="0.1524" layer="91"/>
 <label x="-195.58" y="111.76" size="1.778" layer="95" rot="R90"/>
+</segment>
+<segment>
+<pinref part="MAX6954" gate="G$1" pin="DIN"/>
+<wire x1="-144.78" y1="86.36" x2="-144.78" y2="83.82" width="0.1524" layer="91"/>
+<label x="-144.78" y="83.82" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
 <net name="SERIAL_CS" class="0">
