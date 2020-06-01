@@ -197,7 +197,7 @@ void setup()
   Serial.println(playerLocation[1]);
 
   Serial.println(F("Choosing goal location"));
-  while ((goalLocation[0] == playerLocation[0]) && (goalLocation[1] == playerLocation[1]))
+  while (((goalLocation[0] == playerLocation[0]) && (goalLocation[1] == playerLocation[1])) && ((goalLocation[0] == markerLocations[0][0]) && (goalLocation[1] == markerLocations[0][1])) && ((goalLocation[0] == markerLocations[1][0]) && (goalLocation[1] == markerLocations[1][1])) )
   {
     goalLocation[0] = random(0, 6);
     goalLocation[1] = random(0, 6);
