@@ -290,11 +290,11 @@ void loop()
 
   if (strikes < controller.getStrikes())
   {
-    tone(5, 340, 150);
+    tone(SPEAKER_PIN, 340, 150);
     delayWithUpdates(controller, 200);
-    tone(5, 140, 150);
+    tone(SPEAKER_PIN, 140, 150);
     delayWithUpdates(controller, 150);
-    noTone(5);
+    noTone(SPEAKER_PIN);
     strikes = controller.getStrikes();
     Serial.println("STRIKE!");
     Serial.println(strikes);
@@ -302,11 +302,11 @@ void loop()
 
   if (solves < controller.getSolves())
   {
-    tone(5, 140, 150);
+    tone(SPEAKER_PIN, 140, 150);
     delayWithUpdates(controller, 200);
-    tone(5, 340, 150);
+    tone(SPEAKER_PIN, 340, 150);
     delayWithUpdates(controller, 150);
-    noTone(5);
+    noTone(SPEAKER_PIN);
     solves = controller.getSolves();
   }
 
