@@ -147,14 +147,14 @@ void setup()
     lc.clearDisplay(0);
 
     Serial.println("Getting config");
-    /*while (!module.getConfig())
+    while (!module.getConfig())
     {
         module.interpretData();
-    }*/
+    }
 
     Serial.println("Got config");
 
-    randomSeed(1234); //config_to_seed(module.getConfig()));
+    randomSeed(config_to_seed(module.getConfig()));
 
     Serial.println("Generating button");
     // Generate button
