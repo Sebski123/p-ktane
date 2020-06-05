@@ -1,19 +1,26 @@
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include <WiFiClient.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
+#include <WebServer.h>
+#include <ESPmDNS.h>
 #include <EEPROM.h>
 #include "KTANECommon.h"
 #include "configModule.h"
+#include "BluetoothSerial.h"
+
+#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
+#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
+#endif
 
 extern const char INDEX_HTML[];
 
 // Fill in your WiFi router SSID and password
-const char *ssid = "Sebastian";
-const char *password = "12341234";
+const char *ssid = "KatjaKaj";
+const char *password = "Sebastianqaz";
 MDNSResponder mdns;
 
-ESP8266WebServer server(80);
+WebServer server(80);
+
+BluetoothSerial SerialBT;
 
 raw_config_t stored_config;
 int num_minutes;
@@ -85,6 +92,7 @@ void handleNotFound()
 void setup(void)
 {
   Serial.begin(19200);
+  SerialBT.begin("ESP32test"); //Bluetooth device name
 
   EEPROM.begin(512);
   int addr = 0;
@@ -111,7 +119,7 @@ void setup(void)
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  if (mdns.begin("ktane-setup", WiFi.localIP()))
+  if (mdns.begin("ktane-setup"))
   {
     Serial.println("MDNS responder started");
   }
@@ -129,7 +137,7 @@ void setup(void)
 
 void loop(void)
 {
-  mdns.update();
+  //mdns.update();
 
   server.handleClient();
   if (Serial.available() > 0)
