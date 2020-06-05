@@ -139,6 +139,13 @@ void setup()
     pinMode(STRIP_LED_PIN_BLUE, OUTPUT);
     pinMode(STRIP_LED_PIN_RED, OUTPUT);
 
+    digitalWrite(BUTTON_LED_PIN_GREEN, LOW);
+    digitalWrite(BUTTON_LED_PIN_BLUE, LOW);
+    digitalWrite(BUTTON_LED_PIN_RED, LOW);
+    digitalWrite(STRIP_LED_PIN_GREEN, LOW);
+    digitalWrite(STRIP_LED_PIN_BLUE, LOW);
+    digitalWrite(STRIP_LED_PIN_RED, LOW);
+
     Serial.println("Preparing 7-segment");
     lc.shutdown(0, false);
     /* Set the brightness to a medium values */
