@@ -43,14 +43,15 @@ bool wasButtonHeld = false;
 
 int buttonState = 0;     // current state of the button
 int lastButtonState = 0; // previous state of the button
-int timer;
+bool timerStarted = false;
+unsigned long timer = 0;
 
 int colors[5][2] = {
     {0, 4}, //Blue
     {1, 1}, //Red
     {2, 1}, //White
     {3, 5}, //Yellow
-    {4, 0}  //Transparent (buttons only, not  coloured strips)
+    {4, 0}  //Transparent (button only, not  coloured strips)
 };
 
 int rgbValues[5][3] = {
@@ -115,6 +116,7 @@ void checkSolution(bool held)
         else
         {
             module.strike();
+            timerStarted = false;
             return;
         }
     }
@@ -137,6 +139,7 @@ void checkSolution(bool held)
         }
         module.strike();
         wasButtonHeld = false;
+        timerStarted = false;
         stripColor = colors[random(4)][0];
         disableStrip();
         module.resetTime();
@@ -215,7 +218,7 @@ void loop()
         // read the pushbutton input pin:
         buttonState = digitalRead(BUTTON_PIN);
 
-        if (buttonState && !stripOn && millis() - timer > 1000)
+        if (buttonState && !stripOn && timerStarted && millis() - timer > 1000)
         {
             enableStrip();
             wasButtonHeld = true;
@@ -225,6 +228,7 @@ void loop()
         if (buttonState != lastButtonState)
         {
             timer = millis();
+            timerStarted = true;
 
             if (buttonState == LOW)
             {
