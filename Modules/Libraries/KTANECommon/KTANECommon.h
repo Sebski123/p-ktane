@@ -79,6 +79,7 @@ public:
 
   // Various config getters
   char *getTime();
+  void resetTime();
   int getLitFRK();
   int getLitCAR();
   int getNumBatteries();
@@ -99,6 +100,7 @@ private:
   int _green_led_pin;
   int _red_led_pin;
   int _got_config;
+  int _got_time;
   int _num_strikes;
   int _got_reset;
 };

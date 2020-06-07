@@ -81,6 +81,7 @@ KTANEModule::KTANEModule(SWireClient &swire, int green_led_pin, int red_led_pin)
   pinMode(_green_led_pin, OUTPUT);
   pinMode(_red_led_pin, OUTPUT);
   _got_config = 0;
+  _got_time = 0;
   _num_strikes = 0;
   _got_reset = 0;
   is_solved = 0;
@@ -122,6 +123,7 @@ void KTANEModule::interpretData()
     }
     else if (out_message[0] == TIME)
     {
+      _got_time = 1;
       saveTimeLeft((out_message + 1), _timeLeft);
     }
   }
@@ -192,9 +194,21 @@ int KTANEModule::sendTime()
   return _swire.sendData(str);
 }
 
+void KTANEModule::resetTime()
+{
+  _got_time = 0;
+}
+
 char *KTANEModule::getTime()
 {
-  return _timeLeft;
+  if (_got_time)
+  {
+    return _timeLeft;
+  }
+  else
+  {
+    return NULL;
+  }
 }
 
 int KTANEModule::getLitFRK()
