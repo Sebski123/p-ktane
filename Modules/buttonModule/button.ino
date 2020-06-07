@@ -3,6 +3,16 @@
 #include "LedControl.h"
 
 // Defines
+#define ABORT 0    
+#define DETONATE 1    
+#define HOLD 2    
+#define PRESS 3    
+
+#define BLUE 0
+#define RED 1
+#define WHITE 2
+#define YELLOW 3
+
 //  Pins
 #define GREEN_CLEAR_LED 2
 #define BUTTON_LED_PIN_GREEN 3
@@ -90,7 +100,7 @@ void checkSolution(bool held)
 {
     if (!held)
     {
-        if (text == 1 || (text == 2 && buttonColor == 1))
+        if (text == DETONATE || (text == HOLD && buttonColor == RED))
         {
             module.win();
             return;
@@ -103,7 +113,7 @@ void checkSolution(bool held)
     }
     else
     {
-        if (!(text == 1 || (text == 2 && buttonColor == 1)))
+        if (!(text == DETONATE || (text == HOLD && buttonColor == RED)))
         {
             module.sendTime();
             delay(100);
