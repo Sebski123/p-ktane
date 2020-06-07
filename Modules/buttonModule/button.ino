@@ -123,7 +123,9 @@ void checkSolution(bool held)
         if (!(text == DETONATE || (text == HOLD && buttonColor == RED)))
         {
             module.sendTime();
-            delay(100);
+            while(!module.getTime()){
+                module.interpretData();
+            }
             memcpy(solutionCheckTime, module.getTime(), 5);
             Serial.print("Time left: ");
             Serial.println(solutionCheckTime);
@@ -137,6 +139,7 @@ void checkSolution(bool held)
         wasButtonHeld = false;
         stripColor = colors[random(4)][0];
         disableStrip();
+        module.resetTime();
         return;
     }
 }
