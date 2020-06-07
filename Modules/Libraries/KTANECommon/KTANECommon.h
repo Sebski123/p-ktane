@@ -51,6 +51,8 @@ typedef struct config_st
 void config_to_raw(config_t *config, raw_config_t *raw_config_t);
 void raw_to_config(raw_config_t *raw_config, config_t *config_t);
 
+void saveTimeLeft(char *new_time, char *stored_time);
+
 unsigned long config_to_seed(config_t *config);
 
 void putByte(byte data, int clock_pin, int data_in_pin);

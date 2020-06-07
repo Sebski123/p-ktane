@@ -46,10 +46,10 @@ unsigned long config_to_seed(config_t *config)
   return retval;
 }
 
-void saveTimeLeft(char *raw_config, char *config)
+void saveTimeLeft(char *new_time, char *stored_time)
 {
-  memcpy(config, raw_config, 4);
-  config[4] = '\0';
+  memcpy(stored_time, new_time, 4);
+  stored_time[4] = '\0';
 }
 
 void delayWithUpdates(KTANEModule &module, unsigned int length)
