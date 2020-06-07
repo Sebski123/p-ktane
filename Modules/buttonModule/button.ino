@@ -98,6 +98,13 @@ void disableStrip()
 
 void checkSolution(bool held)
 {
+    Serial.print("Checking solution with: 'held' = ");
+    Serial.print(held);
+    Serial.print("\t'text' = ");
+    Serial.print(text);
+    Serial.print("\t'buttonColor' = ");
+    Serial.println(buttonColor);
+
     if (!held)
     {
         if (text == DETONATE || (text == HOLD && buttonColor == RED))
@@ -118,6 +125,8 @@ void checkSolution(bool held)
             module.sendTime();
             delay(100);
             memcpy(solutionCheckTime, module.getTime(), 5);
+            Serial.print("Time left: ");
+            Serial.println(solutionCheckTime);
             if (!!((int)strchr(solutionCheckTime, colors[stripColor][1] + '0')))
             {
                 module.win();
