@@ -79,6 +79,12 @@ void youLose()
 {
   // Play lose music
   Serial.println("Loose");
+  
+  clock.setDigit(0, 0, 0, false);
+  clock.setDigit(0, 1, 0, false);
+  clock.setDigit(0, 2, 0, false);
+  clock.setDigit(0, 3, 0, false);
+
   serialnr.write_string(" boom ");
   playMelody(lose_melody, lose_melody_durations, lose_melody_len);
 
@@ -93,11 +99,6 @@ void youWin()
 {
   // Play win music
   Serial.println("Win");
-
-  clock.setDigit(0, 0, 0, false);
-  clock.setDigit(0, 1, 0, false);
-  clock.setDigit(0, 2, 0, false);
-  clock.setDigit(0, 3, 0, false);
 
   digitalWrite(CLEAR_PIN, HIGH);
 
