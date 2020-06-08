@@ -287,33 +287,33 @@ void loop()
       clock.setDigit(0, 2, (seconds / 10), false);
       clock.setDigit(0, 3, (seconds % 10), false);
     }
-    else
+  }
+  else
+  {
+    if (currentMillis - previousMillis >= 10)
     {
-      if (currentMillis - previousMillis >= 10)
+      // save the last time you blinked the LED
+      previousMillis = currentMillis;
+      //Serial.println("blink");
+      // if the LED is off turn it on and vice-versa:
+      if (msClockCount > 25)
       {
-        // save the last time you blinked the LED
-        previousMillis = currentMillis;
-        //Serial.println("blink");
-        // if the LED is off turn it on and vice-versa:
-        if (msClockCount > 25)
-        {
-          toggleClockBlink();
-          msClockCount = 0;
-        }
-        else 
-        {
-          msClockCount++;
-        }
-        // Update clock
-
-        controller.setTime(diff_time);
-        int seconds = (diff_time / 1000) % 60;
-        int millisecs = diff_time - (seconds * 1000);
-        clock.setDigit(0, 0, (seconds / 10), false);
-        clock.setDigit(0, 1, (seconds % 10), false);
-        clock.setDigit(0, 2, (millisecs / 10), false);
-        clock.setDigit(0, 3, (millisecs % 10), false);
+        toggleClockBlink();
+        msClockCount = 0;
       }
+      else
+      {
+        msClockCount++;
+      }
+      // Update clock
+
+      controller.setTime(diff_time);
+      int seconds = (diff_time / 1000) % 60;
+      int millisecs = diff_time - (seconds * 1000);
+      clock.setDigit(0, 0, (seconds / 10), false);
+      clock.setDigit(0, 1, (seconds % 10), false);
+      clock.setDigit(0, 2, (millisecs / 10), false);
+      clock.setDigit(0, 3, (millisecs % 10), false);
     }
   }
   if (millis() > dest_time)
