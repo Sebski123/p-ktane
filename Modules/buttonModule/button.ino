@@ -55,11 +55,11 @@ int colors[5][2] = {
 };
 
 int rgbValues[5][3] = {
-    {0, 0, 1}, //Blue
-    {1, 0, 0}, //Red
-    {1, 1, 1}, //White
-    {1, 1, 0}, //Yellow
-    {1, 0, 1}  //Purple (buttons only, not  coloured strips)
+    {0, 0, 255}, //Blue
+    {255, 0, 0}, //Red
+    {255, 255, 80}, //White
+    {255, 60, 0}, //Yellow
+    {255, 0, 255}  //Violet (buttons only, not  coloured strips)
 };
 
 int constants[4] = {
@@ -76,16 +76,16 @@ void generateButton()
     buttonColor = colors[random(5)][0];
     stripColor = colors[random(4)][0];
     text = random(4);
-    digitalWrite(BUTTON_LED_PIN_RED, rgbValues[buttonColor][0]);
-    digitalWrite(BUTTON_LED_PIN_GREEN, rgbValues[buttonColor][1]);
-    digitalWrite(BUTTON_LED_PIN_BLUE, rgbValues[buttonColor][2]);
+    analogWrite(BUTTON_LED_PIN_RED, rgbValues[buttonColor][0]);
+    analogWrite(BUTTON_LED_PIN_GREEN, rgbValues[buttonColor][1]);
+    analogWrite(BUTTON_LED_PIN_BLUE, rgbValues[buttonColor][2]);
 }
 
 void enableStrip()
 {
-    digitalWrite(STRIP_LED_PIN_RED, rgbValues[stripColor][0]);
-    digitalWrite(STRIP_LED_PIN_GREEN, rgbValues[stripColor][1]);
-    digitalWrite(STRIP_LED_PIN_BLUE, rgbValues[stripColor][2]);
+    analogWrite(STRIP_LED_PIN_RED, rgbValues[stripColor][0]);
+    analogWrite(STRIP_LED_PIN_GREEN, rgbValues[stripColor][1]);
+    analogWrite(STRIP_LED_PIN_BLUE, rgbValues[stripColor][2]);
     stripOn = true;
 }
 
