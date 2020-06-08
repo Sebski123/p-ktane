@@ -125,8 +125,13 @@ void checkSolution(bool held)
         if (!(text == DETONATE || (text == HOLD && buttonColor == RED)))
         {
             module.sendTime();
+            unsigned long timeout = millis() + 2000;
             while(!module.getTime()){
                 module.interpretData();
+                if(millis() > timeout){
+                    Serial.println("Timed out waiting for time");
+                    break;
+                }
             }
             memcpy(solutionCheckTime, module.getTime(), 5);
             Serial.print("Time left: ");
