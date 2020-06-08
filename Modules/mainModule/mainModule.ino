@@ -31,7 +31,6 @@ config_t config;
 SWireMaster master;
 KTANEController controller(master);
 
-
 //Variables
 int brightness = 4;
 int win_melody[] = {262, 330, 294, 370, 392};
@@ -44,6 +43,8 @@ int num_minutes;
 unsigned long currentMillis;
 unsigned long previousMillis = 0;
 unsigned long count = 0;
+unsigned long diff_time = 0;
+byte msClockCount = 0;
 
 //  Globals
 int strikes = 0;
@@ -264,25 +265,57 @@ void loop()
 
   currentMillis = millis();
 
-  if (currentMillis - previousMillis >= 500)
+  diff_time = dest_time - millis();
+
+  if (diff_time > 60000)
   {
-    // save the last time you blinked the LED
-    previousMillis = currentMillis;
-    //Serial.println("blink");
-    // if the LED is off turn it on and vice-versa:
-    toggleClockBlink();
+    if (currentMillis - previousMillis >= 500)
+    {
+      // save the last time you blinked the LED
+      previousMillis = currentMillis;
+      //Serial.println("blink");
+      // if the LED is off turn it on and vice-versa:
+      toggleClockBlink();
 
-    // Update clock
-    unsigned long diff_time = dest_time - millis();
-    controller.setTime(diff_time);
-    int seconds = (diff_time / 1000) % 60;
-    int minutes = diff_time / 60000;
-    clock.setDigit(0, 0, (minutes / 10), false);
-    clock.setDigit(0, 1, (minutes % 10), false);
-    clock.setDigit(0, 2, (seconds / 10), false);
-    clock.setDigit(0, 3, (seconds % 10), false);
+      // Update clock
+
+      controller.setTime(diff_time);
+      int seconds = (diff_time / 1000) % 60;
+      int minutes = diff_time / 60000;
+      clock.setDigit(0, 0, (minutes / 10), false);
+      clock.setDigit(0, 1, (minutes % 10), false);
+      clock.setDigit(0, 2, (seconds / 10), false);
+      clock.setDigit(0, 3, (seconds % 10), false);
+    }
+    else
+    {
+      if (currentMillis - previousMillis >= 10)
+      {
+        // save the last time you blinked the LED
+        previousMillis = currentMillis;
+        //Serial.println("blink");
+        // if the LED is off turn it on and vice-versa:
+        if (msClockCount > 25)
+        {
+          toggleClockBlink();
+          msClockCount = 0;
+        }
+        else 
+        {
+          msClockCount++;
+        }
+        // Update clock
+
+        controller.setTime(diff_time);
+        int seconds = (diff_time / 1000) % 60;
+        int millisecs = diff_time - (seconds * 1000);
+        clock.setDigit(0, 0, (seconds / 10), false);
+        clock.setDigit(0, 1, (seconds % 10), false);
+        clock.setDigit(0, 2, (millisecs / 10), false);
+        clock.setDigit(0, 3, (millisecs % 10), false);
+      }
+    }
   }
-
   if (millis() > dest_time)
   {
     youLose();
