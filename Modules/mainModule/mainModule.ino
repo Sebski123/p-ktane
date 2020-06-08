@@ -94,6 +94,11 @@ void youWin()
   // Play win music
   Serial.println("Win");
 
+  clock.setDigit(0, 0, 0, false);
+  clock.setDigit(0, 1, 0, false);
+  clock.setDigit(0, 2, 0, false);
+  clock.setDigit(0, 3, 0, false);
+
   digitalWrite(CLEAR_PIN, HIGH);
 
   serialnr.write_string("winner");
