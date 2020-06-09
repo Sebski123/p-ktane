@@ -190,12 +190,12 @@ void generateRandomNumbers()
     buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[1][buttons_to_press[1]]);
     break;
   case (3):
-    // Same label as stage 3
-    buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[2][buttons_to_press[3]]);
+    // Same label as stage 4
+    buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[3][buttons_to_press[3]]);
     break;
   case (4):
-    // Same label as stage 4
-    buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[3][buttons_to_press[2]]);
+    // Same label as stage 3
+    buttons_to_press[4] = getIndexFromNumber(bottom_nums[4], bottom_nums[2][buttons_to_press[2]]);
     break;
   }
 
