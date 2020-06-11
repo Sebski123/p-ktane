@@ -147,7 +147,15 @@ void setup()
   Serial.begin(19200);
   configSerial.begin(19200);
 
-  delay(1000);
+  while (!Serial)
+  {
+    ;
+  } // wait for serial port to connect. Needed for native USB
+  while (!configSerial)
+  {
+    ;
+  } // wait for serial port to connect. Needed for native USB
+
 #pragma endregion
 
 #pragma region Get config
