@@ -22,6 +22,17 @@
 #define SERIAL_CLK 16
 //I2C SDA 18
 //I2C SCL 19
+//  I/O Expander pins
+#define BATT1 0
+#define BATT2 1
+#define BATT3 2
+#define BATT4 3
+#define FRK_LED 8
+#define CAR_LED 9
+#define FRQ_LED 10
+#define IND_LED 11
+#define BOB_LED 12
+#define NSA_LED 13
 
 //Class inits
 SoftwareSerial configSerial = SoftwareSerial(CONF_RX, CONF_TX);
