@@ -3,6 +3,7 @@
 #include "KTANECommon.h"
 #include "LedControl.h"
 #include "MAX6954.h"
+#include "Adafruit_MCP23017.h"
 #include <SoftwareSerial.h>
 
 // Defines
@@ -34,7 +35,8 @@
 #define BOB_LED 12
 #define NSA_LED 13
 
-//Class inits
+//Class init
+Adafruit_MCP23017 mcp;
 SoftwareSerial configSerial = SoftwareSerial(CONF_RX, CONF_TX);
 MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
 LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
@@ -165,6 +167,51 @@ void setup()
   Serial.println("Getting config");
   getConfigESP();
   //getConfigManual();
+#pragma endregion
+
+#pragma region I / O Expander setup
+  mcp.begin(); // use default address 0x20
+
+  //Setup battery pins and enable 100K internal pullup 
+  mcp.pinMode(BATT1, INPUT);
+  mcp.pinMode(BATT2, INPUT);
+  mcp.pinMode(BATT3, INPUT);
+  mcp.pinMode(BATT4, INPUT);
+  mcp.pullUp(BATT1, HIGH);
+  mcp.pullUp(BATT2, HIGH);
+  mcp.pullUp(BATT3, HIGH);
+  mcp.pullUp(BATT4, HIGH);
+
+  //Setup indicator pins
+  mcp.pinMode(FRK_LED, OUTPUT);
+  mcp.pinMode(CAR_LED, OUTPUT);
+  mcp.pinMode(FRQ_LED, OUTPUT);
+  mcp.pinMode(IND_LED, OUTPUT);
+  mcp.pinMode(BOB_LED, OUTPUT);
+  mcp.pinMode(NSA_LED, OUTPUT);
+#pragma endregion
+
+#pragma region SET / GET I / O Expander values
+  //Read number of batteries
+  config.batteries = 0;
+  for(int i = 0; i < 4; i++){
+    config.batteries += !mcp.digitalRead(i);
+  }
+
+  config.indicators = 0;
+  randomSeed(config_to_seed(&config));
+
+  // Turn on indicators randomly
+  for(int i = 8; i < 14; i++){
+    mcp.digitalWrite(i, random(2));
+  }
+
+  //Read FRK and CAR indicators
+  config.indicators |= (mcp.digitalRead(FRK_LED) & 1);
+  config.indicators |= (mcp.digitalRead(CAR_LED) & 2);
+#pragma endregion
+
+#pragma region Show config
   Serial.println("Got config");
   Serial.print("Serial nr. : ");
   Serial.println(config.serial);
