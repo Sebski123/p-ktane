@@ -10,3 +10,6 @@
 [submodule ".\\Modules\\Libraries\\Adafruit_MCP3008"]
 	path = .\\Modules\\Libraries\\Adafruit_MCP3008
 	url = git@github.com:adafruit/Adafruit_MCP3008.git
+[submodule ".\\Modules\\Libraries\\Adafruit-MCP23017-Arduino-Library"]
+	path = .\\Modules\\Libraries\\Adafruit-MCP23017-Arduino-Library
+	url = git@github.com:adafruit/Adafruit-MCP23017-Arduino-Library.git

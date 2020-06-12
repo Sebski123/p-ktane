@@ -108,7 +108,7 @@ void checkSolution(bool held)
 
     if (!held)
     {
-        if (text == DETONATE || (text == HOLD && buttonColor == RED))
+        if ((text == DETONATE && module.getNumBatteries() > 1) || (module.getNumBatteries() > 2 && module.getLitFRK()) ||(text == HOLD && buttonColor == RED))
         {
             module.win();
             return;
@@ -122,7 +122,7 @@ void checkSolution(bool held)
     }
     else
     {
-        if (!(text == DETONATE || (text == HOLD && buttonColor == RED)))
+        if (!(text == DETONATE && module.getNumBatteries() > 1) || (module.getNumBatteries() > 2 && module.getLitFRK()) ||(text == HOLD && buttonColor == RED))
         {
             module.sendTime();
             unsigned long timeout = millis() + 2000;
