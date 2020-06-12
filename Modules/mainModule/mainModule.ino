@@ -197,7 +197,7 @@ void setup()
   for(int i = 0; i < 4; i++){
     config.batteries += !mcp.digitalRead(i);
   }
-
+  
   config.indicators = 0;
   randomSeed(config_to_seed(&config));
 
@@ -207,8 +207,8 @@ void setup()
   }
 
   //Read FRK and CAR indicators
-  config.indicators |= (mcp.digitalRead(FRK_LED) & 1);
-  config.indicators |= (mcp.digitalRead(CAR_LED) & 2);
+  config.indicators |= mcp.digitalRead(FRK_LED);
+  config.indicators |= (mcp.digitalRead(CAR_LED) << 1);
 #pragma endregion
 
 #pragma region Show config
