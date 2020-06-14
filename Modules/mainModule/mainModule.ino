@@ -175,6 +175,7 @@ void setup()
   Serial.println("Getting config");
   getConfigESP();
   //getConfigManual();
+  Serial.println("Got config");
 #pragma endregion
 
 #pragma region I / O Expander setup
@@ -220,7 +221,6 @@ void setup()
 #pragma endregion
 
 #pragma region Show config
-  Serial.println("Got config");
   Serial.print("Serial nr. : ");
   Serial.println(config.serial);
   Serial.print("No. of Batteries: ");
