@@ -35,7 +35,7 @@ void handleSubmit()
   config_t config;
   int addr = 0;
 
-  if (!server.hasArg("serial_num") || !server.hasArg("num_batteries"))
+  if (!server.hasArg("serial_num") || !server.hasArg("num_minutes"))
   {
     return returnFail("BAD ARGS");
   }
