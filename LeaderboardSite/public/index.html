@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="https://ktane-solver.droppages.com/img/game%20logo.png">
+  <title>P-KTANE leaderboards</title>
+
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/7.15.1/firebase-app.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/7.15.1/firebase-database.js"></script>
+  <!-- initialize the SDK after all desired features are loaded -->
+  <script defer src="/__/firebase/init.js"></script>
+  
+</head>
+
+<body>
+  <div id="leaderboards">
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var database = firebase.database();
+      var ref = database.ref("Score");
+      ref.on("value", gotData);
+    });
+
+    function gotData(data) {
+      document.getElementById("leaderboards").innerHTML = "";
+      var scores = data.val();
+      // Grab the keys to iterate over the object
+      var keys = Object.keys(scores);
+
+      for (var i = 0; i < keys.length; i++) {
+        var serial = keys[i];
+        var data = scores[serial];
+        createLeaderboard(serial, data);
+        console.log(data)
+      }
+    }
+
+    function createLeaderboard(name, data){
+      let div = document.getElementById("leaderboards");
+      let board = document.createElement("DIV");
+      let headline = document.createElement("H2");
+      let scores = document.createElement("DIV");
+
+      headline.innerText = name;
+      board.appendChild(headline);
+
+      // Sort by value
+      let names = Object.keys(data).sort(function(a,b){return data[b]-data[a]})
+
+      for (var i = 0; i < names.length; i++) {
+        let entry = document.createElement("DIV");
+        let name = document.createTextNode(names[i] + ": ");
+        var score = document.createTextNode(data[names[i]]);
+        entry.appendChild(name);
+        entry.appendChild(score);
+        scores.appendChild(entry);
+      }
+      board.appendChild(scores);
+
+
+      div.appendChild(board);
+    }
+  </script>
+</body>
+
+</html>
