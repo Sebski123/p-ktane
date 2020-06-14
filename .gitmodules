@@ -13,3 +13,6 @@
 [submodule ".\\Modules\\Libraries\\Adafruit-MCP23017-Arduino-Library"]
 	path = .\\Modules\\Libraries\\Adafruit-MCP23017-Arduino-Library
 	url = git@github.com:adafruit/Adafruit-MCP23017-Arduino-Library.git
+[submodule ".\\Modules\\Libraries\\Firebase-ESP8266"]
+	path = .\\Modules\\Libraries\\Firebase-ESP8266
+	url = git@github.com:mobizt/Firebase-ESP8266.git

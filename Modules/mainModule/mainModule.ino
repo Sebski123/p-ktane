@@ -112,6 +112,8 @@ void youLose()
 
 void youWin()
 {
+  int seconds = (diff_time / 1000) % 60;
+  int minutes = diff_time / 60000;
   // Play win music
   Serial.println("Win");
 
@@ -119,6 +121,12 @@ void youWin()
 
   serialnr.write_string("winner");
   playMelody(win_melody, win_melody_durations, win_melody_len);
+
+  configSerial.write('W');
+  configSerial.write((char)((minutes / 10) + '0'));
+  configSerial.write((char)((minutes % 10) + '0'));
+  configSerial.write((char)((seconds / 10) + '0'));
+  configSerial.write((char)((seconds % 10) + '0'));
 
   // Stop clock
   while (1)
