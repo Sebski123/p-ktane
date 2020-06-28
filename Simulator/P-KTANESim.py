@@ -1,4 +1,4 @@
-from ArduinoRand import randomSeed, random, random2
+from ArduinoRandom import randomSeed, random, random2
 from dataclasses import dataclass
 
 
@@ -6,7 +6,7 @@ from dataclasses import dataclass
 class config_t:
     ports: int
     batteries: int
-    indicators: float
+    indicators: int
     serial: str
 
 
@@ -18,8 +18,8 @@ YELLOW = 3
 BLACK = 4
 RED = 5
 
-serial = "TEXGS9" #"KS1TL2"
-numOfBatts = 3
+serial = "63QX11"  # "KS1TL2"
+numOfBatts = 1
 Parallel = False
 RJ45 = False
 Stereo = False
@@ -133,17 +133,17 @@ def getButtonSolution():
 
     print("To solve Button module you need to ", end="")
 
-    colors = [[0, 4],  # Blue
-              [1, 1],  # Red
-              [2, 1],  # White
-              [3, 5],  # Yellow
-              [4, 0]]  # Transparent (button only, not  coloured strips)
+    colors = [0, 1, 2, 3, 4] 
 
-    buttonColor = colors[random(5)][0]
-    stripColor = colors[random(4)][0]
+    buttonColor = colors[random(5)]
+    stripColor = colors[random(4)]
     text = random(4)
 
-    if (text == DETONATE or (text == HOLD and buttonColor == B_RED)):
+    print(buttonColor)
+    print(stripColor)
+    print(text)
+
+    if ((text == DETONATE and config.batteries > 1) or (config.batteries > 2 and (config.indicators & 1)) or (text == HOLD and buttonColor == B_RED)):
         print("press and immediately release the button")
     else:
         print("hold the button and release it when the countdown timer has a ", end="")
@@ -534,7 +534,6 @@ def getsToGoal(start, goal, moves):
     return False
 
 
-
 def isValid(start, moves, mazeNum):
     x = start[0]
     y = start[1]
@@ -555,7 +554,6 @@ def isValid(start, moves, mazeNum):
     return True
 
 
-
 def getMazesSolution():
     import queue
 
@@ -570,10 +568,9 @@ def getMazesSolution():
 
     goalLocation[0] = random2(0, 6)
     goalLocation[1] = random2(0, 6)
-    while (((goalLocation[0] == playerLocation[0]) and (goalLocation[1] == playerLocation[1])) or ((goalLocation[0] == markerLocations[0][0]) and (goalLocation[1] == markerLocations[0][1])) or ((goalLocation[0] == markerLocations[1][0]) and (goalLocation[1] == markerLocations[1][1]))):
+    while (((goalLocation[0] == playerLocation[0]) and (goalLocation[1] == playerLocation[1])) or ((goalLocation[0] == markerLocations[0][0]) and (goalLocation[1] == markerLocations[0][1])) or ((goalLocation[0] == markerLocations[1][0]) and (goalLocation[1] == markerLocations[1][1])) or (abs((goalLocation[0] - playerLocation[0]) + (goalLocation[1] - playerLocation[1])) < 5)):
         goalLocation[0] = random2(0, 6)
         goalLocation[1] = random2(0, 6)
-
 
     Q = queue.Queue()
     pattern = ""
@@ -585,17 +582,19 @@ def getMazesSolution():
             if isValid(playerLocation, newPattern, mazeNum):
                 Q.put(newPattern)
 
+
 if(__name__ == "__main__"):
     config.serial = serial
     config.batteries = 0
     config.ports = (Parallel | (RJ45 << 1) | (Stereo << 2))
 
+    config.indicators = 0
+    
+    print(config_to_seed(config))
     randomSeed(config_to_seed(config))
 
-    config.indicators = 0
-
-    #config.indicators |= random(2)
-    #config.indicators |= (random(2) << 1)
+    config.indicators |= random(2)
+    config.indicators |= (random(2) << 1)
 
     randomSeed(config_to_seed(config))
     getWiresSolution()
