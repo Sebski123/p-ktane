@@ -51,7 +51,7 @@ int colors[5][2] = {
     {1, 1}, //Red
     {2, 1}, //White
     {3, 5}, //Yellow
-    {4, 0}  //Transparent (button only, not  coloured strips)
+    {4, 0}  //Violet (button only, not  coloured strips)
 };
 
 int rgbValues[5][3] = {
