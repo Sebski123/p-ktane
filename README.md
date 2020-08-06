@@ -6,6 +6,18 @@
 * https://github.com/jgillick/avr-discobus
 
 
+## ReDesign
+### To-do
+- [ ] Design PCBs
+- [ ] Make more modules
+- [ ] Organize Repo
+- [ ] Clean up README
+- [ ] Modules on back?
+- [ ] Better leaderboard?
+- [ ] Way to enter name? (Password module?)
+- [ ] Better system for swapping modules?
+
+
 ## Modules
 | Module                                                 | Coded | Built | Tested | I2C addr |
 |--------------------------------------------------------|-------|-------|--------|----------|
