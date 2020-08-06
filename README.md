@@ -10,7 +10,7 @@
 ### To-do
 - [ ] Design PCBs
 - [ ] Make more modules
-- [ ] Organize Repo
+- [x] Organize Repo
 - [ ] Clean up README
 - [ ] Modules on back?
 - [ ] Better leaderboard?
