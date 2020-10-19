@@ -2,6 +2,32 @@
 #include "KTANECommon.h"
 #include "LedControl.h"
 
+/*                                                                                                                            
+                                                    dddddddd                                                                 
+UUUUUUUU     UUUUUUUU                               d::::::d                          tttt                                   
+U::::::U     U::::::U                               d::::::d                       ttt:::t                                   
+U::::::U     U::::::U                               d::::::d                       t:::::t                                   
+UU:::::U     U:::::UU                               d:::::d                        t:::::t                                   
+ U:::::U     U:::::Uppppp   ppppppppp       ddddddddd:::::d   aaaaaaaaaaaaa  ttttttt:::::ttttttt        eeeeeeeeeeee         
+ U:::::D     D:::::Up::::ppp:::::::::p    dd::::::::::::::d   a::::::::::::a t:::::::::::::::::t      ee::::::::::::ee       
+ U:::::D     D:::::Up:::::::::::::::::p  d::::::::::::::::d   aaaaaaaaa:::::at:::::::::::::::::t     e::::::eeeee:::::ee     
+ U:::::D     D:::::Upp::::::ppppp::::::pd:::::::ddddd:::::d            a::::atttttt:::::::tttttt    e::::::e     e:::::e     
+ U:::::D     D:::::U p:::::p     p:::::pd::::::d    d:::::d     aaaaaaa:::::a      t:::::t          e:::::::eeeee::::::e     
+ U:::::D     D:::::U p:::::p     p:::::pd:::::d     d:::::d   aa::::::::::::a      t:::::t          e:::::::::::::::::e      
+ U:::::D     D:::::U p:::::p     p:::::pd:::::d     d:::::d  a::::aaaa::::::a      t:::::t          e::::::eeeeeeeeeee       
+ U::::::U   U::::::U p:::::p    p::::::pd:::::d     d:::::d a::::a    a:::::a      t:::::t    tttttte:::::::e                
+ U:::::::UUU:::::::U p:::::ppppp:::::::pd::::::ddddd::::::dda::::a    a:::::a      t::::::tttt:::::te::::::::e               
+  UU:::::::::::::UU  p::::::::::::::::p  d:::::::::::::::::da:::::aaaa::::::a      tt::::::::::::::t e::::::::eeeeeeee       
+    UU:::::::::UU    p::::::::::::::pp    d:::::::::ddd::::d a::::::::::aa:::a       tt:::::::::::tt  ee:::::::::::::e       
+      UUUUUUUUU      p::::::pppppppp       ddddddddd   ddddd  aaaaaaaaaa  aaaa         ttttttttttt      eeeeeeeeeeeeee       
+                     p:::::p                                                                                                 
+                     p:::::p                                                                                                 
+                    p:::::::p                                                                                                
+                    p:::::::p                                                                                                
+                    p:::::::p                                                                                                
+                    ppppppppp                                                                                                                                                                                                                
+*/
+
 // Defines
 #define BUTTON1_PIN 2
 #define BUTTON2_PIN 3
@@ -230,10 +256,10 @@ void setup()
   pinMode(DATA_IN_PIN, OUTPUT);
   pinMode(LOAD_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
-  pinMode(BUTTON1_PIN, INPUT);
-  pinMode(BUTTON2_PIN, INPUT);
-  pinMode(BUTTON3_PIN, INPUT);
-  pinMode(BUTTON4_PIN, INPUT);
+  pinMode(BUTTON1_PIN, INPUT_PULLUP);
+  pinMode(BUTTON2_PIN, INPUT_PULLUP);
+  pinMode(BUTTON3_PIN, INPUT_PULLUP);
+  pinMode(BUTTON4_PIN, INPUT_PULLUP);
   pinMode(LED1_PIN, OUTPUT);
   pinMode(LED2_PIN, OUTPUT);
   pinMode(LED3_PIN, OUTPUT);
