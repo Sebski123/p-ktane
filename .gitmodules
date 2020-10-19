@@ -16,3 +16,6 @@
 [submodule ".\\Modules\\Libraries\\Firebase-ESP8266"]
 	path = .\\Modules\\Libraries\\Firebase-ESP8266
 	url = git@github.com:mobizt/Firebase-ESP8266.git
+[submodule ".\\MiscCode\\Libraries\\Adafruit_LiquidCrystal"]
+	path = .\\MiscCode\\Libraries\\Adafruit_LiquidCrystal
+	url = git@github.com:adafruit/Adafruit_LiquidCrystal.git
