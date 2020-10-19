@@ -1,7 +1,9 @@
-*.s#*
 build/**
-.vscode/c_cpp_properties.json
-Modules/configModule/config.html
+.vscode/**
+**/Config/config.html
+**/temp*/**
+*.*bak
+**/gerber/**
 
 # Logs
 logs
