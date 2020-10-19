@@ -1,4 +1,3 @@
-#include "SWire.h"
 #include "KTANECommon.h"
 #include "LedControl.h"
 
@@ -14,24 +13,26 @@
 #define YELLOW 3
 
 //  Pins
+//RX 0
+//TX 1
 #define GREEN_CLEAR_LED 2
-#define BUTTON_LED_PIN_GREEN 3
+#define STRIP_LED_PIN_RED 3
 #define RED_STRIKE_LED 4
-#define BUTTON_LED_PIN_BLUE 5
-#define BUTTON_LED_PIN_RED 6
+#define STRIP_LED_PIN_GREEN 5
+#define STRIP_LED_PIN_BLUE 6
 #define BUTTON_PIN 7
-#define CLOCK_PIN 8
-#define STRIP_LED_PIN_GREEN 9
-#define STRIP_LED_PIN_BLUE 10
-#define STRIP_LED_PIN_RED 11
-#define LOAD_PIN 12
-#define DATA_IN_PIN 13
+#define BUTTON_LED_PIN_RED 9
+#define BUTTON_LED_PIN_GREEN 10
+#define BUTTON_LED_PIN_BLUE 11
+#define DATA_IN_PIN 14
+#define CLOCK_PIN 15
+#define LOAD_PIN 16
 //I2C SDA 18
 //I2C SCL 19
 
 //Class inits
 LedControl lc = LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
-SWireClient client(0x04);
+SWireClient client(0x02);
 KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 
 //Variables
@@ -158,10 +159,8 @@ void setup()
 
     Serial.println("Starting setup");
 
-    pinMode(DATA_IN_PIN, OUTPUT);
-    pinMode(LOAD_PIN, OUTPUT);
-    pinMode(CLOCK_PIN, OUTPUT);
-    pinMode(BUTTON_PIN, INPUT);
+    pinMode(BUTTON_PIN, INPUT_PULLUP);
+    
     pinMode(BUTTON_LED_PIN_GREEN, OUTPUT);
     pinMode(BUTTON_LED_PIN_BLUE, OUTPUT);
     pinMode(BUTTON_LED_PIN_RED, OUTPUT);
