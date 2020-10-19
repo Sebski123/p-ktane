@@ -2,3 +2,18 @@
 	path = .\\MiscCode\\Libraries\\Adafruit_LiquidCrystal
 	url = git@github.com:adafruit/Adafruit_LiquidCrystal.git
 
+[submodule ".\\MiscCode\\Libraries\\LedControl"]
+	path = .\\MiscCode\\Libraries\\LedControl
+	url = git@github.com:wayoda/LedControl.git
+[submodule ".\\MiscCode\\Libraries\\MAX6954"]
+	path = .\\MiscCode\\Libraries\\MAX6954
+	url = git@github.com:Sebski123/MAX6954.git
+[submodule ".\\MiscCode\\Libraries\\SWire"]
+	path = .\\MiscCode\\Libraries\\SWire
+	url = git@github.com:Sebski123/SWire.git
+[submodule ".\\MiscCode\\Libraries\\Adafruit_MCP3008"]
+	path = .\\MiscCode\\Libraries\\Adafruit_MCP3008
+	url = git@github.com:adafruit/Adafruit_MCP3008.git
+[submodule ".\\MiscCode\\Libraries\\Adafruit-MCP23017-Arduino-Library"]
+	path = .\\MiscCode\\Libraries\\Adafruit-MCP23017-Arduino-Library
+	url = git@github.com:adafruit/Adafruit-MCP23017-Arduino-Library.git
