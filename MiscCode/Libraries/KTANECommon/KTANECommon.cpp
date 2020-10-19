@@ -10,6 +10,8 @@
 #include "KTANECommon.h"
 #include <string.h>
 
+const int needys[] = {0x7, 0x8, 0x9};
+
 void config_to_raw(config_t *config, raw_config_t *raw_config)
 {
   raw_config->ports = config->ports;
@@ -83,8 +85,10 @@ KTANEModule::KTANEModule(SWireClient &swire, int green_led_pin, int red_led_pin)
   _got_config = 0;
   _got_time = 0;
   _num_strikes = 0;
+  _num_solves = 0;
   _got_reset = 0;
   is_solved = 0;
+  needyStop = false;
 }
 
 void KTANEModule::interpretData()
@@ -107,6 +111,7 @@ void KTANEModule::interpretData()
       //  but is kept in case the hard-reset call is removed.
       is_solved = 0;
       _num_strikes = 0;
+      _num_solves = 0;
       _got_config = 0;
       memset(&_config, 0, sizeof(config_t));
       _got_reset = 1;
@@ -114,17 +119,27 @@ void KTANEModule::interpretData()
 
       // Delay for a small bit to allow client to ACK the reset.
       start_millis = millis();
-      while (millis() - start_millis < 300){}
+      while (millis() - start_millis < 300)
+      {
+      }
       softwareReset();
     }
     else if (out_message[0] == NUM_STRIKES)
     {
       _num_strikes = out_message[1];
     }
+    else if (out_message[0] == NUM_SOLVES)
+    {
+      _num_solves = out_message[1];
+    }
     else if (out_message[0] == TIME)
     {
       _got_time = 1;
       saveTimeLeft((out_message + 1), _timeLeft);
+    }
+    else if (out_message[0] == STOP)
+    {
+      needyStop = true;
     }
   }
 }
@@ -236,7 +251,6 @@ int KTANEModule::getRJ45Port()
   return _config.ports & 2;
 }
 
-
 int KTANEModule::getRCAPort()
 {
   return _config.ports & 4;
@@ -249,6 +263,11 @@ char KTANEModule::getSerialDigit(int index)
     return (char)0;
   }
   return _config.serial[index];
+}
+
+int KTANEModule::getLastDigitEven()
+{
+  return IS_EVEN(getSerialDigit(5) - '0');
 }
 
 int KTANEModule::serialContains(char c)
@@ -276,6 +295,11 @@ int KTANEModule::getNumStrikes()
   return _num_strikes;
 }
 
+int KTANEModule::getNumSolves()
+{
+  return _num_solves;
+}
+
 int KTANEModule::getReset()
 {
   if (_got_reset)
@@ -291,6 +315,7 @@ KTANEController::KTANEController(SWireMaster &swire) : _swire(swire)
   memset(_strikes, 0, MAX_CLIENTS);
   memset(_solves, 0, MAX_CLIENTS);
   memset(_readies, 0, MAX_CLIENTS);
+  _needy_modules = 0;
 }
 
 void KTANEController::setTime(unsigned long timeLeft)
@@ -316,10 +341,18 @@ void KTANEController::interpretData()
     else if (out_message[0] == SOLVE)
     {
       _solves[client_id] = 1;
+      if (!(client_id == 0x7 || client_id == 0x8 || client_id == 0x9))
+      {
+        sendSolves();
+      }
     }
     else if (out_message[0] == READY)
     {
       _readies[client_id] = 1;
+      if (client_id == 0x7 || client_id == 0x8 || client_id == 0x9)
+      {
+        _needy_modules++;
+      }
     }
     else if (out_message[0] == TIME)
     {
@@ -396,10 +429,10 @@ int KTANEController::sendReset()
   uint8_t clients[MAX_CLIENTS];
   int num_clients = 0;
   num_clients = _swire.getClients(clients);
-  
+
   for (int i = 0; i < num_clients; i++)
   {
-    if (!_swire.sendData(clients[i], msg)) 
+    if (!_swire.sendData(clients[i], msg))
     {
       err++;
     }
@@ -424,6 +457,55 @@ int KTANEController::sendStrikes()
       if (!_swire.sendData(clients[i], msg))
       {
         err++;
+      }
+    }
+    return (err == 0);
+  }
+  return 0;
+}
+
+int KTANEController::sendSolves()
+{
+  int num_solves = getSolves() - _needy_modules;
+  char msg[3] = {NUM_SOLVES, (char)num_solves, '\0'};
+  int err = 0;
+  uint8_t clients[MAX_CLIENTS];
+  int num_clients = 0;
+
+  if (num_solves > 0)
+  {
+    num_clients = _swire.getClients(clients);
+
+    for (int i = 0; i < num_clients; i++)
+    {
+      if (!_swire.sendData(clients[i], msg))
+      {
+        err++;
+      }
+    }
+    return (err == 0);
+  }
+  return 0;
+}
+
+int KTANEController::stopNeedys()
+{
+  char msg[2] = {STOP, '\0'};
+  int err = 0;
+  uint8_t clients[MAX_CLIENTS];
+  int num_clients = 0;
+  num_clients = _swire.getClients(clients);
+
+  for (int i = 0; i < num_clients; i++)
+  {
+    for (int j = 0; j < 3; j++)
+    {
+      if (clients[i] == needys[j])
+      {
+        if (!_swire.sendData(clients[i], msg))
+        {
+          err++;
+        }
       }
     }
     return (err == 0);

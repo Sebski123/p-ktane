@@ -22,7 +22,9 @@
 #define READY (char)0xC3
 #define RESET (char)0xC4
 #define NUM_STRIKES (char)0xC5
-#define TIME (char)0xC6
+#define NUM_SOLVES (char)0xC6
+#define TIME (char)0xC7
+#define STOP (char)0xC8
 
 typedef struct raw_config_st
 {
@@ -69,7 +71,9 @@ public:
   int win();
   int sendReady();
   int getNumStrikes();
+  int getNumSolves();
   int is_solved;
+  bool needyStop;
   int sendDebugMsg(char *msg);
 
   // Helper functions for strike() and win()
@@ -87,6 +91,7 @@ public:
   int getRCAPort();
   int getRJ45Port();
   char getSerialDigit(int index);
+  int getLastDigitEven();
   int serialContains(char c);
   int serialContainsVowel();
 
@@ -102,6 +107,7 @@ private:
   int _got_config;
   int _got_time;
   int _num_strikes;
+  int _num_solves;
   int _got_reset;
 };
 
@@ -117,6 +123,8 @@ public:
   int clientsAreReady();
   int sendReset();
   int sendStrikes();
+  int sendSolves();
+  int stopNeedys();
 
 private:
   SWireMaster &_swire;
@@ -124,6 +132,7 @@ private:
   uint8_t _solves[MAX_CLIENTS];
   uint8_t _readies[MAX_CLIENTS];
   unsigned long timeLeftOnTimer;
+  int _needy_modules;
 };
 
 void delayWithUpdates(KTANEModule &module, unsigned int length);
