@@ -138,6 +138,8 @@ void youLose()
 
 void youWin()
 {
+
+  controller.stopNeedys();
   int seconds = (diff_time / 1000) % 60;
   int minutes = diff_time / 60000;
   // Play win music
