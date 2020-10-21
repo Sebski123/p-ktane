@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:VentingGas-cache
+LIBS:NeedyVentingGas-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -445,16 +445,6 @@ Wire Wire Line
 NoConn ~ 6300 2950
 Wire Wire Line
 	7000 2300 7000 3050
-Text Label 6350 3250 0    50   ~ 0
-seg_e
-Text Label 6350 3350 0    50   ~ 0
-seg_d
-Text Label 6350 3450 0    50   ~ 0
-seg_c
-Text Label 6350 3550 0    50   ~ 0
-seg_b
-Text Label 6350 3650 0    50   ~ 0
-seg_a
 Wire Wire Line
 	6300 3050 7000 3050
 Connection ~ 7000 3050
