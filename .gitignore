@@ -4,6 +4,7 @@ build/**
 **/temp*/**
 *.*bak
 **/gerber/**
+fp-info-cache
 
 # Logs
 logs

@@ -25,11 +25,22 @@
 - [ ] Way to enter name? (Password module?)
 - [ ] Better system for swapping modules?
 - [ ] Make e-paper display
-- - [ ] Expose PSU enable pin
-- - [ ] Add SRAM IC
-- - [ ] Add microSD slot?
-- - [ ] White image for storage
-- - [ ] Add display/controller to GxEPD2?
+  - [ ] Expose PSU enable pin
+  - [x] Add SRAM IC
+  - [x] Add microSD slot?
+  - [ ] White image for storage
+  - [ ] Add display/controller to GxEPD2?
+- [ ] Figure out how to power device
+  - [ ] Wired?
+  - [ ] Battery?
+  - [ ] Both?
+- [ ] Add protection circuits?
+  - [ ] Short circuit protection?
+  - [ ] Overvoltage protection?
+  - [ ] Overcurrent protection?
+- [ ] Add TMRpcm and SD to timer?
+  - [ ] [This](https://maxoffsky.com/maxoffsky-blog/how-to-play-wav-audio-files-with-arduino-uno-and-microsd-card/)
+  - [ ] Or [this](https://circuitdigest.com/microcontroller-projects/arduino-audio-music-player)
 
 
 ### v1 Compromises
