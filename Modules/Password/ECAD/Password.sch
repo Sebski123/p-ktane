@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
 LIBS:Password-cache
-LIBS:NeedyVentingGas-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -276,7 +275,6 @@ Text Label 2750 4550 3    50   ~ 0
 status_grn
 Text Label 2950 4550 3    50   ~ 0
 status_red
-NoConn ~ 4400 2550
 NoConn ~ 4400 2650
 NoConn ~ 4400 2750
 $Comp
@@ -423,13 +421,11 @@ Wire Wire Line
 Wire Wire Line
 	6650 4750 5300 4750
 Wire Wire Line
-	5300 4750 5300 2350
+	5300 4750 5300 2450
 Wire Wire Line
-	5300 2350 4400 2350
+	5300 2450 4400 2450
 Wire Wire Line
-	4400 2450 5250 2450
-Wire Wire Line
-	5250 2450 5250 4950
+	4400 2550 5250 2550
 Wire Wire Line
 	5250 4950 6650 4950
 Wire Wire Line
@@ -473,7 +469,6 @@ Wire Wire Line
 	5700 2150 4400 2150
 Wire Wire Line
 	4400 2250 5700 2250
-NoConn ~ 5700 2350
 $Comp
 L power:VCC #PWR02
 U 1 1 5F8472AD
@@ -811,4 +806,8 @@ Wire Wire Line
 Connection ~ 9700 4000
 Wire Wire Line
 	9700 4000 9700 3650
+Wire Wire Line
+	5250 2550 5250 4950
+Wire Wire Line
+	5700 2350 4400 2350
 $EndSCHEMATC
