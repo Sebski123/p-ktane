@@ -24,6 +24,8 @@
 - [ ] Better leaderboard?
 - [ ] Way to enter name? (Password module?)
 - [ ] Better system for swapping modules?
+- [ ] Use HD107S for button module?
+- [ ] Use built-in resistor to identify button?
 - [ ] Make e-paper display
   - [ ] Expose PSU enable pin
   - [x] Add SRAM IC
@@ -37,7 +39,8 @@
 - [ ] Add protection circuits?
   - [ ] Short circuit protection?
   - [ ] Overvoltage protection?
-  - [ ] Overcurrent protection?
+  - [ ] Overcurrent protection
+    - [ ] Add fuse to every module
 - [ ] Add TMRpcm and SD to timer?
   - [ ] [This](https://maxoffsky.com/maxoffsky-blog/how-to-play-wav-audio-files-with-arduino-uno-and-microsd-card/)
   - [ ] Or [this](https://circuitdigest.com/microcontroller-projects/arduino-audio-music-player)
