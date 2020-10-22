@@ -40,7 +40,7 @@
   - [ ] Short circuit protection?
   - [ ] Overvoltage protection?
   - [ ] Overcurrent protection
-    - [ ] Add fuse to every module
+    - [x] Add polyfuse to every module
 - [ ] Add TMRpcm and SD to timer?
   - [ ] [This](https://maxoffsky.com/maxoffsky-blog/how-to-play-wav-audio-files-with-arduino-uno-and-microsd-card/)
   - [ ] Or [this](https://circuitdigest.com/microcontroller-projects/arduino-audio-music-player)

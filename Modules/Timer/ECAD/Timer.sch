@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
 LIBS:Timer-cache
-LIBS:MorseCode-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -138,24 +137,13 @@ $EndComp
 $Comp
 L power:VCC #PWR01
 U 1 1 5F822FD5
-P 1400 3350
-F 0 "#PWR01" H 1400 3200 50  0001 C CNN
-F 1 "VCC" V 1418 3477 50  0000 L CNN
-F 2 "" H 1400 3350 50  0001 C CNN
-F 3 "" H 1400 3350 50  0001 C CNN
-	1    1400 3350
-	0    -1   -1   0   
-$EndComp
-$Comp
-L power:VCC #PWR03
-U 1 1 5F822FD6
-P 1400 3950
-F 0 "#PWR03" H 1400 3800 50  0001 C CNN
-F 1 "VCC" V 1418 4077 50  0000 L CNN
-F 2 "" H 1400 3950 50  0001 C CNN
-F 3 "" H 1400 3950 50  0001 C CNN
-	1    1400 3950
-	0    -1   -1   0   
+P 2300 3000
+F 0 "#PWR01" H 2300 2850 50  0001 C CNN
+F 1 "VCC" V 2318 3127 50  0000 L CNN
+F 2 "" H 2300 3000 50  0001 C CNN
+F 3 "" H 2300 3000 50  0001 C CNN
+	1    2300 3000
+	0    1    1    0   
 $EndComp
 $Comp
 L power:GND #PWR02
@@ -748,4 +736,25 @@ Connection ~ 6100 4700
 Wire Wire Line
 	6100 4700 6100 5050
 NoConn ~ 4400 3950
+$Comp
+L Device:Polyfuse F1
+U 1 1 5F922CA4
+P 2050 3000
+F 0 "F1" V 1825 3000 50  0000 C CNN
+F 1 "Polyfuse" V 1916 3000 50  0000 C CNN
+F 2 "" H 2100 2800 50  0001 L CNN
+F 3 "~" H 2050 3000 50  0001 C CNN
+	1    2050 3000
+	0    1    1    0   
+$EndComp
+Text Label 1400 3350 2    50   ~ 0
+UVCC
+Text Label 1400 3950 2    50   ~ 0
+UVCC
+Text Label 1800 3000 2    50   ~ 0
+UVCC
+Wire Wire Line
+	1800 3000 1900 3000
+Wire Wire Line
+	2200 3000 2300 3000
 $EndSCHEMATC
