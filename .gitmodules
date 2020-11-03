@@ -17,3 +17,9 @@
 [submodule ".\\MiscCode\\Libraries\\Adafruit-MCP23017-Arduino-Library"]
 	path = .\\MiscCode\\Libraries\\Adafruit-MCP23017-Arduino-Library
 	url = git@github.com:adafruit/Adafruit-MCP23017-Arduino-Library.git
+[submodule ".\\MiscCode\\Libraries\\FastLED"]
+	path = .\\MiscCode\\Libraries\\FastLED
+	url = git@github.com:FastLED/FastLED.git
+[submodule ".\\MiscCode\\Libraries\\Bounce2"]
+	path = .\\MiscCode\\Libraries\\Bounce2
+	url = git@github.com:thomasfredericks/Bounce2.git
