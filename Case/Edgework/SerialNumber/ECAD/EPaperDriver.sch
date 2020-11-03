@@ -114,36 +114,32 @@ F 3 "~" H 2450 2100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2200 7100 2100 7100
+	2300 7100 2200 7100
 Wire Wire Line
-	2200 7000 2100 7000
+	2300 7000 2200 7000
 Wire Wire Line
-	2200 6900 2100 6900
+	2300 6900 2200 6900
 Wire Wire Line
-	2200 6800 2100 6800
+	2300 6800 2200 6800
 Wire Wire Line
-	2200 6700 2100 6700
+	2300 6700 2200 6700
 Wire Wire Line
-	2200 6600 2100 6600
+	2300 6600 2200 6600
 Wire Wire Line
-	2200 6300 2100 6300
-Wire Wire Line
-	2200 6200 2100 6200
-Text Label 2200 6200 0    50   ~ 0
-VCC
-Text Label 2200 6300 0    50   ~ 0
+	2300 6300 2200 6300
+Text Label 2300 6300 0    50   ~ 0
 GND
-Text Label 2200 6600 0    50   ~ 0
+Text Label 2300 6600 0    50   ~ 0
 MOSI
-Text Label 2200 6700 0    50   ~ 0
+Text Label 2300 6700 0    50   ~ 0
 SCLK
-Text Label 2200 6800 0    50   ~ 0
+Text Label 2300 6800 0    50   ~ 0
 E_CS
-Text Label 2200 6900 0    50   ~ 0
+Text Label 2300 6900 0    50   ~ 0
 DC
-Text Label 2200 7000 0    50   ~ 0
+Text Label 2300 7000 0    50   ~ 0
 RST
-Text Label 2200 7100 0    50   ~ 0
+Text Label 2300 7100 0    50   ~ 0
 BUSY
 Wire Wire Line
 	5550 2800 5550 2700
@@ -209,7 +205,7 @@ Text Label 5050 1600 2    50   ~ 0
 3V3
 Wire Wire Line
 	5050 1600 5150 1600
-Text Label 1400 4350 2    50   ~ 0
+Text Label 1400 4300 2    50   ~ 0
 VCC
 Text Label 2600 4300 0    50   ~ 0
 3V3
@@ -218,11 +214,11 @@ L Device:R_US R2
 U 1 1 5F87732D
 P 1500 4550
 F 0 "R2" H 1568 4596 50  0000 L CNN
-F 1 "100k" H 1568 4505 50  0000 L CNN
+F 1 "10k" H 1568 4505 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 1540 4540 50  0001 C CNN
 F 3 "~" H 1500 4550 50  0001 C CNN
 	1    1500 4550
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	2000 4800 2000 4700
@@ -230,8 +226,6 @@ Wire Wire Line
 	2300 4300 2450 4300
 Wire Wire Line
 	1700 4400 1500 4400
-Wire Wire Line
-	1500 4700 1500 4800
 $Comp
 L Device:C C3
 U 1 1 5F87C53A
@@ -281,8 +275,6 @@ Wire Wire Line
 Wire Wire Line
 	2450 4800 2450 4700
 Wire Wire Line
-	1500 4800 2000 4800
-Wire Wire Line
 	2000 4800 2450 4800
 Connection ~ 2000 4800
 Wire Wire Line
@@ -296,15 +288,6 @@ Wire Wire Line
 Connection ~ 2000 3900
 Wire Wire Line
 	2000 3900 2450 3900
-Wire Wire Line
-	1500 4300 1500 4350
-Connection ~ 1500 4300
-Connection ~ 1500 4400
-Wire Wire Line
-	1500 4350 1400 4350
-Connection ~ 1500 4350
-Wire Wire Line
-	1500 4350 1500 4400
 Text Label 2450 2350 0    50   ~ 0
 BS
 Wire Wire Line
@@ -576,20 +559,9 @@ F 3 "" H 5300 6200 50  0001 C CNN
 	1    5300 6200
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector_Generic:Conn_01x11 J2
-U 1 1 5F91087B
-P 1900 6700
-F 0 "J2" H 1818 5975 50  0000 C CNN
-F 1 "Conn_01x11" H 1818 6066 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x11_P2.54mm_Vertical" H 1900 6700 50  0001 C CNN
-F 3 "~" H 1900 6700 50  0001 C CNN
-	1    1900 6700
-	-1   0    0    -1  
-$EndComp
 Wire Wire Line
-	2200 6400 2100 6400
-Text Label 2200 6400 0    50   ~ 0
+	2300 6400 2200 6400
+Text Label 2300 6400 0    50   ~ 0
 MISO
 Wire Wire Line
 	6050 1700 5950 1700
@@ -600,12 +572,12 @@ Wire Wire Line
 Text Label 5050 1700 2    50   ~ 0
 MISO'
 Wire Wire Line
-	2200 6500 2100 6500
-Text Label 2200 6500 0    50   ~ 0
+	2300 6500 2200 6500
+Text Label 2300 6500 0    50   ~ 0
 SD_CS
 Wire Wire Line
-	2200 7200 2100 7200
-Text Label 2200 7200 0    50   ~ 0
+	2300 7200 2200 7200
+Text Label 2300 7200 0    50   ~ 0
 RAM_CS
 Wire Wire Line
 	4750 6450 4850 6450
@@ -760,4 +732,35 @@ Wire Wire Line
 	6750 4600 6650 4600
 Text Label 6750 4600 0    50   ~ 0
 GND
+Wire Wire Line
+	1500 4300 1400 4300
+Connection ~ 1500 4300
+Text Label 1500 4800 0    50   ~ 0
+VCC
+Wire Wire Line
+	1500 4800 1500 4700
+Wire Wire Line
+	1500 4400 1400 4400
+Connection ~ 1500 4400
+Text Label 1400 4400 2    50   ~ 0
+EN
+$Comp
+L Connector_Generic:Conn_01x12 J2
+U 1 1 5F9569D9
+P 2000 6600
+F 0 "J2" H 1918 7317 50  0000 C CNN
+F 1 "Conn_01x12" H 1918 7226 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical" H 2000 6600 50  0001 C CNN
+F 3 "~" H 2000 6600 50  0001 C CNN
+	1    2000 6600
+	-1   0    0    -1  
+$EndComp
+Text Label 2300 6200 0    50   ~ 0
+VCC
+Wire Wire Line
+	2300 6200 2200 6200
+Text Label 2300 6100 0    50   ~ 0
+EN
+Wire Wire Line
+	2300 6100 2200 6100
 $EndSCHEMATC
