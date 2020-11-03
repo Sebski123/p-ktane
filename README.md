@@ -66,19 +66,19 @@
 ## Modules
 | Module                                                       |Going to build| Coded | Schematic | PCB | Parts | Tested | Built | I2C addr.|
 |--------------------------------------------------------------|--------------|-------|---------- |-----|-------|--------|-------|----------|
-| Timer (Controller)                                           |      ✔️     |   ✔️  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |  MASTER  |
-| Config (ESP8266)                                             |      ✔️     |   ✔️  |    ✔️    |  ❌ |  ✔️  |   ✔️   |  ❌  |    0x1   |
-| [Button](https://i.imgur.com/Leew7du.png)                    |      ✔️     |   ✔️  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |    0x2   |
-| [Complicated Wires](https://i.imgur.com/jJb2Kp9.png)         |      ✔️     |   ✔️  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |    0x3   |
-| [Maze](https://i.imgur.com/xXMdvLr.png)                      |      ✔️     |   🟡  |    🟡    |  ❌ |  🟡  |   ❌   |  ❌  |    0x4   |
-| [Memory](https://i.imgur.com/bvGt5gz.png)                    |      ✔️     |   🟡  |    🟡    |  🟡 |  ❌  |   ❌   |  ❌  |    0x5   |
-| [Morse Code](https://i.imgur.com/V4XAdVZ.png)                |      ✔️     |   ❌  |    ❌    |  ❌ |  ❌  |   ❌   |  ❌  |    0x6   |
-| [Needy Capacitor Discharge](https://i.imgur.com/Q0VJkoo.png) |      ✔️     |   ✔️  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |    0x7   |
-| [Needy Knob](https://i.imgur.com/hlpkEUD.png)                |      ✔️     |   ✔️  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |    0x8   |
-| [Needy Venting Gas](https://i.imgur.com/f2eua3p.png)         |      ✔️     |   ✔️  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |    0x9   |
-| [Password](https://i.imgur.com/us0XRBs.png)                  |      ✔️     |   ❌  |    ❌    |  ❌ |  ❌  |   ❌   |  ❌  |    0xA   | 
-| [Simon Says](https://i.imgur.com/uX7BzED.png)                |      ✔️     |   🟡  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |    0xB   |
-| [Simple Wires](https://i.imgur.com/xLXpCYH.png)              |      ✔️     |   🟡  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |    0xC   |
+| Timer (Controller)                                           |      ✔️     |   🟡  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |  MASTER  |
+| Config (ESP8266)                                             |      ✔️     |   🟡  |    ✔️    |  ❌ |  ✔️  |   ✔️   |  ❌  |    0x1   |
+| [Button](https://i.imgur.com/Leew7du.png)                    |      ✔️     |   ✔️  |    ✔️    |  ❌ |  ❌  |   ❌   |  ❌  |    0x2   |
+| [Complicated Wires](https://i.imgur.com/jJb2Kp9.png)         |      ✔️     |   ✔️  |    ✔️    |  ❌ |  ❌  |   ❌   |  ❌  |    0x3   |
+| [Maze](https://i.imgur.com/xXMdvLr.png)                      |      ✔️     |   🟡  |    ✔️    |  ❌ |  🟡  |   ❌   |  ❌  |    0x4   |
+| [Memory](https://i.imgur.com/bvGt5gz.png)                    |      ✔️     |   🟡  |    ✔️    |  🟡 |  ❌  |   ❌   |  ❌  |    0x5   |
+| [Morse Code](https://i.imgur.com/V4XAdVZ.png)                |      ✔️     |   ❌  |    🟡    |  ❌ |  ❌  |   ❌   |  ❌  |    0x6   |
+| [Needy Capacitor Discharge](https://i.imgur.com/Q0VJkoo.png) |      ✔️     |   ✔️  |    ✔️    |  ❌ |  ❌  |   ❌   |  ❌  |    0x7   |
+| [Needy Knob](https://i.imgur.com/hlpkEUD.png)                |      ✔️     |   ✔️  |    ✔️    |  ❌ |  ❌  |   ❌   |  ❌  |    0x8   |
+| [Needy Venting Gas](https://i.imgur.com/f2eua3p.png)         |      ✔️     |   ✔️  |    ✔️    |  ❌ |  ❌  |   ❌   |  ❌  |    0x9   |
+| [Password](https://i.imgur.com/us0XRBs.png)                  |      ✔️     |   ❌  |    ✔️    |  ❌ |  ❌  |   ❌   |  ❌  |    0xA   | 
+| [Simon Says](https://i.imgur.com/uX7BzED.png)                |      ✔️     |   🟡  |    ✔️    |  ❌ |  ❌  |   ❌   |  ❌  |    0xB   |
+| [Simple Wires](https://i.imgur.com/xLXpCYH.png)              |      ✔️     |   🟡  |    ✔️    |  ❌ |  ❌  |   ❌   |  ❌  |    0xC   |
 | [Keypads](https://i.imgur.com/Zy6ScEo.png)                   |      ❌     |   ❌  |    ❌    |  ❌ |  ❌  |   ❌   |  ❌  |    N/A   |
 | [Who's on First](https://i.imgur.com/YisE1go.png)            |      ❌     |   ❌  |    ❌    |  ❌ |  ❌  |   ❌   |  ❌  |    N/A   |
 | [Wire Sequence](https://i.imgur.com/1drzKTO.png)             |      ❌     |   ❌  |    ❌    |  ❌ |  ❌  |   ❌   |  ❌  |    N/A   |
