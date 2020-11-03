@@ -7,13 +7,14 @@
 
 ## ReDesign
 ### To-do
-- [ ] Add pinheaders to all schematics
+- [ ] Decide on module size
+- [x] Add pinheaders to all schematics
 - [ ] Figure out how to add battery/indicators
 - [ ] Make symbol/footprint for arcade button
 - [ ] Redo SimonSays schematic with above symbol
 - [ ] Design PCBs
 - [ ] Make more modules
-- [ ] Organize Repo
+- [x] Organize Repo
 - [ ] Clean up README
 - [x] Choose which modules to build
 - [ ] Double check value of RSet for MAX7219 ICs
@@ -26,8 +27,9 @@
 - [ ] Better system for swapping modules?
 - [ ] Use HD107S for button module?
 - [ ] Use built-in resistor to identify button?
+- [ ] Implement Bounce2 in all button modules
 - [ ] Make e-paper display
-  - [ ] Expose PSU enable pin
+  - [x] Expose PSU enable pin
   - [x] Add SRAM IC
   - [x] Add microSD slot?
   - [ ] White image for storage
