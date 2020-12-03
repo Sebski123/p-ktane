@@ -3,6 +3,7 @@ build/**
 **/Config/config.html
 **/temp*/**
 *.*bak
+*.FCStd1
 **/gerber/**
 fp-info-cache
 
@@ -71,3 +72,4 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
