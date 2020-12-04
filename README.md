@@ -5,6 +5,8 @@
 * https://old.reddit.com/r/ktane/comments/a3fgyt/i_made_a_physical_version_of_the_video_game_keep/
 
 
+run command `git config --local --add diff.fcinfo.textconv ./MiscCode/fcinfo` to use git diff on FreeCAD files
+
 ## ReDesign
 ### To-do
 - [ ] Decide on module size
