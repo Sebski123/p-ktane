@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:EPaperDriver-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -305,7 +304,7 @@ GND = 4-line SPI
 Text Notes 2150 1750 0    50   ~ 0
 3V3 = 3-line SPI
 $Comp
-L Display_Graphic:MDE029A128296RBW FPC1
+L EPaperDriver-rescue:MDE029A128296RBW-Display_Graphic-EPaperDriver-rescue FPC1
 U 1 1 5F899E8A
 P 10050 1050
 F 0 "FPC1" H 10078 -254 50  0000 L CNN
@@ -549,7 +548,7 @@ Connection ~ 9750 5500
 Wire Wire Line
 	9750 5500 9750 5300
 $Comp
-L Memory_RAM:23LC1024 U3
+L EPaperDriver-rescue:23LC1024-Memory_RAM-EPaperDriver-rescue U3
 U 1 1 5F90D53F
 P 5300 6200
 F 0 "U3" H 5250 6215 50  0000 C CNN

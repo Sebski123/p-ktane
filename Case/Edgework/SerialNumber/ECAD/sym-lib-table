@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name EPaperDriver-rescue)(type Legacy)(uri ${KIPRJMOD}/EPaperDriver-rescue.lib)(options "")(descr ""))
+)
