@@ -156,6 +156,7 @@ void printVentWarning()
         delayWithUpdates(module, 200);
         lcd.display();
     }
+    lcd.setCursor(0, 0);
     lcd.print("   VENT GAS?   ");
     lcd.setCursor(0, 1);
     lcd.print("      Y/N      ");
