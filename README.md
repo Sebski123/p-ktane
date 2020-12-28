@@ -24,6 +24,7 @@ run command `git config --local --add diff.fcinfo.textconv ./MiscCode/fcinfo` to
 - [ ] Modules on back?
 - [ ] Add presets from KTANE?
 - [ ] Variable amount of strikes?
+- [ ] Use 14-segments for strike indicator?
 - [ ] Better leaderboard?
 - [ ] Way to enter name? (Password module?)
 - [ ] Better system for swapping modules?
@@ -45,6 +46,7 @@ run command `git config --local --add diff.fcinfo.textconv ./MiscCode/fcinfo` to
   - [ ] Overvoltage protection?
   - [ ] Overcurrent protection
     - [x] Add polyfuse to every module
+    - [ ] Measure curent draw for each module
 - [ ] Add TMRpcm and SD to timer?
   - [ ] [This](https://maxoffsky.com/maxoffsky-blog/how-to-play-wav-audio-files-with-arduino-uno-and-microsd-card/)
   - [ ] Or [this](https://circuitdigest.com/microcontroller-projects/arduino-audio-music-player)
