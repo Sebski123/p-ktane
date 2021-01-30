@@ -74,6 +74,7 @@ void loop()
             {
                 timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
                 moduleActive = true;
+                Serial.println("Activating by forced timer");
             }
             if (millis() - updateTimer > 100)
             {
@@ -132,6 +133,8 @@ void setGraph(int timeLeft)
 
 void eventHappened()
 {
+    Serial.println("Event happened");
+
     strikes = module.getNumStrikes();
     solves = module.getNumSolves();
 
@@ -144,6 +147,7 @@ void eventHappened()
             numEvents = 0;
             timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
             moduleActive = true;
+            Serial.println("Activated by 1nd event");
         }
     }
     else
@@ -151,6 +155,7 @@ void eventHappened()
         numEvents = 0;
         timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
         moduleActive = true;
+        Serial.println("Activated by 2nd event");
     }
 }
 
