@@ -101,7 +101,7 @@ void loop()
             if (millis() - updateTimer > 200)
             {
                 updateTimer = millis();
-
+                updateCountdown();
                 if (btnState)
                 {
                     timer += 1200; //time since last check + 5 times increase time
@@ -109,10 +109,6 @@ void loop()
                     {
                         timer = millis() + ((unsigned long)41 * 1000);
                     }
-                }
-                else
-                {
-                    updateCountdown();
                 }
             }
         }
