@@ -76,8 +76,9 @@ void loop()
                 moduleActive = true;
                 Serial.println("Activating by forced timer");
             }
-            if (millis() - updateTimer > 100)
+            if (millis() - updateTimer > 200)
             {
+                updateTimer = millis();
                 if (module.getNumStrikes() > strikes || module.getNumSolves() > solves)
                 {
                     eventHappened();
