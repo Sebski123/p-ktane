@@ -122,11 +122,12 @@ void setGraph(int timeLeft)
 {
     int howManyToLight = 40 - timeLeft;
 
-    for (int i = 2; i < 8; i++)
+    for (int digit = 6; digit > 1; digit--)
     {
-        for (int j = 0; j < 8; j++)
+        lc.setLed(0, digit, 0, howManyToLight-- > 0);
+        for (int segment = 7; segment > 0; segment--)
         {
-            lc.setLed(0, i, j, howManyToLight-- > 0);
+            lc.setLed(0, digit, segment, howManyToLight-- > 0);
         }
     }
 }
