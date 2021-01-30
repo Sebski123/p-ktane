@@ -52,7 +52,7 @@ void setup()
     Serial.println("Got config");
     randomSeed(config_to_seed(module.getConfig()));
 
-    forcedTimer = millis() + (90 * 1000); //Add 90 seconds for forced start
+    forcedTimer = millis() + ((unsigned long)90 * 1000); //Add 90 seconds for forced start
 
     Serial.println("Finished setup");
     module.sendReady();
@@ -72,7 +72,7 @@ void loop()
         {
             if (millis() >= forcedTimer)
             {
-                timer = millis() + (40 * 1000); //Add 40 seconds for countdown
+                timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
                 moduleActive = true;
             }
             if (millis() - updateTimer > 100)
@@ -93,7 +93,7 @@ void loop()
                 delayWithUpdates(module, random(10, 40));
                 strikes = module.getNumStrikes();
                 solves = module.getNumSolves();
-                timer = millis() + (90 * 1000); //Add 90 seconds for forced start
+                forcedTimer = millis() + ((unsigned long)90 * 1000); //Add 90 seconds for forced start
                 moduleActive = false;
             }
 
@@ -103,10 +103,9 @@ void loop()
 
                 if (btnState)
                 {
-                    timer += 1000; //should this be 500?
-                    if(timer - millis() > (40 * 1000))
+                    if(timer - millis() > ((unsigned long)41 * 1000)) //41 too allow bar to become totally empty
                     {
-                        timer = millis() + (40 * 1000);
+                        timer = millis() + ((unsigned long)41 * 1000);
                     }
                 }
                 else
@@ -143,14 +142,14 @@ void eventHappened()
         if (random(0, 101) > 85)
         {
             numEvents = 0;
-            timer = millis() + (40 * 1000); //Add 40 seconds for countdown
+            timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
             moduleActive = true;
         }
     }
     else
     {
         numEvents = 0;
-        timer = millis() + (40 * 1000); //Add 40 seconds for countdown
+        timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
         moduleActive = true;
     }
 }
