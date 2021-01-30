@@ -84,8 +84,7 @@ void loop()
                 }
             }
         }
-
-        if (moduleActive)
+        else
         {
             if (millis() >= timer)
             {
