@@ -31,6 +31,7 @@ run command `git config --local --add diff.fcinfo.textconv ./MiscCode/fcinfo` to
 - [ ] Use HD107S for button module?
 - [ ] Use built-in resistor to identify button?
 - [ ] Implement Bounce2 in all button modules
+- [ ] Add pullup resistors to I2C bus
 - [ ] Make e-paper display
   - [x] Expose PSU enable pin
   - [x] Add SRAM IC
