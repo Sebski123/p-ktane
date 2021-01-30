@@ -97,12 +97,13 @@ void loop()
                 moduleActive = false;
             }
 
-            if (millis() - updateTimer > 500)
+            if (millis() - updateTimer > 200)
             {
                 updateTimer = millis();
 
                 if (btnState)
                 {
+                    timer += 1200; //time since last check + 5 times increase time
                     if(timer - millis() > ((unsigned long)41 * 1000)) //41 too allow bar to become totally empty
                     {
                         timer = millis() + ((unsigned long)41 * 1000);
