@@ -42,6 +42,7 @@ void setup()
     lc.setIntensity(0, 8);
     /* and clear the display */
     lc.clearDisplay(0);
+    lc.shutdown(0, true); //put MAX7219 in shutdown mode untill module is activated
 
     Serial.println("Getting config");
     while (!module.getConfig())
@@ -74,6 +75,7 @@ void loop()
             {
                 timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
                 moduleActive = true;
+                lc.shutdown(0, false);
                 Serial.println("Activating by forced timer");
             }
             if (millis() - updateTimer > 200)
@@ -90,6 +92,7 @@ void loop()
             if (millis() >= timer)
             {
                 module.strike();
+                Serial.println("strike");
                 lc.shutdown(0, true);
                 delayWithUpdates(module, random(10, 40));
                 strikes = module.getNumStrikes();
