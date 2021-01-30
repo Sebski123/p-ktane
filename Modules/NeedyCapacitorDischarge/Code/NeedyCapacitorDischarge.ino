@@ -66,7 +66,7 @@ void loop()
 
     if (!module.needyStop)
     {
-        btnState = digitalRead(LEVER_BUTTON);
+        btnState = !digitalRead(LEVER_BUTTON);
 
         if (!moduleActive)
         {
