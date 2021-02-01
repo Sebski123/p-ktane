@@ -116,6 +116,8 @@ void playMelody(int *melody, int *durations, int melody_len)
 
 void youLose()
 {
+  controller.stopNeedys();
+
   // Play lose music
   Serial.println("Loose");
   if (diff_time < 1000)
