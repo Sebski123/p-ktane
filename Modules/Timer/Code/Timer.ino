@@ -287,7 +287,6 @@ void setup()
   Serial.println();
   Serial.print("Minutes to beat: ");
   Serial.println(num_minutes);
-  Serial.println();
 
   delay(100);
 #pragma endregion
@@ -352,8 +351,7 @@ void setup()
   controller.sendReset();
   delayWithUpdates(controller, 1000);
   Serial.println("Sending config to clients");
-  int test = controller.sendConfig(&config);
-  Serial.println(test);
+  controller.sendConfig(&config);
   while (!controller.clientsAreReady())
   {
     controller.interpretData();
