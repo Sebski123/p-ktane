@@ -91,14 +91,14 @@ void loop()
         {
             if (millis() >= timer)
             {
-                module.strike();
                 Serial.println("strike");
                 lc.shutdown(0, true);
-                delayWithUpdates(module, random(10, 40));
-                strikes = module.getNumStrikes();
-                solves = module.getNumSolves();
                 forcedTimer = millis() + ((unsigned long)90 * 1000); //Add 90 seconds for forced start
                 moduleActive = false;
+                module.strike();
+                delayWithUpdates(module, 40); //delay as to not get triggered by it's own strike
+                strikes = module.getNumStrikes();
+                solves = module.getNumSolves();
             }
 
             if (millis() - updateTimer > 200)
