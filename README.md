@@ -9,6 +9,12 @@ run command `git config --local --add diff.fcinfo.textconv ./MiscCode/fcinfo` to
 
 ## ReDesign
 ### To-do
+- [ ] Rewrite SWire protocol
+- - [ ] Expand addressing (allow multiple of same module)
+- - [ ] Don't need adress in packet
+- - [ ] Don't to send 'ack' message (built into i2c)
+- - [ ] Don't start and end messages (built into i2c)
+- - [ ] Update sigrok decoder with new protocol
 - [ ] Decide on module size
 - [x] Add pinheaders to all schematics
 - [ ] Figure out how to add battery/indicators
