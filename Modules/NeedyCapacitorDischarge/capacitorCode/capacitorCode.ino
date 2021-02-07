@@ -32,7 +32,11 @@ bool btnState;
 void setup()
 {
     Serial.begin(19200);
-
+    
+    while (!Serial)
+    {
+        ; // wait for serial port to connect. Needed for native USB
+    }
     Serial.println("Starting setup");
     pinMode(LEVER_BUTTON, INPUT_PULLUP);
 
@@ -107,8 +111,8 @@ void loop()
                 updateCountdown();
                 if (btnState)
                 {
-                    timer += 1200; //time since last check + 5 times increase time
-                    if(timer - millis() > ((unsigned long)41 * 1000)) //41 too allow bar to become totally empty
+                    timer += 1200;                                     //time since last check + 5 times increase time
+                    if (timer - millis() > ((unsigned long)41 * 1000)) //41 too allow bar to become totally empty
                     {
                         timer = millis() + ((unsigned long)41 * 1000);
                     }
