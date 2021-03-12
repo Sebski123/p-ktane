@@ -50,7 +50,8 @@ run command `git config --local --add diff.fcinfo.textconv ./MiscCode/fcinfo` to
   - [ ] Both?
 - [ ] Add protection circuits?
   - [ ] Short circuit protection?
-  - [ ] Overvoltage protection?
+  - [ ] Overvoltage protection
+    - [ ] Zener diode voltage clamp
   - [ ] Overcurrent protection
     - [x] Add polyfuse to every module
     - [ ] Measure curent draw for each module
