@@ -98,7 +98,7 @@ void KTANEModule::interpretData()
 
   if (_swire.getData(out_message))
   {
-    Serial.print("Got data");
+    Serial.print(F("Got data"));
     Serial.println(out_message);
     if (out_message[0] == CONFIG && strlen(out_message) == 8)
     {
@@ -329,9 +329,9 @@ void KTANEController::interpretData()
   int client_id = _swire.getData(out_message);
   if (client_id)
   {
-    Serial.print("Got ");
+    Serial.print(F("Got "));
     Serial.print(out_message);
-    Serial.print(" from ");
+    Serial.print(F(" from "));
     Serial.println((char)client_id);
     if (out_message[0] == STRIKE)
     {

@@ -63,7 +63,7 @@ void maxSingle(byte reg, byte col, int load_pin, int data_pin, int clock_pin);
 class KTANEModule
 {
 public:
-  KTANEModule(SWireClient &swire, int green_led_pin, int red_led_pin);
+  KTANEModule(SWireClient &swire, int green_led_pin = 100, int red_led_pin = 100);
   void interpretData();
   void interpretData(Stream &s);
   config_t *getConfig();
