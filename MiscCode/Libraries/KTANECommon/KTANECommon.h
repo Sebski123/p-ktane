@@ -25,6 +25,7 @@
 #define NUM_SOLVES (char)0xC6
 #define TIME (char)0xC7
 #define STOP (char)0xC8
+#define SEED (char)0xC9
 
 typedef struct raw_config_st
 {
@@ -49,6 +50,12 @@ typedef struct config_st
   char serial[7];
 } config_t;
 
+typedef struct settings_st
+{
+  unsigned int seed;
+  unsigned int time;
+} settings_t;
+
 void config_to_raw(config_t *config, raw_config_t *raw_config_t);
 void raw_to_config(raw_config_t *raw_config, config_t *config_t);
 
@@ -66,6 +73,7 @@ public:
   void interpretData();
   void interpretData(Stream &s);
   config_t *getConfig();
+  int getSeed();
   int strike();
   int win();
   int sendReady();
@@ -108,6 +116,7 @@ private:
   int _num_strikes;
   int _num_solves;
   int _got_reset;
+  int _seed;
 };
 
 class KTANEController
@@ -117,6 +126,7 @@ public:
   void setTime(unsigned long timeLeft);
   void interpretData();
   int sendConfig(config_t *config);
+  int sendSeed(settings_t settings);
   int getStrikes();
   int getSolves();
   int clientsAreReady();

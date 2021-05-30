@@ -90,6 +90,7 @@ KTANEModule::KTANEModule(SWireClient &swire, int green_led_pin, int red_led_pin)
   _num_solves = 0;
   _got_reset = 0;
   is_solved = 0;
+  _seed = 0;
   needyStop = false;
 }
 
@@ -142,6 +143,11 @@ void KTANEModule::interpretData()
     else if (out_message[0] == STOP)
     {
       needyStop = true;
+    }
+    else if (out_message[0] == SEED)
+    {
+      _seed = out_message[1] << 8;
+      _seed |= out_message[2];
     }
   }
 }
@@ -203,6 +209,12 @@ config_t *KTANEModule::getConfig()
   {
     return NULL;
   }
+}
+
+
+int KTANEModule::getSeed()
+{
+  return _seed;
 }
 
 int KTANEModule::sendTime()
@@ -390,6 +402,42 @@ int KTANEController::sendConfig(config_t *config)
     {
       err++;
     }
+  }
+  return (err == 0);
+}
+
+int KTANEController::sendSeed(settings_t settings)
+{
+  char msg[4];
+  msg[0] = SEED;
+  msg[1] = (settings.seed >> 8) & 0xff;
+  msg[2] = settings.seed & 0xff;
+  msg[3] = '\0';
+
+  int err = 0;
+  uint8_t clients[MAX_CLIENTS];
+  bool has_widget_controller = false;
+  _swire.getClients(clients);
+
+  for (auto &&client : clients)
+  {
+    if (client == 0x1)
+    {
+      has_widget_controller = true;
+      break;
+    }
+  }
+
+  if (has_widget_controller)
+  {
+    if (!_swire.sendData(0x1, msg))
+    {
+      err++;
+    }
+  }
+  else
+  {
+    return 1;
   }
   return (err == 0);
 }
