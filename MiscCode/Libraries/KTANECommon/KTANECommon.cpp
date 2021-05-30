@@ -211,6 +211,21 @@ config_t *KTANEModule::getConfig()
   }
 }
 
+int KTANEModule::sendConfig(config_t *config)
+{
+  char msg[8];
+  int err = 0;
+
+  msg[0] = CONFIG;
+  config_to_raw(config, (raw_config_t *)(msg + 1));
+  msg[7] = '\0';
+
+  if (!_swire.sendData(msg))
+  {
+    err++;
+  }
+  return (err == 0);
+}
 
 int KTANEModule::getSeed()
 {
@@ -326,6 +341,7 @@ int KTANEModule::getReset()
 
 KTANEController::KTANEController(SWireMaster &swire) : _swire(swire)
 {
+  memset(&_config, 0, sizeof(config_t));
   memset(_strikes, 0, MAX_CLIENTS);
   memset(_solves, 0, MAX_CLIENTS);
   memset(_readies, 0, MAX_CLIENTS);
@@ -360,6 +376,11 @@ void KTANEController::interpretData()
         sendSolves();
       }
     }
+    if (out_message[0] == CONFIG && strlen(out_message) == 7)
+    {
+      _got_config = 1;
+      raw_to_config((raw_config_t *)(out_message + 1), &_config);
+    }
     else if (out_message[0] == READY)
     {
       _readies[client_id] = 1;
@@ -381,6 +402,18 @@ void KTANEController::interpretData()
       msg[5] = '\0';
       _swire.sendData(client_id, msg);
     }
+  }
+}
+
+config_t *KTANEController::getConfig()
+{
+  if (_got_config)
+  {
+    return &_config;
+  }
+  else
+  {
+    return NULL;
   }
 }
 

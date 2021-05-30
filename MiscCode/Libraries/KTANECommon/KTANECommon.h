@@ -72,6 +72,7 @@ public:
   KTANEModule(SWireClient &swire, int green_led_pin = 100, int red_led_pin = 100);
   void interpretData();
   void interpretData(Stream &s);
+  int sendConfig(config_t *config);
   config_t *getConfig();
   int getSeed();
   int strike();
@@ -126,6 +127,7 @@ public:
   void setTime(unsigned long timeLeft);
   void interpretData();
   int sendConfig(config_t *config);
+  config_t *getConfig();
   int sendSeed(settings_t settings);
   int getStrikes();
   int getSolves();
@@ -137,11 +139,13 @@ public:
 
 private:
   SWireMaster &_swire;
+  config_t _config;
   uint8_t _strikes[MAX_CLIENTS];
   uint8_t _solves[MAX_CLIENTS];
   uint8_t _readies[MAX_CLIENTS];
   unsigned long timeLeftOnTimer;
   int _needy_modules;
+  int _got_config;
 };
 
 void delayWithUpdates(KTANEModule &module, unsigned int length);
