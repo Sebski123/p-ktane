@@ -29,23 +29,22 @@
 typedef struct raw_config_st
 {
   // Byte 0
-  unsigned int spacer1 : 2;
-  unsigned int ports : 3;
-  unsigned int batteries : 3;
-
-  // Bytes 1-5
-  char serial[5];
-
-  // Byte 6
-  unsigned int spacer2 : 3;
-  unsigned int serial6 : 3;
+  unsigned int ports : 1;
+  unsigned int batteries : 5;
   unsigned int indicators : 2;
+
+  // Bytes 1-4
+  char serial[4];
+
+  // Byte 5
+  unsigned int serial3 : 4;
+  unsigned int serial6 : 4;
 } raw_config_t;
 
 typedef struct config_st
 {
-  unsigned int ports : 3;
-  unsigned int batteries : 3;
+  unsigned int ports : 1;
+  unsigned int batteries : 5;
   unsigned int indicators : 2;
   char serial[7];
 } config_t;

@@ -17,10 +17,10 @@ void config_to_raw(config_t *config, raw_config_t *raw_config)
   raw_config->ports = config->ports;
   raw_config->batteries = config->batteries;
   raw_config->indicators = config->indicators;
-  memcpy(raw_config->serial, config->serial, 5);
+  memcpy(raw_config->serial, config->serial, 2);
+  memcpy(raw_config->serial + 2, config->serial + 3, 2);
+  raw_config->serial3 = config->serial[2] - '0';
   raw_config->serial6 = config->serial[5] - '0';
-  raw_config->spacer1 = 1;
-  raw_config->spacer2 = 1;
 }
 
 void raw_to_config(raw_config_t *raw_config, config_t *config)
@@ -28,7 +28,9 @@ void raw_to_config(raw_config_t *raw_config, config_t *config)
   config->ports = raw_config->ports;
   config->batteries = raw_config->batteries;
   config->indicators = raw_config->indicators;
-  memcpy(config->serial, raw_config->serial, 5);
+  memcpy(config->serial, raw_config->serial, 2);
+  config->serial[2] = raw_config->serial3 + '0';
+  memcpy(config->serial + 3, raw_config->serial + 2, 2);
   config->serial[5] = raw_config->serial6 + '0';
   config->serial[6] = '\0';
 }
@@ -100,7 +102,7 @@ void KTANEModule::interpretData()
   {
     Serial.print(F("Got data"));
     Serial.println(out_message);
-    if (out_message[0] == CONFIG && strlen(out_message) == 8)
+    if (out_message[0] == CONFIG && strlen(out_message) == 7)
     {
       _got_config = 1;
       raw_to_config((raw_config_t *)(out_message + 1), &_config);
