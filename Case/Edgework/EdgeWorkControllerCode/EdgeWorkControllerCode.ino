@@ -276,12 +276,23 @@ void detectWidgets()
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(19200);
+  while (!Serial)
+  {
+    ;
+  } // wait for serial port to connect. Needed for native USB
 
-  while (!module.getConfig())
+  Serial.println(F("Getting Seed"));
+
+  while (!module.getSeed())
   {
     module.interpretData();
   }
+
+  Serial.print(F("Seed is: "));
+  Serial.println(module.getSeed());
+
+  randomSeed(module.getSeed());
 
   Serial.println(F("Generating Serial #"));
   generateSerial();
