@@ -53,7 +53,8 @@ typedef struct config_st
 typedef struct settings_st
 {
   unsigned int seed;
-  unsigned int time;
+  float time;
+  uint8_t strikes;
 } settings_t;
 
 void config_to_raw(config_t *config, raw_config_t *raw_config_t);
