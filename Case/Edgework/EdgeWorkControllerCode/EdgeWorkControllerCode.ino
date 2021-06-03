@@ -325,8 +325,8 @@ void setup()
   sendConfig();
   Serial.println(F("Sent config:"));
   Serial.println(F("Displaying Serial #"));
-  initEPD();
-  writeSerialEPD();
+  //initEPD();
+  //writeSerialEPD();
   // display.clearScreen();
   // display.hibernate();
 
