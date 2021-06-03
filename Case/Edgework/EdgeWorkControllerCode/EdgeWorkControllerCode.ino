@@ -274,6 +274,18 @@ void detectWidgets()
   pinMode(IND_TEST, INPUT);
 }
 
+void sendConfig()
+{
+  config_t config;
+
+  config.batteries = 4;                //numBatteries;
+  config.indicators = 3;               //litFRK | (litCAR << 1);
+  config.ports = 1;                    //hasParallelPort;
+  strcpy(config.serial, serialNumber); //serialNumber);
+
+  module.sendConfig(&config);
+}
+
 void setup()
 {
   Serial.begin(19200);
@@ -310,6 +322,8 @@ void setup()
   }
   Serial.println();
 
+  sendConfig();
+  Serial.println(F("Sent config:"));
   Serial.println(F("Displaying Serial #"));
   initEPD();
   writeSerialEPD();
