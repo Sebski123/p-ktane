@@ -62,6 +62,10 @@ int widgetLeds[] = {WIDGET_1_LED, WIDGET_2_LED, WIDGET_3_LED, WIDGET_4_LED, WIDG
 char serialNumber[] = "XXXXXX";
 char widgets[5][3] = {"XX", "XX", "XX", "XX", "XX"};
 char litLeds = 0;
+int numBatteries = 0;
+bool litCAR = false;
+bool litFRK = false;
+bool hasParallelPort = false;
 
 char randomAlpha()
 {
@@ -163,10 +167,18 @@ void identifyWidget(char idx, int adcVal, bool ledVal)
   if (adcVal < 20)
   {
     widget[1] = '0';
+    if (!ledVal)
+    {
+      numBatteries += 1;
+    }
   }
   else if (adcVal < 100)
   {
     widget[1] = '1';
+    if (!ledVal)
+    {
+      numBatteries += 2;
+    }
   }
   else if (adcVal < 180)
   {
@@ -175,10 +187,18 @@ void identifyWidget(char idx, int adcVal, bool ledVal)
   else if (adcVal < 260)
   {
     widget[1] = '3';
+    if (!ledVal)
+    {
+      hasParallelPort = true;
+    }
   }
   else if (adcVal < 340)
   {
     widget[1] = '4';
+    if (!ledVal)
+    {
+      hasParallelPort = true;
+    }
   }
   else if (adcVal < 420)
   {
@@ -236,6 +256,15 @@ void detectWidgets()
     {
       if (random(10) > 4)
       {
+        if (widgets[i][1] == '2')
+        {
+          litCAR = true;
+        }
+        else if (widgets[i][1] == 'A')
+        {
+          litFRK = true;
+        }
+
         pinMode(widgetLeds[i], OUTPUT);
         digitalWrite(widgetLeds[i], HIGH);
         litLeds |= 1 << (7 - i);
