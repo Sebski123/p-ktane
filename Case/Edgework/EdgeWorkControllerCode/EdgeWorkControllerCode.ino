@@ -5,12 +5,12 @@
 #include <GxEPD2_MH29EP.h>
 
 #define ENABLE_GxEPD2_GFX 0
-#define MAX_DISPLAY_BUFFER_SIZE 800
+#define MAX_DISPLAY_BUFFER_SIZE 400
 #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8) ? EPD::HEIGHT : (MAX_DISPLAY_BUFFER_SIZE / 2) / (EPD::WIDTH / 8))
 
 /*
 ADC val     0-20    20-100    100-180   180-260   260-340   340-420   420-500   500-580   580-660   660-740   740-820   820-900   900-1023
-Res val     47      620       1k6       2k7       4k3       5k6       8k2       11k       15k       22k       33k       51k       open
+Res val     47      620       1k54      2k7       4k12      5k9       8k2       11k      15k       21k5      33k       53k6      open
 Indicator   SND     CLR       CAR       IND       FRQ       SIG       NSA       MSA       TRN       BOB       FRK       ---       ---
 Equivalent  Batt1   Batt2     P1        P2        P3        P4        P5        P6        P7        P8        P9        P10       ---
 Char 2      0       1         2         3         4         5         6         7         8         9         A         B         X
@@ -48,7 +48,7 @@ P10 =   PS2 + RJ45
 //I2C SDA 18
 //I2C SCL 19
 
-SWireClient client(10); // ID 10
+SWireClient client(1); // ID 1
 KTANEModule module(client);
 GxEPD2_3C<GxEPD2_MH29EP, MAX_HEIGHT(GxEPD2_MH29EP)> display(GxEPD2_MH29EP(EDP_CS, EDP_DC, EDP_RST, EPD_BUSY));
 U8G2_FOR_ADAFRUIT_GFX u8g2Fonts;
