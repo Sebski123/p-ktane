@@ -51,19 +51,19 @@ uint8_t clients[16];
 
 void playMelody(int *melody, int *durations, int melody_len)
 {
-  for (int thisNote = 0; thisNote < melody_len; thisNote++)
-  {
+  // for (int thisNote = 0; thisNote < melody_len; thisNote++)
+  // {
 
-    int noteDuration = 1000 / durations[thisNote];
-    tone(SPEAKER_PIN, melody[thisNote], noteDuration);
+  //   int noteDuration = 1000 / durations[thisNote];
+  //   tone(SPEAKER_PIN, melody[thisNote], noteDuration);
 
-    // to distinguish the notes, set a minimum time between them.
-    int pauseBetweenNotes = noteDuration * 1.30;
-    delayWithUpdates(controller, pauseBetweenNotes);
+  //   // to distinguish the notes, set a minimum time between them.
+  //   int pauseBetweenNotes = noteDuration * 1.30;
+  //   delayWithUpdates(controller, pauseBetweenNotes);
 
-    // stop the tone playing:
-    noTone(SPEAKER_PIN);
-  }
+  //   // stop the tone playing:
+  //   noTone(SPEAKER_PIN);
+  // }
 }
 
 void youLose()
