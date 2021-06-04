@@ -168,14 +168,61 @@ void getSettingsManual()
   raw_to_config(&recv_config, &config);
 }
 
-void getConfigManual()
+void updateStrikes()
 {
-  config.ports = 3;
-  config.batteries = 1;
-  config.indicators = 0;
-  strncpy(config.serial, "123456", 6);
-  config.serial[6] = '\0';
-  num_minutes = 6;
+  strikeDriver.write_char(' ', 0); // Star
+  strikeDriver.write_char(' ', 1); // Star
+  if (!panicModeStatus)
+  {
+    switch (settings.strikes)
+    {
+    case 1:
+      strikeDriver.write_char(0x2A, 1); // Star
+    case 2:
+      strikeDriver.write_char(0x2A, 0); // Star
+      if (strikes)
+      {
+        strikeDriver.write_char(0x2A, 1); // Star
+      }
+      break;
+    case 3:
+      switch (strikes)
+      {
+      case 2:
+        strikeDriver.write_char(0x2A, 1); // Star
+      case 1:
+        strikeDriver.write_char(0x2A, 0); // Star
+      default:
+        break;
+      }
+      break;
+
+    default:
+      if (strikes < 3)
+      {
+        switch (strikes)
+        {
+        case 2:
+          strikeDriver.write_char(0x2A, 1); // Star
+        case 1:
+          strikeDriver.write_char(0x2A, 0); // Star
+        default:
+          break;
+        }
+      }
+      else if (strikes < 10)
+      {
+        strikeDriver.write_char(strikes + '0', 0);
+        strikeDriver.write_char(0x2A, 1); // Star
+      }
+      else
+      {
+        strikeDriver.write_char((strikes / 10) + '0', 0);
+        strikeDriver.write_char((strikes % 10) + '0', 1);
+      }
+      break;
+    }
+  }
 }
 
 void setup()
@@ -399,10 +446,9 @@ void loop()
     solves = controller.getSolves();
   }
 
-  digitalWrite(STRIKE_1_PIN, strikes >= 1);
-  digitalWrite(STRIKE_2_PIN, strikes >= 2);
+  updateStrikes();
 
-  if (strikes >= 3)
+  if (strikes >= settings.strikes || timeRemaining <= 0)
   {
     youLose();
   }
