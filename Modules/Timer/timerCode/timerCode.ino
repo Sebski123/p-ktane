@@ -383,19 +383,16 @@ void loop()
   //Serial.println("Getting data");
   controller.interpretData();
 
-  currentMillis = millis();
-
-  diff_time = dest_time - millis();
-
-  if (diff_time > 60000)
+  while (Serial.available() > 0)
   {
-    if (currentMillis - previousMillis >= 500)
-    {
-      // save the last time you blinked the LED
-      previousMillis = currentMillis;
-      //Serial.println("blink");
-      // if the LED is off turn it on and vice-versa:
-      toggleClockBlink();
+    settings.strikes = Serial.parseInt();
+    strikes = Serial.parseInt();
+    Serial.print("Max strikes: ");
+    Serial.print(settings.strikes);
+    Serial.print("\tStrikes: ");
+    Serial.println(strikes);
+    panicModeStatus = false;
+  }
 
   deltaTime = millis() - previousMillis;
   timeRemaining -= deltaTime * rateModifier;
@@ -415,17 +412,21 @@ void loop()
 
   updateDisplay();
 
-  if (strikes < controller.getStrikes())
-  {
-    tone(SPEAKER_PIN, 340, 150);
-    delayWithUpdates(controller, 200);
-    tone(SPEAKER_PIN, 140, 150);
-    delayWithUpdates(controller, 150);
-    noTone(SPEAKER_PIN);
-    strikes = controller.getStrikes();
-    Serial.println("STRIKE!");
-    Serial.println(strikes);
-  }
+  // if (strikes < controller.getStrikes())
+  // {
+  //   //tone(SPEAKER_PIN, 340, 150);
+  //   delayWithUpdates(controller, 200);
+  //   //tone(SPEAKER_PIN, 140, 150);
+  //   delayWithUpdates(controller, 150);
+  //   //noTone(SPEAKER_PIN);
+  //   strikes = controller.getStrikes();
+  //   if (rateModifier < 2)
+  //   {
+  //     rateModifier += 0.25;
+  //   }
+  //   Serial.println("STRIKE!");
+  //   Serial.println(strikes);
+  // }
 
   if (solves < controller.getSolves())
   {
@@ -446,6 +447,6 @@ void loop()
 
   if (controller.getSolves() >= num_modules)
   {
-    youWin();
+    //youWin();
   }
 }
