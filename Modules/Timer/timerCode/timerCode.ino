@@ -72,16 +72,15 @@ void youLose()
 
   // Play lose music
   Serial.println("Loose");
-  if (diff_time < 1000)
+  if (deltaTime < 1000)
   {
-    clock.setDigit(0, 0, 0, false);
-    clock.setDigit(0, 1, 0, false);
-    clock.setDigit(0, 2, 0, false);
-    clock.setDigit(0, 3, 0, false);
+    clockDriver.setDigit(0, 0, 0, false);
+    clockDriver.setDigit(0, 1, 0, false);
+    clockDriver.setDigit(0, 2, 0, false);
+    clockDriver.setDigit(0, 3, 0, false);
   }
 
-  serialnr.write_string(" boom ");
-  playMelody(lose_melody, lose_melody_durations, lose_melody_len);
+  //playMelody(lose_melody, lose_melody_durations, lose_melody_len);
 
   // Stop clock
   while (1)
@@ -94,21 +93,20 @@ void youWin()
 {
 
   controller.stopNeedys();
-  int seconds = (diff_time / 1000) % 60;
-  int minutes = diff_time / 60000;
+  int seconds = (deltaTime / 1000) % 60;
+  int minutes = deltaTime / 60000;
   // Play win music
   Serial.println("Win");
 
-  digitalWrite(CLEAR_PIN, HIGH);
+  digitalWrite(GREEN_CLEAR_PIN, HIGH);
 
-  serialnr.write_string("winner");
-  playMelody(win_melody, win_melody_durations, win_melody_len);
+  //playMelody(win_melody, win_melody_durations, win_melody_len);
 
-  configSerial.write('W');
-  configSerial.write((char)((minutes / 10) + '0'));
-  configSerial.write((char)((minutes % 10) + '0'));
-  configSerial.write((char)((seconds / 10) + '0'));
-  configSerial.write((char)((seconds % 10) + '0'));
+  ESPSerial.write('W');
+  ESPSerial.write((char)((minutes / 10) + '0'));
+  ESPSerial.write((char)((minutes % 10) + '0'));
+  ESPSerial.write((char)((seconds / 10) + '0'));
+  ESPSerial.write((char)((seconds % 10) + '0'));
 
   // Stop clock
   while (1)
@@ -247,33 +245,26 @@ void setup()
 
 #pragma region I / O setup
   Serial.println("Setting up I/O-pins");
-  // LED/Speaker setup
-  pinMode(STRIKE_1_PIN, OUTPUT);
-  pinMode(STRIKE_2_PIN, OUTPUT);
-  pinMode(CLEAR_PIN, OUTPUT);
   pinMode(CLOCK_DOT, OUTPUT);
-  pinMode(SPEAKER_PIN, OUTPUT);
+  pinMode(GREEN_CLEAR_PIN, OUTPUT);
 
-  digitalWrite(STRIKE_1_PIN, LOW);
-  digitalWrite(STRIKE_2_PIN, LOW);
-  digitalWrite(CLEAR_PIN, LOW);
-
+  digitalWrite(GREEN_CLEAR_PIN, LOW);
 #pragma endregion
 
 #pragma region Display setup
   Serial.println("Initializing display");
   /*
-   The MAX72XX is in power-saving mode on startup,
-   we have to do a wakeup call
-   */
-  serialnr.begin();
-  clock.shutdown(0, false);
+     The MAX72XX is in power-saving mode on startup,
+     we have to do a wakeup call
+     */
+  strikeDriver.begin();
+  clockDriver.shutdown(0, false);
   /* Set the brightness to a medium values */
-  serialnr.set_global_brightness(8);
-  clock.setIntensity(0, 8);
+  strikeDriver.set_global_brightness(2);
+  clockDriver.setIntensity(0, 8);
   /* and clear the display */
-  clock.clearDisplay(0);
-  serialnr.clear();
+  clockDriver.clearDisplay(0);
+  strikeDriver.clear();
 
   delay(500);
 #pragma endregion
@@ -314,9 +305,12 @@ void setup()
   Serial.println("Clients are ready");
 #pragma endregion
 
-  dest_time = millis() + (long)num_minutes * 60 * 1000;
-  controller.setTime(dest_time);
+  timeRemaining = settings.time * 60.0 * 1000.0;
+  controller.setTime(timeRemaining);
+  previousMillis = millis();
 
+  digitalWrite(CLOCK_DOT, HIGH);
+  Serial.println(timeRemaining);
   Serial.println("Done setup");
 }
 
@@ -339,7 +333,9 @@ void loop()
       // if the LED is off turn it on and vice-versa:
       toggleClockBlink();
 
-      // Update clock
+  deltaTime = millis() - previousMillis;
+  timeRemaining -= deltaTime * rateModifier;
+  previousMillis = millis();
 
       controller.setTime(diff_time);
       int seconds = (diff_time / 1000) % 60;
@@ -397,11 +393,11 @@ void loop()
 
   if (solves < controller.getSolves())
   {
-    tone(SPEAKER_PIN, 140, 150);
+    //tone(SPEAKER_PIN, 140, 150);
     delayWithUpdates(controller, 200);
-    tone(SPEAKER_PIN, 340, 150);
+    //tone(SPEAKER_PIN, 340, 150);
     delayWithUpdates(controller, 150);
-    noTone(SPEAKER_PIN);
+    //noTone(SPEAKER_PIN);
     solves = controller.getSolves();
   }
 
