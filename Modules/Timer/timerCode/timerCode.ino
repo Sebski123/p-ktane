@@ -31,31 +31,23 @@ SWireMaster master;
 KTANEController controller(master);
 
 //Variables
-int brightness = 4;
-int win_melody[] = {262, 330, 294, 370, 392};
-int win_melody_durations[] = {8, 8, 8, 8, 2};
-int win_melody_len = 5;
-int lose_melody[] = {659, 622, 587, 554};
-int lose_melody_durations[] = {8, 8, 8, 1};
-int lose_melody_len = 4;
-int num_minutes;
-unsigned long currentMillis;
 unsigned long previousMillis = 0;
-unsigned long count = 0;
-unsigned long diff_time = 0;
+unsigned long deltaTime = 0;
+unsigned long panicModeTimer = 0;
+long timeRemaining = 0;
+float rateModifier = 1;
+bool panicModeStatus = false;
+bool panicMode = false;
 byte msClockCount = 0;
+config_t config;
+settings_t settings;
 
 //  Globals
 int strikes = 0;
 int solves = 0;
-unsigned long dest_time;
+
 int num_modules;
 uint8_t clients[16];
-
-void toggleClockBlink()
-{
-  digitalWrite(CLOCK_DOT, !digitalRead(CLOCK_DOT));
-}
 
 void playMelody(int *melody, int *durations, int melody_len)
 {
