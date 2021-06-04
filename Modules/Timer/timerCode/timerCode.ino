@@ -160,12 +160,31 @@ void getSettingsManual()
   settings.time = 10;
   settings.strikes = 3;
 }
-  for (int i = 0; i < 7; i++)
+
+void updateDisplay()
+{
+  uint8_t leftNumber;
+  uint8_t rightNumber;
+  bool showDecimalPlace = false;
+  if (timeRemaining > (1L * 60L * 1000L)) //1 minute
   {
-    ((char *)(&recv_config))[i] = configSerial.read();
+    leftNumber = timeRemaining / 60000L;         // minutes
+    rightNumber = (timeRemaining / 1000L) % 60L; // seconds
   }
-  num_minutes = configSerial.read();
-  raw_to_config(&recv_config, &config);
+  else
+  {
+    leftNumber = (timeRemaining / 1000L) % 60L;         // seconds
+    rightNumber = timeRemaining - (leftNumber * 1000L); // miliseconds
+    showDecimalPlace = true;
+    digitalWrite(CLOCK_DOT, LOW);
+  }
+
+  clockDriver.setDigit(0, 0, (leftNumber / 10L), false);
+  clockDriver.setDigit(0, 1, (leftNumber % 10L), showDecimalPlace);
+  clockDriver.setDigit(0, 2, (rightNumber / 10L), false);
+  clockDriver.setDigit(0, 3, (rightNumber % 10L), false);
+
+  controller.setTime(timeRemaining);
 }
 
 void updateStrikes()
@@ -382,47 +401,19 @@ void loop()
   timeRemaining -= deltaTime * rateModifier;
   previousMillis = millis();
 
-      controller.setTime(diff_time);
-      int seconds = (diff_time / 1000) % 60;
-      int minutes = diff_time / 60000;
-      clock.setDigit(0, 0, (minutes / 10), false);
-      clock.setDigit(0, 1, (minutes % 10), false);
-      clock.setDigit(0, 2, (seconds / 10), false);
-      clock.setDigit(0, 3, (seconds % 10), false);
-    }
-  }
-  else
+  if (!panicMode && (settings.strikes - strikes == 1))
   {
-    if (currentMillis - previousMillis >= 10)
-    {
-      // save the last time you blinked the LED
-      previousMillis = currentMillis;
-      //Serial.println("blink");
-      // if the LED is off turn it on and vice-versa:
-      if (msClockCount > 25)
-      {
-        toggleClockBlink();
-        msClockCount = 0;
-      }
-      else
-      {
-        msClockCount++;
-      }
-      // Update clock
+    panicMode = true;
+    panicModeTimer = timeRemaining;
+  }
 
-      controller.setTime(diff_time);
-      int seconds = (diff_time / 1000) % 60;
-      int millisecs = diff_time - (seconds * 1000);
-      clock.setDigit(0, 0, (seconds / 10), false);
-      clock.setDigit(0, 1, (seconds % 10), false);
-      clock.setDigit(0, 2, (millisecs / 10), false);
-      clock.setDigit(0, 3, (millisecs % 10), false);
-    }
-  }
-  if (millis() > dest_time)
+  if (panicMode && panicModeTimer - timeRemaining > 100)
   {
-    youLose();
+    panicModeStatus = !panicModeStatus;
+    panicModeTimer = timeRemaining;
   }
+
+  updateDisplay();
 
   if (strikes < controller.getStrikes())
   {
