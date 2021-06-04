@@ -115,15 +115,51 @@ void youWin()
   }
 }
 
-void getConfigESP()
-{
-  raw_config_t recv_config;
+// void getConfigESP()
+// {
+//   raw_config_t recv_config;
 
-  configSerial.write("1");
-  while (configSerial.available() <= 0)
+//   configSerial.write("1");
+//   while (configSerial.available() <= 0)
+//   {
+//     delay(10);
+//   }
+//   for (int i = 0; i < 7; i++)
+//   {
+//     ((char *)(&recv_config))[i] = configSerial.read();
+//   }
+//   num_minutes = configSerial.read();
+//   raw_to_config(&recv_config, &config);
+// }
+
+// void getConfigManual()
+// {
+//   config.ports = 3;
+//   config.batteries = 1;
+//   config.indicators = 0;
+//   strncpy(config.serial, "123456", 6);
+//   config.serial[6] = '\0';
+//   num_minutes = 6;
+// }
+
+void getSettingsESP()
+{
+  ESPSerial.write(".");
+  while (ESPSerial.available() <= 0)
   {
-    delay(10);
+    delay(1);
   }
+  settings.seed = ESPSerial.read() << 8;
+  settings.seed |= ESPSerial.read();
+  settings.time = ESPSerial.read();
+}
+
+void getSettingsManual()
+{
+  settings.seed = 12345;
+  settings.time = 10;
+  settings.strikes = 3;
+}
   for (int i = 0; i < 7; i++)
   {
     ((char *)(&recv_config))[i] = configSerial.read();
@@ -146,7 +182,8 @@ void setup()
 {
 #pragma region Serial setup
   Serial.begin(19200);
-  configSerial.begin(19200);
+  ESPSerial.begin(19200);
+  DFPlayerSerial.begin(9600);
 
   while (!Serial)
   {
@@ -159,11 +196,18 @@ void setup()
 
 #pragma endregion
 
-#pragma region Get config
-  Serial.println("Getting config");
-  getConfigESP();
-  //getConfigManual();
-  Serial.println("Got config");
+#pragma region Get settings
+  Serial.println("Getting settings");
+  //getSettingsESP();
+  getSettingsManual();
+  Serial.println("Got settings:");
+  Serial.print("Seed: ");
+  Serial.println(settings.seed);
+  Serial.print("Time: ");
+  Serial.println(settings.time);
+  Serial.print("Max Strikes: ");
+  Serial.println(settings.strikes);
+  Serial.println();
 #pragma endregion
 
 #pragma region I / O Expander setup
@@ -188,24 +232,17 @@ void setup()
   mcp.pinMode(NSA_LED, OUTPUT);
 #pragma endregion
 
-#pragma region SET / GET I / O Expander values
-  //Read number of batteries
-  config.batteries = 0;
-  for(int i = 0; i < 4; i++){
-    config.batteries += !mcp.digitalRead(i);
+#pragma region Get config
+  Serial.println("Get config");
+  Serial.println("Sending seed");
+  controller.sendSeed(settings);
+  while (!controller.getConfig())
+  {
+    controller.interpretData();
   }
-  
-  config.indicators = 0;
-  randomSeed(config_to_seed(&config));
-
-  // Turn on indicators randomly
-  for(int i = 8; i < 14; i++){
-    mcp.digitalWrite(i, random(2));
-  }
-
-  //Read FRK and CAR indicators
-  config.indicators |= mcp.digitalRead(FRK_LED);
-  config.indicators |= (mcp.digitalRead(CAR_LED) << 1);
+  Serial.println("Got config");
+  memcpy(&config, controller.getConfig(), sizeof(config_t));
+  //config = controller.getConfig();
 #pragma endregion
 
 #pragma region Show config
