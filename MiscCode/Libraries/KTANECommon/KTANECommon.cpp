@@ -52,7 +52,30 @@ unsigned long config_to_seed(config_t *config)
 
 void saveTimeLeft(char *new_time, char *stored_time)
 {
-  memcpy(stored_time, new_time, 4);
+  uint8_t leftNumber;
+  uint8_t rightNumber;
+  unsigned long timeRemaining;
+
+  timeRemaining = stored_time[0];
+  timeRemaining = stored_time[1] << 8;
+  timeRemaining = stored_time[2] << 16;
+  timeRemaining = stored_time[3] << 24;
+
+  if (timeRemaining > 1 * 60 * 1000) //1 minute
+  {
+    leftNumber = timeRemaining / 60000;        // minutes
+    rightNumber = (timeRemaining / 1000) % 60; // seconds
+  }
+  else
+  {
+    leftNumber = (timeRemaining / 1000) % 60;          // seconds
+    rightNumber = timeRemaining - (leftNumber * 1000); // miliseconds
+  }
+
+  new_time[0] = (leftNumber / 10) + '0';
+  new_time[1] = (leftNumber % 10) + '0';
+  new_time[2] = (rightNumber / 10) + '0';
+  new_time[3] = (rightNumber % 10) + '0';
   stored_time[4] = '\0';
 }
 
@@ -350,7 +373,7 @@ KTANEController::KTANEController(SWireMaster &swire) : _swire(swire)
 
 void KTANEController::setTime(unsigned long timeLeft)
 {
-  timeLeftOnTimer = timeLeft;
+  _timeLeftOnTimer = timeLeft;
 }
 
 void KTANEController::interpretData()
@@ -393,12 +416,10 @@ void KTANEController::interpretData()
     {
       char msg[6];
       msg[0] = TIME;
-      int seconds = (timeLeftOnTimer / 1000) % 60;
-      int minutes = timeLeftOnTimer / 60000;
-      msg[1] = (minutes / 10) + '0';
-      msg[2] = (minutes % 10) + '0';
-      msg[3] = (seconds / 10) + '0';
-      msg[4] = (seconds % 10) + '0';
+      msg[1] = _timeLeftOnTimer & 0xff;
+      msg[2] = (_timeLeftOnTimer >> 8) & 0xff;
+      msg[3] = (_timeLeftOnTimer >> 16) & 0xff;
+      msg[4] = (_timeLeftOnTimer >> 24) & 0xff;
       msg[5] = '\0';
       _swire.sendData(client_id, msg);
     }

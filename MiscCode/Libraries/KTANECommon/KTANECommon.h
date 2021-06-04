@@ -144,7 +144,7 @@ private:
   uint8_t _strikes[MAX_CLIENTS];
   uint8_t _solves[MAX_CLIENTS];
   uint8_t _readies[MAX_CLIENTS];
-  unsigned long timeLeftOnTimer;
+  unsigned long _timeLeftOnTimer;
   int _needy_modules;
   int _got_config;
 };
