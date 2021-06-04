@@ -189,10 +189,6 @@ void setup()
   {
     ;
   } // wait for serial port to connect. Needed for native USB
-  while (!configSerial)
-  {
-    ;
-  } // wait for serial port to connect. Needed for native USB
 
 #pragma endregion
 
@@ -210,26 +206,22 @@ void setup()
   Serial.println();
 #pragma endregion
 
-#pragma region I / O Expander setup
-  mcp.begin(); // use default address 0x20
+#pragma region Identify connected modules
+  Serial.println("Get modules");
+  num_modules = master.identifyClients();
 
-  //Setup battery pins and enable 100K internal pullup 
-  mcp.pinMode(BATT1, INPUT);
-  mcp.pinMode(BATT2, INPUT);
-  mcp.pinMode(BATT3, INPUT);
-  mcp.pinMode(BATT4, INPUT);
-  mcp.pullUp(BATT1, HIGH);
-  mcp.pullUp(BATT2, HIGH);
-  mcp.pullUp(BATT3, HIGH);
-  mcp.pullUp(BATT4, HIGH);
+  Serial.print("Number of modules: ");
+  Serial.println(num_modules);
 
-  //Setup indicator pins
-  mcp.pinMode(FRK_LED, OUTPUT);
-  mcp.pinMode(CAR_LED, OUTPUT);
-  mcp.pinMode(FRQ_LED, OUTPUT);
-  mcp.pinMode(IND_LED, OUTPUT);
-  mcp.pinMode(BOB_LED, OUTPUT);
-  mcp.pinMode(NSA_LED, OUTPUT);
+  Serial.print("Client id's: ");
+  master.getClients(clients);
+  for (size_t i = 0; i < num_modules; i++)
+  {
+    Serial.print(clients[i]);
+    Serial.print("\t");
+  }
+  Serial.println();
+  Serial.println();
 #pragma endregion
 
 #pragma region Get config
@@ -265,17 +257,9 @@ void setup()
   {
     Serial.print("Parallel\t");
   }
-  if (config.ports & 2)
-  {
-    Serial.print("RJ45\t");
-  }
-  if (config.ports & 4)
-  {
-    Serial.print("RCA");
-  }
   Serial.println();
   Serial.print("Minutes to beat: ");
-  Serial.println(num_minutes);
+  Serial.println(settings.time);
 
   delay(100);
 #pragma endregion
@@ -305,29 +289,6 @@ void setup()
 
   delay(500);
 #pragma endregion
-
-#pragma region Serial setup
-  Serial.println("Writing serial-number");
-  // Serial alphanumeric setup
-  serialnr.write_string(config.serial);
-
-  delay(1000);
-#pragma endregion
-
-  Serial.println("Get modules");
-  num_modules = master.identifyClients();
-
-  Serial.print("Number of modules: ");
-  Serial.println(num_modules);
-
-  Serial.print("Client id's: ");
-  master.getClients(clients);
-  for (size_t i = 0; i < num_modules; i++)
-  {
-    Serial.print(clients[i]);
-    Serial.print("\t");
-  }
-  Serial.println();
 
 #pragma region Prepare modules
   controller.sendReset();
