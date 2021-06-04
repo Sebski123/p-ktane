@@ -7,39 +7,26 @@
 
 // Defines
 //  Pins
-#define SPEAKER_PIN 3
-#define STRIKE_1_PIN 4
-#define STRIKE_2_PIN 5
-#define CLEAR_PIN 6
-#define CLOCK_DOT 7
-#define CONF_RX 8
-#define CONF_TX 9
-#define CLOCK_DATA 10
-#define CLOCK_LOAD 11
-#define CLOCK_CLK 12
-#define SERIAL_CS 14
-#define SERIAL_DATAOUT 15
-#define SERIAL_CLK 16
+//RX 0
+//TX 1
+#define CLOCK_DOT 2
+#define ESP32_RX 3
+#define ESP32_TX 4
+#define GREEN_CLEAR_PIN 7
+#define SPI_MOSI 8
+#define SPI_SCK 9
+#define MAX7219_CS 10
+#define MAX6954_CS 11
+#define DFPLAYER_RX 12
+#define DFPLAYER_TX 13
 //I2C SDA 18
 //I2C SCL 19
-//  I/O Expander pins
-#define BATT1 0
-#define BATT2 1
-#define BATT3 2
-#define BATT4 3
-#define FRK_LED 8
-#define CAR_LED 9
-#define FRQ_LED 10
-#define IND_LED 11
-#define BOB_LED 12
-#define NSA_LED 13
 
 //Class init
-Adafruit_MCP23017 mcp;
-SoftwareSerial configSerial = SoftwareSerial(CONF_RX, CONF_TX);
-MAX6954 serialnr = MAX6954(SERIAL_DATAOUT, SERIAL_CLK, SERIAL_CS);
-LedControl clock = LedControl(CLOCK_DATA, CLOCK_CLK, CLOCK_LOAD, 1);
-config_t config;
+SoftwareSerial ESPSerial(ESP32_RX, ESP32_TX);
+SoftwareSerial DFPlayerSerial(DFPLAYER_RX, DFPLAYER_TX); // RX, TX
+MAX6954 strikeDriver(SPI_MOSI, SPI_SCK, MAX6954_CS);
+LedControl clockDriver(SPI_MOSI, SPI_SCK, MAX7219_CS, 1);
 SWireMaster master;
 KTANEController controller(master);
 
