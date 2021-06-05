@@ -197,19 +197,38 @@ void getSettingsManual()
   settings.strikes = 3;
 }
 
-void updateDisplay()
+void handleBeep()
 {
-  uint8_t leftNumber;
-  uint8_t rightNumber;
-  bool showDecimalPlace = false;
-  if (timeRemaining > (1L * 60L * 1000L)) //1 minute
+  if (rateModifier > 1.25)
   {
-    leftNumber = timeRemaining / 60000L;         // minutes
-    rightNumber = (timeRemaining / 1000L) % 60L; // seconds
+    DFPlayer.playMp3FolderTrack(SoundTrack::singlebeep);
+  }
+  else if (rateModifier > 1)
+  {
+    DFPlayer.playMp3FolderTrack(SoundTrack::doublebeep_125);
   }
   else
   {
-    leftNumber = (timeRemaining / 1000L) % 60L;         // seconds
+    DFPlayer.playMp3FolderTrack(SoundTrack::doublebeep);
+  }
+}
+
+void updateDisplay()
+{
+  static uint8_t lastSecondDisplayed;
+  uint8_t seconds;
+  uint8_t leftNumber;
+  uint8_t rightNumber;
+  bool showDecimalPlace = false;
+  seconds = (timeRemaining / 1000L) % 60L;
+  if (timeRemaining > (1L * 60L * 1000L)) //1 minute
+  {
+    leftNumber = timeRemaining / 60000L; // minutes
+    rightNumber = seconds;               // seconds
+  }
+  else
+  {
+    leftNumber = seconds;                               // seconds
     rightNumber = timeRemaining - (leftNumber * 1000L); // miliseconds
     showDecimalPlace = true;
     digitalWrite(CLOCK_DOT, LOW);
@@ -219,6 +238,12 @@ void updateDisplay()
   clockDriver.setDigit(0, 1, (leftNumber % 10L), showDecimalPlace);
   clockDriver.setDigit(0, 2, (rightNumber / 10L), false);
   clockDriver.setDigit(0, 3, (rightNumber % 10L), false);
+
+  if (lastSecondDisplayed != seconds)
+  {
+    lastSecondDisplayed = seconds;
+    handleBeep();
+  }
 
   controller.setTime(timeRemaining);
 }
