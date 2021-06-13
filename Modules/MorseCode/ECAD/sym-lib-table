@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name MorseCode-rescue)(type Legacy)(uri ${KIPRJMOD}/MorseCode-rescue.lib)(options "")(descr ""))
+)

@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:MorseCode-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -15,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L MCU_Microchip_ATmega:ATmega328-PU U1
+L MorseCode-rescue:ATmega328-PU-MCU_Microchip_ATmega U1
 U 1 1 5F833469
 P 3800 3250
 F 0 "U1" H 3156 3296 50  0000 R CNN
