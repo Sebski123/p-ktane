@@ -513,6 +513,6 @@ void loop()
 
   if (controller.getSolves() >= num_modules)
   {
-    //youWin();
+    youWin();
   }
 }
