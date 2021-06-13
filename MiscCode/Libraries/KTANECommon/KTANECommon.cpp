@@ -126,7 +126,7 @@ void KTANEModule::interpretData()
   {
     Serial.print(F("Got data"));
     Serial.println(out_message);
-    if (out_message[0] == CONFIG && strlen(out_message) == 7)
+    if (out_message[0] == CONFIG && strlen(out_message) == 8)
     {
       _got_config = 1;
       raw_to_config((raw_config_t *)(out_message + 1), &_config);
