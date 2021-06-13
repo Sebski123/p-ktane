@@ -458,16 +458,16 @@ void loop()
 
   // DFPlayer.loop();
 
-  while (Serial.available() > 0)
-  {
-    settings.strikes = Serial.parseInt();
-    strikes = Serial.parseInt();
-    Serial.print("Max strikes: ");
-    Serial.print(settings.strikes);
-    Serial.print("\tStrikes: ");
-    Serial.println(strikes);
-    panicModeStatus = false;
-  }
+  // while (Serial.available() > 0)
+  // {
+  //   settings.strikes = Serial.parseInt();
+  //   strikes = Serial.parseInt();
+  //   Serial.print("Max strikes: ");
+  //   Serial.print(settings.strikes);
+  //   Serial.print("\tStrikes: ");
+  //   Serial.println(strikes);
+  //   panicModeStatus = false;
+  // }
 
   deltaTime = millis() - previousMillis;
   timeRemaining -= deltaTime * rateModifier;
@@ -487,17 +487,17 @@ void loop()
 
   updateDisplay();
 
-  // if (strikes < controller.getStrikes())
-  // {
-  //   DFPlayer.playMp3FolderTrack(SoundTrack::strike);
-  //   strikes = controller.getStrikes();
-  //   if (rateModifier < 2)
-  //   {
-  //     rateModifier += 0.25;
-  //   }
-  //   Serial.print("STRIKE!:  ");
-  //   Serial.println(strikes);
-  // }
+  if (strikes < controller.getStrikes())
+  {
+    //DFPlayer.playMp3FolderTrack(SoundTrack::strike);
+    strikes = controller.getStrikes();
+    if (rateModifier < 2)
+    {
+      rateModifier += 0.25;
+    }
+    Serial.print("STRIKE!:  ");
+    Serial.println(strikes);
+  }
 
   if (solves < controller.getSolves())
   {
