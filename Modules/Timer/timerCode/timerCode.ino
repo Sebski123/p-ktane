@@ -25,6 +25,7 @@
 
 class Mp3Notify
 {
+public:
   static void OnError(uint16_t errorCode)
   {
     // see DfMp3_Error for code meaning
@@ -32,6 +33,10 @@ class Mp3Notify
     Serial.print("DFP Com Error ");
     Serial.println(errorCode);
   }
+  static void OnPlayFinished(DfMp3_PlaySources source, uint16_t track) {}
+  static void OnPlaySourceOnline(DfMp3_PlaySources source) {}
+  static void OnPlaySourceInserted(DfMp3_PlaySources source) {}
+  static void OnPlaySourceRemoved(DfMp3_PlaySources source) {}
 };
 
 //Class init
