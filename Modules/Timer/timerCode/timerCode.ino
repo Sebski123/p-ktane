@@ -97,13 +97,13 @@ void youLose()
   //   clockDriver.setDigit(0, 3, 0, false);
   // }
 
-  DFPlayer.playMp3FolderTrack(SoundTrack::bombExplosion);
-  while (DFPlayer.getCurrentTrack() == SoundTrack::bombExplosion)
-  {
-    controller.interpretData();
-  }
+  // DFPlayer.playMp3FolderTrack(SoundTrack::bombExplosion);
+  // while (DFPlayer.getCurrentTrack() == SoundTrack::bombExplosion)
+  // {
+  //   controller.interpretData();
+  // }
 
-  DFPlayer.playMp3FolderTrack(SoundTrack::looseMelody);
+  // DFPlayer.playMp3FolderTrack(SoundTrack::looseMelody);
 
   // Stop clock
   while (1)
@@ -124,19 +124,19 @@ void youWin()
 
   submitTime();
 
-  DFPlayer.playMp3FolderTrack(SoundTrack::bombDefused);
-  while (DFPlayer.getCurrentTrack() == SoundTrack::bombDefused)
-  {
-    controller.interpretData();
-  }
+  // DFPlayer.playMp3FolderTrack(SoundTrack::bombDefused);
+  // while (DFPlayer.getCurrentTrack() == SoundTrack::bombDefused)
+  // {
+  //   controller.interpretData();
+  // }
 
-  DFPlayer.playMp3FolderTrack(SoundTrack::fanfare);
-  while (DFPlayer.getCurrentTrack() == SoundTrack::fanfare)
-  {
-    controller.interpretData();
-  }
+  // DFPlayer.playMp3FolderTrack(SoundTrack::fanfare);
+  // while (DFPlayer.getCurrentTrack() == SoundTrack::fanfare)
+  // {
+  //   controller.interpretData();
+  // }
 
-  DFPlayer.playMp3FolderTrack(SoundTrack::winMelody);
+  // DFPlayer.playMp3FolderTrack(SoundTrack::winMelody);
 
   // Stop clock
   while (1)
@@ -206,15 +206,15 @@ void handleBeep()
 {
   if (rateModifier > 1.25)
   {
-    DFPlayer.playMp3FolderTrack(SoundTrack::singlebeep);
+    // DFPlayer.playMp3FolderTrack(SoundTrack::singlebeep);
   }
   else if (rateModifier > 1)
   {
-    DFPlayer.playMp3FolderTrack(SoundTrack::doublebeep_125);
+    // DFPlayer.playMp3FolderTrack(SoundTrack::doublebeep_125);
   }
   else
   {
-    DFPlayer.playMp3FolderTrack(SoundTrack::doublebeep);
+    // DFPlayer.playMp3FolderTrack(SoundTrack::doublebeep);
   }
 }
 
@@ -423,8 +423,8 @@ void setup()
 #pragma endregion
 
 #pragma region Sound setup
-  DFPlayer.begin();
-  DFPlayer.setVolume(24);
+  // DFPlayer.begin();
+  // DFPlayer.setVolume(24);
 
 #pragma endregion
 
@@ -456,7 +456,7 @@ void loop()
 {
   controller.interpretData();
 
-  DFPlayer.loop();
+  // DFPlayer.loop();
 
   while (Serial.available() > 0)
   {
