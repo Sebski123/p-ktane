@@ -606,17 +606,10 @@ int KTANEController::stopNeedys()
 
   for (int i = 0; i < num_clients; i++)
   {
-    for (int j = 0; j < 3; j++)
+    if (!_swire.sendData(clients[i], msg))
     {
-      if (clients[i] == needys[j])
-      {
-        if (!_swire.sendData(clients[i], msg))
-        {
-          err++;
-        }
-      }
+      err++;
     }
-    return (err == 0);
   }
-  return 0;
+  return (err == 0);
 }
