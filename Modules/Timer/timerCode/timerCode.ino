@@ -450,7 +450,7 @@ void setup()
   controller.setTime(timeRemaining);
   previousMillis = millis();
 
-  digitalWrite(CLOCK_DOT, HIGH);
+  digitalWrite(CLOCK_DOT, settings.time >= 1 ? HIGH : LOW);
   Serial.println(timeRemaining);
   Serial.println("Done setup");
 #pragma endregion
