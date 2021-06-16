@@ -536,10 +536,6 @@ int KTANEController::sendReset()
 
   for (int i = 0; i < num_clients; i++)
   {
-    if (clients[i] == 0x1)
-    {
-      continue;
-    }
     if (!_swire.sendData(clients[i], msg))
     {
       err++;
