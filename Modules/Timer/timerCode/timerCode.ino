@@ -324,20 +324,6 @@ void setup()
 
 #pragma endregion
 
-#pragma region Get settings
-  Serial.println("Getting settings");
-  //getSettingsESP();
-  getSettingsManual();
-  Serial.println("Got settings:");
-  Serial.print("Seed: ");
-  Serial.println(settings.seed);
-  Serial.print("Time: ");
-  Serial.println(settings.time);
-  Serial.print("Max Strikes: ");
-  Serial.println(settings.strikes);
-  Serial.println();
-#pragma endregion
-
 #pragma region Identify connected modules
   Serial.println("Get modules");
   num_modules = master.identifyClients();
@@ -353,6 +339,26 @@ void setup()
     Serial.print("\t");
   }
   Serial.println();
+  Serial.println();
+#pragma endregion
+
+#pragma region Reset modules
+  Serial.println("Resetting modules");
+  controller.sendReset();
+  delayWithUpdates(controller, 1000);
+#pragma endregion
+
+#pragma region Get settings
+  Serial.println("Getting settings");
+  //getSettingsESP();
+  getSettingsManual();
+  Serial.println("Got settings:");
+  Serial.print("Seed: ");
+  Serial.println(settings.seed);
+  Serial.print("Time: ");
+  Serial.println(settings.time);
+  Serial.print("Max Strikes: ");
+  Serial.println(settings.strikes);
   Serial.println();
 #pragma endregion
 
@@ -429,8 +435,6 @@ void setup()
 #pragma endregion
 
 #pragma region Prepare modules
-  controller.sendReset();
-  delayWithUpdates(controller, 1000);
   Serial.println("Sending config to clients");
   controller.sendConfig(&config);
   while (!controller.clientsAreReady())
