@@ -213,7 +213,7 @@ void loop()
 {
   module.interpretData();
 
-  if (!module.is_solved)
+  if (!module.is_solved && !module.needyStop)
   {
     doMorse();
 
