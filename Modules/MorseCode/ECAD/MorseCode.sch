@@ -263,13 +263,8 @@ Text Label 2750 4550 3    50   ~ 0
 status_grn
 Text Label 2950 4550 3    50   ~ 0
 status_red
-NoConn ~ 4400 2550
 NoConn ~ 4400 2650
 NoConn ~ 4400 2750
-NoConn ~ 4400 2950
-NoConn ~ 4400 3050
-NoConn ~ 4400 3150
-NoConn ~ 4400 3250
 $Comp
 L Device:R_US R2
 U 1 1 5F833475
@@ -778,4 +773,182 @@ Wire Wire Line
 	1750 3050 1850 3050
 Wire Wire Line
 	2150 3050 2250 3050
+$Comp
+L Driver_Motor:L293 U7
+U 1 1 60C7C92C
+P 2850 6600
+F 0 "U7" H 3200 7550 50  0000 C CNN
+F 1 "L293" H 2550 7550 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 3100 5850 50  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/l293.pdf" H 2550 7300 50  0001 C CNN
+	1    2850 6600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR019
+U 1 1 60C82B18
+P 2850 7550
+F 0 "#PWR019" H 2850 7300 50  0001 C CNN
+F 1 "GND" H 2855 7377 50  0000 C CNN
+F 2 "" H 2850 7550 50  0001 C CNN
+F 3 "" H 2850 7550 50  0001 C CNN
+	1    2850 7550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:VCC #PWR018
+U 1 1 60C8344A
+P 2850 5450
+F 0 "#PWR018" H 2850 5300 50  0001 C CNN
+F 1 "VCC" H 2867 5623 50  0000 C CNN
+F 2 "" H 2850 5450 50  0001 C CNN
+F 3 "" H 2850 5450 50  0001 C CNN
+	1    2850 5450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 5600 2750 5550
+Wire Wire Line
+	2750 5550 2850 5550
+Wire Wire Line
+	2850 5550 2850 5450
+Wire Wire Line
+	2950 5600 2950 5550
+Wire Wire Line
+	2950 5550 2850 5550
+Connection ~ 2850 5550
+Wire Wire Line
+	2750 7400 2750 7500
+Wire Wire Line
+	2750 7500 2850 7500
+Wire Wire Line
+	2850 7500 2850 7550
+Wire Wire Line
+	2950 7400 2950 7500
+Wire Wire Line
+	2950 7500 2850 7500
+Connection ~ 2850 7500
+Wire Wire Line
+	3050 7400 3050 7500
+Wire Wire Line
+	3050 7500 2950 7500
+Connection ~ 2950 7500
+Wire Wire Line
+	2650 7400 2650 7500
+Wire Wire Line
+	2650 7500 2750 7500
+Connection ~ 2750 7500
+$Comp
+L Motor:Stepper_Motor_bipolar M1
+U 1 1 60CA94C4
+P 3900 6700
+F 0 "M1" H 4088 6824 50  0000 L CNN
+F 1 "Marker position" H 4088 6733 50  0000 L CNN
+F 2 "" H 3910 6690 50  0001 C CNN
+F 3 "http://www.infineon.com/dgdl/Application-Note-TLE8110EE_driving_UniPolarStepperMotor_V1.1.pdf?fileId=db3a30431be39b97011be5d0aa0a00b0" H 3910 6690 50  0001 C CNN
+	1    3900 6700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 6600 3600 6600
+Wire Wire Line
+	3600 6800 3350 6800
+Wire Wire Line
+	3350 6000 3800 6000
+Wire Wire Line
+	3800 6000 3800 6400
+Wire Wire Line
+	3350 6200 4000 6200
+Wire Wire Line
+	4000 6200 4000 6400
+Wire Wire Line
+	4500 2950 4400 2950
+Wire Wire Line
+	4500 3050 4400 3050
+Wire Wire Line
+	4500 3150 4400 3150
+Wire Wire Line
+	4500 3250 4400 3250
+Text Label 4500 2950 0    50   ~ 0
+Motor_A1
+Text Label 4500 3050 0    50   ~ 0
+Motor_A2
+Text Label 4500 3150 0    50   ~ 0
+Motor_A3
+Text Label 4500 3250 0    50   ~ 0
+Motor_A4
+Wire Wire Line
+	2250 6000 2350 6000
+Wire Wire Line
+	2250 6200 2350 6200
+Wire Wire Line
+	2250 6600 2350 6600
+Wire Wire Line
+	2250 6800 2350 6800
+Text Label 2250 6800 2    50   ~ 0
+Motor_A4
+Text Label 2250 6600 2    50   ~ 0
+Motor_A3
+Text Label 2250 6200 2    50   ~ 0
+Motor_A2
+Text Label 2250 6000 2    50   ~ 0
+Motor_A1
+$Comp
+L power:VCC #PWR017
+U 1 1 60D0045A
+P 2250 7000
+F 0 "#PWR017" H 2250 6850 50  0001 C CNN
+F 1 "VCC" H 2267 7173 50  0000 C CNN
+F 2 "" H 2250 7000 50  0001 C CNN
+F 3 "" H 2250 7000 50  0001 C CNN
+	1    2250 7000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:VCC #PWR03
+U 1 1 60D02180
+P 2250 6400
+F 0 "#PWR03" H 2250 6250 50  0001 C CNN
+F 1 "VCC" H 2267 6573 50  0000 C CNN
+F 2 "" H 2250 6400 50  0001 C CNN
+F 3 "" H 2250 6400 50  0001 C CNN
+	1    2250 6400
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2250 6400 2350 6400
+Wire Wire Line
+	2350 7000 2250 7000
+$Comp
+L Switch:SW_Push_Open SW?
+U 1 1 60D12947
+P 5350 6750
+F 0 "SW?" H 5350 6965 50  0000 C CNN
+F 1 "Motor limit switch" H 5350 6874 50  0000 C CNN
+F 2 "" H 5350 6950 50  0001 C CNN
+F 3 "~" H 5350 6950 50  0001 C CNN
+	1    5350 6750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 60D142A4
+P 5000 6750
+F 0 "#PWR?" H 5000 6500 50  0001 C CNN
+F 1 "GND" H 5005 6577 50  0000 C CNN
+F 2 "" H 5000 6750 50  0001 C CNN
+F 3 "" H 5000 6750 50  0001 C CNN
+	1    5000 6750
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5000 6750 5150 6750
+Wire Wire Line
+	5650 6750 5550 6750
+Text Label 5650 6750 0    50   ~ 0
+Limit_SW
+Text Label 4500 2550 0    50   ~ 0
+Limit_SW
+Wire Wire Line
+	4500 2550 4400 2550
 $EndSCHEMATC
