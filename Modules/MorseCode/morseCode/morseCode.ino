@@ -2,74 +2,7 @@
 #include "KTANECommon.h"
 #include "morseCode.h"
 #include "LedControl.h"
-/*
-#define DOT_TIME 300
 
-char freqs[16][4] = {
-    "505",
-    "515",
-    "522",
-    "532",
-    "535",
-    "542",
-    "545",
-    "552",
-    "555",
-    "565",
-    "572",
-    "575",
-    "582",
-    "592",
-    "595",
-    "600"};
-
-char words[16][7] = {
-    "shell",
-    "halls",
-    "slick",
-    "trick",
-    "boxes",
-    "leaks",
-    "strobe",
-    "bistro",
-    "flick",
-    "bombs",
-    "break",
-    "brick",
-    "steak",
-    "sting",
-    "vector",
-    "beats"};
-
-char morse[26][5] = {
-    ".-",   // a
-    "-...", // b
-    "-.-.", // c
-    "-..",  // d (not used)
-    ".",    // e
-    "..-.", // f
-    "--.",  // g
-    "....", // h
-    "..",   // i
-    ".---", // j (not used)
-    "-.-",  // k
-    ".-..", // l
-    "--",   // m
-    "-.",   // n
-    "---",  // o
-    ".--.", // p (not used)
-    "--.-", // q (not used)
-    ".-.",  // r
-    "...",  // s
-    "-",    // t
-    "..-",  // u (not used)
-    "...-", // v
-    ".--",  // w (not used)
-    "-..-", // x
-    "-.--", // y (not used)
-    "--.."  // z (not used)
-};
-*/
 // Defines
 //  Pins
 //RX 0
@@ -105,7 +38,7 @@ unsigned long last_button_time = 0;
 void setMorseBit(uint8_t *bits, int index, int val)
 {
   uint8_t and_mask, or_mask;
-  and_mask = ~(1 << (index % 8));       
+  and_mask = ~(1 << (index % 8));
   or_mask = ((!!val) << (index % 8));
   bits[index / 8] = (bits[index / 8] & and_mask) | or_mask;
 }
@@ -187,7 +120,7 @@ void setup()
     setMorseBit(morse_bits, morse_index++, 0); //After each letter, add two additional 'off' units for a total of three
     setMorseBit(morse_bits, morse_index++, 0);
   }
-  setMorseBit(morse_bits, morse_index++, 0);//After each word, add four additional 'off' units for a total of seven
+  setMorseBit(morse_bits, morse_index++, 0); //After each word, add four additional 'off' units for a total of seven
   setMorseBit(morse_bits, morse_index++, 0);
   setMorseBit(morse_bits, morse_index++, 0);
   setMorseBit(morse_bits, morse_index++, 0);
@@ -227,7 +160,7 @@ void loop()
       }
     }
 
-    if (!digitalRead(BUTTON_R_PIN) && (millis() - last_button_time > 250))  //Detect right button press
+    if (!digitalRead(BUTTON_R_PIN) && (millis() - last_button_time > 250)) //Detect right button press
     {
       last_button_time = millis();
       selected_freq++;
