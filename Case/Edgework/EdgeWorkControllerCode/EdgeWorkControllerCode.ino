@@ -333,7 +333,7 @@ void setup()
   Serial.println(F("Setup done"));
 
   module.sendReady();
-  delay(50);
+  delayWithUpdates(module, 50);
   module.sendSolve();
 }
 
