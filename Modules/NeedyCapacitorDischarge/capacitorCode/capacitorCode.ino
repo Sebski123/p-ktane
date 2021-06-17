@@ -19,10 +19,11 @@ SWireClient client(0x07);
 KTANEModule module(client, GREEN_CLEAR_LED, RED_STRIKE_LED);
 LedControl lc = LedControl(DATA_IN_PIN, CLOCK_PIN, LOAD_PIN);
 
-unsigned long timer = 0;
-unsigned long forcedTimer = 0;
-unsigned long updateTimer = 0;
-int timeLeft;
+unsigned long deltaTime = 0;
+unsigned long previousMillis = 0;
+long timeRemaining = 0;
+long forcedTimer = 0;
+int secondsLeft;
 bool moduleActive = false;
 int solves = 0;
 int strikes = 0;
@@ -32,11 +33,12 @@ bool btnState;
 void setup()
 {
     Serial.begin(19200);
-    
+
     while (!Serial)
     {
         ; // wait for serial port to connect. Needed for native USB
     }
+    Serial.println("Capacitor Discharge");
     Serial.println("Starting setup");
     pinMode(LEVER_BUTTON, INPUT_PULLUP);
 
@@ -57,7 +59,8 @@ void setup()
     Serial.println("Got config");
     randomSeed(config_to_seed(module.getConfig()));
 
-    forcedTimer = millis() + ((unsigned long)90 * 1000); //Add 90 seconds for forced start
+    forcedTimer = (long)90 * 1000; //Add 90 seconds for forced start
+    previousMillis = millis();
 
     Serial.println("Finished setup");
     module.sendReady();
@@ -71,33 +74,48 @@ void loop()
 
     if (!module.needyStop)
     {
+
+        deltaTime = millis() - previousMillis;
+        previousMillis = millis();
+
         btnState = !digitalRead(LEVER_BUTTON);
 
         if (!moduleActive)
         {
-            if (millis() >= forcedTimer)
+
+            forcedTimer -= deltaTime;
+
+            if (forcedTimer <= 0)
             {
-                timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
+                timeRemaining = 40L * 1000; //Add 40 seconds for countdown
                 moduleActive = true;
                 lc.shutdown(0, false);
                 Serial.println("Activating by forced timer");
             }
-            if (millis() - updateTimer > 200)
+
+            if (module.getNumStrikes() > strikes || module.getNumSolves() > solves)
             {
-                updateTimer = millis();
-                if (module.getNumStrikes() > strikes || module.getNumSolves() > solves)
-                {
-                    eventHappened();
-                }
+                eventHappened();
             }
         }
         else
         {
-            if (millis() >= timer)
+            timeRemaining -= deltaTime;
+
+            if (btnState)
+            {
+                timeRemaining += (long)deltaTime * 5L; //time since last check + 5 times increase time
+                if (timeRemaining > 40L * 1000)
+                {
+                    timeRemaining = 40L * 1000;
+                }
+            }
+
+            if (timeRemaining <= 0)
             {
                 Serial.println("strike");
                 lc.shutdown(0, true);
-                forcedTimer = millis() + ((unsigned long)90 * 1000); //Add 90 seconds for forced start
+                forcedTimer = (long)(90 * 1000); //Add 90 seconds for forced start
                 moduleActive = false;
                 module.strike();
                 delayWithUpdates(module, 40); //delay as to not get triggered by it's own strike
@@ -105,26 +123,14 @@ void loop()
                 solves = module.getNumSolves();
             }
 
-            if (millis() - updateTimer > 200)
-            {
-                updateTimer = millis();
-                updateCountdown();
-                if (btnState)
-                {
-                    timer += 1200;                                     //time since last check + 5 times increase time
-                    if (timer - millis() > ((unsigned long)41 * 1000)) //41 too allow bar to become totally empty
-                    {
-                        timer = millis() + ((unsigned long)41 * 1000);
-                    }
-                }
-            }
+            updateCountdown();
         }
     }
 }
 
-void setGraph(int timeLeft)
+void setGraph()
 {
-    int howManyToLight = 40 - timeLeft;
+    int howManyToLight = 40 - secondsLeft;
 
     for (int digit = 6; digit > 1; digit--)
     {
@@ -150,7 +156,8 @@ void eventHappened()
         if (random(0, 101) > 85)
         {
             numEvents = 0;
-            timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
+            lc.shutdown(0, false);
+            timeRemaining = 40L * 1000; //Add 40 seconds for countdown
             moduleActive = true;
             Serial.println("Activated by 1nd event");
         }
@@ -158,7 +165,8 @@ void eventHappened()
     else
     {
         numEvents = 0;
-        timer = millis() + ((unsigned long)40 * 1000); //Add 40 seconds for countdown
+        lc.shutdown(0, false);
+        timeRemaining = 40L * 1000; //Add 40 seconds for countdown
         moduleActive = true;
         Serial.println("Activated by 2nd event");
     }
@@ -166,8 +174,8 @@ void eventHappened()
 
 void updateCountdown()
 {
-    timeLeft = (timer - millis()) / 1000;
-    setGraph(timeLeft);
-    lc.setDigit(0, 0, timeLeft / 10, false);
-    lc.setDigit(0, 1, timeLeft % 10, false);
+    secondsLeft = timeRemaining / 1000;
+    setGraph();
+    lc.setDigit(0, 0, secondsLeft / 10, false);
+    lc.setDigit(0, 1, secondsLeft % 10, false);
 }
