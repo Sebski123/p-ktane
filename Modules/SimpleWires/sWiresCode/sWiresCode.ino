@@ -138,6 +138,8 @@ void setup()
 {
   Serial.begin(19200);
 
+  Serial.println("### Simple Wires Module ###");
+
   Serial.println("Begin setup");
 
 #pragma region Detect wires:

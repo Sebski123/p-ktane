@@ -253,6 +253,8 @@ void setup()
 {
   Serial.begin(19200);
 
+  Serial.println("### Memory Module ###");
+
   pinMode(DATA_IN_PIN, OUTPUT);
   pinMode(LOAD_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);

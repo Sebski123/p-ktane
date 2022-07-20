@@ -1,10 +1,8 @@
-
 #include "KTANECommon.h"
 #include "LedControl.h"
 #include "MAX6954.h"
 #include "SoftwareSerial.h"
 #include "DFRobotDFPlayerMini.h"
-#include <DFMiniMp3.h>
 
 // Defines
 //  Pins
@@ -18,31 +16,21 @@
 #define SPI_SCK 9
 #define MAX7219_CS 10
 #define MAX6954_CS 11
-#define DFPLAYER_RX 12
-#define DFPLAYER_TX 13
+#define DFPLAYER_TX 12
+#define DFPLAYER_RX 13
 //I2C SDA 18
 //I2C SCL 19
 
-class Mp3Notify
+union
 {
-public:
-  static void OnError(uint16_t errorCode)
-  {
-    // see DfMp3_Error for code meaning
-    Serial.println();
-    Serial.print("DFP Com Error ");
-    Serial.println(errorCode);
-  }
-  static void OnPlayFinished(DfMp3_PlaySources source, uint16_t track) {}
-  static void OnPlaySourceOnline(DfMp3_PlaySources source) {}
-  static void OnPlaySourceInserted(DfMp3_PlaySources source) {}
-  static void OnPlaySourceRemoved(DfMp3_PlaySources source) {}
-};
+  float f;
+  char a[4];
+} u;
 
 //Class init
 SoftwareSerial ESPSerial(ESP32_RX, ESP32_TX);
 SoftwareSerial DFPlayerSerial(DFPLAYER_RX, DFPLAYER_TX); // RX, TX
-DFMiniMp3<SoftwareSerial, Mp3Notify> DFPlayer(DFPlayerSerial);
+DFRobotDFPlayerMini DFPlayer;
 MAX6954 strikeDriver(SPI_MOSI, SPI_SCK, MAX6954_CS);
 LedControl clockDriver(SPI_MOSI, SPI_SCK, MAX7219_CS, 1);
 SWireMaster master;
@@ -83,12 +71,20 @@ enum SoundTrack
   alarmClock      //alarm_clock_beep
 };
 
+enum GameResult
+{
+  win,
+  loss
+};
+
 void youLose()
 {
   controller.stopNeedys();
 
   // Play lose music
   Serial.println("Loose");
+
+  submitTime(GameResult::loss);
   // if (deltaTime < 1000)
   // {
   //   clockDriver.setDigit(0, 0, 0, false);
@@ -97,13 +93,9 @@ void youLose()
   //   clockDriver.setDigit(0, 3, 0, false);
   // }
 
-  // DFPlayer.playMp3FolderTrack(SoundTrack::bombExplosion);
-  // while (DFPlayer.getCurrentTrack() == SoundTrack::bombExplosion)
-  // {
-  //   controller.interpretData();
-  // }
-
-  // DFPlayer.playMp3FolderTrack(SoundTrack::looseMelody);
+  DFPlayer.play(SoundTrack::bombExplosion);
+  waitForCurrentTrackToFinish();
+  DFPlayer.play(SoundTrack::looseMelody);
 
   // Stop clock
   while (1)
@@ -122,21 +114,13 @@ void youWin()
 
   digitalWrite(GREEN_CLEAR_PIN, HIGH);
 
-  submitTime();
+  submitTime(GameResult::win);
 
-  // DFPlayer.playMp3FolderTrack(SoundTrack::bombDefused);
-  // while (DFPlayer.getCurrentTrack() == SoundTrack::bombDefused)
-  // {
-  //   controller.interpretData();
-  // }
-
-  // DFPlayer.playMp3FolderTrack(SoundTrack::fanfare);
-  // while (DFPlayer.getCurrentTrack() == SoundTrack::fanfare)
-  // {
-  //   controller.interpretData();
-  // }
-
-  // DFPlayer.playMp3FolderTrack(SoundTrack::winMelody);
+  DFPlayer.play(SoundTrack::bombDefused);
+  waitForCurrentTrackToFinish();
+  DFPlayer.play(SoundTrack::fanfare);
+  waitForCurrentTrackToFinish();
+  DFPlayer.play(SoundTrack::winMelody);
 
   // Stop clock
   while (1)
@@ -145,54 +129,45 @@ void youWin()
   }
 }
 
-void submitTime()
+void waitForCurrentTrackToFinish()
 {
-  // int seconds = (deltaTime / 1000) % 60;
-  // int minutes = deltaTime / 60000;
-  // ESPSerial.write('W');
-  // ESPSerial.write((char)((minutes / 10) + '0'));
-  // ESPSerial.write((char)((minutes % 10) + '0'));
-  // ESPSerial.write((char)((seconds / 10) + '0'));
-  // ESPSerial.write((char)((seconds % 10) + '0'));
+  while (true)
+  {
+    if (DFPlayer.available())
+    {
+      if (DFPlayer.readType() == 11)
+      {
+        break;
+      }
+    }
+    controller.interpretData();
+  }
 }
 
-// void getConfigESP()
-// {
-//   raw_config_t recv_config;
-
-//   configSerial.write("1");
-//   while (configSerial.available() <= 0)
-//   {
-//     delay(10);
-//   }
-//   for (int i = 0; i < 7; i++)
-//   {
-//     ((char *)(&recv_config))[i] = configSerial.read();
-//   }
-//   num_minutes = configSerial.read();
-//   raw_to_config(&recv_config, &config);
-// }
-
-// void getConfigManual()
-// {
-//   config.ports = 3;
-//   config.batteries = 1;
-//   config.indicators = 0;
-//   strncpy(config.serial, "123456", 6);
-//   config.serial[6] = '\0';
-//   num_minutes = 6;
-// }
+void submitTime(GameResult result)
+{
+  u.f = (timeRemaining / 60.0) / 1000.0;
+  ESPSerial.write('W');
+  ESPSerial.write(u.a, 4);
+  ESPSerial.write('1');
+}
 
 void getSettingsESP()
 {
+  ESPSerial.listen();
   ESPSerial.write(".");
   while (ESPSerial.available() <= 0)
   {
     delay(1);
   }
   settings.seed = ESPSerial.read() << 8;
+  delay(5);
   settings.seed |= ESPSerial.read();
-  settings.time = ESPSerial.read();
+  delay(5);
+  ESPSerial.readBytes(u.a, 4);
+  settings.time = u.f;
+  delay(5);
+  settings.strikes = ESPSerial.read();
 }
 
 void getSettingsManual()
@@ -206,15 +181,15 @@ void handleBeep()
 {
   if (rateModifier > 1.25)
   {
-    // DFPlayer.playMp3FolderTrack(SoundTrack::singlebeep);
+    DFPlayer.play(SoundTrack::singlebeep);
   }
   else if (rateModifier > 1)
   {
-    // DFPlayer.playMp3FolderTrack(SoundTrack::doublebeep_125);
+    DFPlayer.play(SoundTrack::doublebeep_125);
   }
   else
   {
-    // DFPlayer.playMp3FolderTrack(SoundTrack::doublebeep);
+    DFPlayer.play(SoundTrack::doublebeep);
   }
 }
 
@@ -314,14 +289,15 @@ void setup()
 {
 #pragma region Serial setup
   Serial.begin(19200);
-  ESPSerial.begin(19200);
   DFPlayerSerial.begin(9600);
+  ESPSerial.begin(19200);
 
   while (!Serial)
   {
     ;
   } // wait for serial port to connect. Needed for native USB
 
+  Serial.println("### Timer Module ###");
 #pragma endregion
 
 #pragma region Identify connected modules
@@ -350,8 +326,8 @@ void setup()
 
 #pragma region Get settings
   Serial.println("Getting settings");
-  //getSettingsESP();
-  getSettingsManual();
+  getSettingsESP();
+  //getSettingsManual();
   Serial.println("Got settings:");
   Serial.print("Seed: ");
   Serial.println(settings.seed);
@@ -429,9 +405,22 @@ void setup()
 #pragma endregion
 
 #pragma region Sound setup
-  // DFPlayer.begin();
-  // DFPlayer.setVolume(24);
+  DFPlayerSerial.listen();
+  Serial.println(F("DFRobot DFPlayer Mini Demo"));
+  Serial.println(F("Initializing DFPlayer ... (May take 3~5 seconds)"));
 
+  if (!DFPlayer.begin(DFPlayerSerial))
+  { //Use softwareSerial to communicate with mp3.
+    Serial.println(F("Unable to begin:"));
+    Serial.println(F("1.Please recheck the connection!"));
+    Serial.println(F("2.Please insert the SD card!"));
+    while (true)
+    {
+      delay(0); // Code to compatible with ESP8266 watch dog.
+    }
+  }
+  Serial.println(F("DFPlayer Mini online."));
+  DFPlayer.volume(10);
 #pragma endregion
 
 #pragma region Prepare modules
@@ -460,18 +449,16 @@ void loop()
 {
   controller.interpretData();
 
-  // DFPlayer.loop();
-
-  // while (Serial.available() > 0)
-  // {
-  //   settings.strikes = Serial.parseInt();
-  //   strikes = Serial.parseInt();
-  //   Serial.print("Max strikes: ");
-  //   Serial.print(settings.strikes);
-  //   Serial.print("\tStrikes: ");
-  //   Serial.println(strikes);
-  //   panicModeStatus = false;
-  // }
+  while (Serial.available() > 0)
+  {
+    settings.strikes = Serial.parseInt();
+    strikes = Serial.parseInt();
+    Serial.print("Max strikes: ");
+    Serial.print(settings.strikes);
+    Serial.print("\tStrikes: ");
+    Serial.println(strikes);
+    panicModeStatus = false;
+  }
 
   deltaTime = millis() - previousMillis;
   timeRemaining -= deltaTime * rateModifier;
@@ -493,7 +480,7 @@ void loop()
 
   if (strikes < controller.getStrikes())
   {
-    //DFPlayer.playMp3FolderTrack(SoundTrack::strike);
+    DFPlayer.play(SoundTrack::strike);
     strikes = controller.getStrikes();
     if (rateModifier < 2)
     {

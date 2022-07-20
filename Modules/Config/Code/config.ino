@@ -1,209 +1,261 @@
-#include "FirebaseESP8266.h"
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
-#include <EEPROM.h>
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
+#include <BLE2902.h>
+#include <Preferences.h>
 #include "KTANECommon.h"
-#include "configModule.h"
 
-/*                                                                                                                            
-                                                    dddddddd                                                                 
-UUUUUUUU     UUUUUUUU                               d::::::d                          tttt                                   
-U::::::U     U::::::U                               d::::::d                       ttt:::t                                   
-U::::::U     U::::::U                               d::::::d                       t:::::t                                   
-UU:::::U     U:::::UU                               d:::::d                        t:::::t                                   
- U:::::U     U:::::Uppppp   ppppppppp       ddddddddd:::::d   aaaaaaaaaaaaa  ttttttt:::::ttttttt        eeeeeeeeeeee         
- U:::::D     D:::::Up::::ppp:::::::::p    dd::::::::::::::d   a::::::::::::a t:::::::::::::::::t      ee::::::::::::ee       
- U:::::D     D:::::Up:::::::::::::::::p  d::::::::::::::::d   aaaaaaaaa:::::at:::::::::::::::::t     e::::::eeeee:::::ee     
- U:::::D     D:::::Upp::::::ppppp::::::pd:::::::ddddd:::::d            a::::atttttt:::::::tttttt    e::::::e     e:::::e     
- U:::::D     D:::::U p:::::p     p:::::pd::::::d    d:::::d     aaaaaaa:::::a      t:::::t          e:::::::eeeee::::::e     
- U:::::D     D:::::U p:::::p     p:::::pd:::::d     d:::::d   aa::::::::::::a      t:::::t          e:::::::::::::::::e      
- U:::::D     D:::::U p:::::p     p:::::pd:::::d     d:::::d  a::::aaaa::::::a      t:::::t          e::::::eeeeeeeeeee       
- U::::::U   U::::::U p:::::p    p::::::pd:::::d     d:::::d a::::a    a:::::a      t:::::t    tttttte:::::::e                
- U:::::::UUU:::::::U p:::::ppppp:::::::pd::::::ddddd::::::dda::::a    a:::::a      t::::::tttt:::::te::::::::e               
-  UU:::::::::::::UU  p::::::::::::::::p  d:::::::::::::::::da:::::aaaa::::::a      tt::::::::::::::t e::::::::eeeeeeee       
-    UU:::::::::UU    p::::::::::::::pp    d:::::::::ddd::::d a::::::::::aa:::a       tt:::::::::::tt  ee:::::::::::::e       
-      UUUUUUUUU      p::::::pppppppp       ddddddddd   ddddd  aaaaaaaaaa  aaaa         ttttttttttt      eeeeeeeeeeeeee       
-                     p:::::p                                                                                                 
-                     p:::::p                                                                                                 
-                    p:::::::p                                                                                                
-                    p:::::::p                                                                                                
-                    p:::::::p                                                                                                
-                    ppppppppp                                                                                                                                                                                                                
-*/
+Preferences preferences;
 
-extern const char INDEX_HTML[];
+// https://www.uuidgenerator.net/
 
-// Fill in your WiFi router SSID and password
-#define FIREBASE_HOST "p-ktane.firebaseio.com"
-#define FIREBASE_AUTH "IOSc03Pc3bdDasJCHNqLeZueGVEVHrJgSFLerxui"
-#define WIFI_SSID "KatjaKaj"
-#define WIFI_PASSWORD "Sebastianqaz"
-MDNSResponder mdns;
+#define DEVICENAME "P-Ktane ESP32"
 
-ESP8266WebServer server(80);
-FirebaseData firebaseData;
+#define SEND "46a3c400-8dd9-4bdc-9898-a954947c5802"
+#define SEND_SEED "ce7082a7-c061-477d-a04c-4d6e60126f3c"
+#define SEND_TIME "d4e642e4-9830-4c86-9965-c13eed553e6a"
+#define SEND_STRIKES "a8fac7f4-0a71-445e-92fc-3b53a4136447"
+#define SEND_TIMELEFT "069cd0b7-d8fc-465f-820f-097ada211ed8"
+#define SEND_SUBMIT "7381bae4-aa40-4d1c-ba82-6977250574cf"
 
-raw_config_t stored_config;
+#define RECIVE "8ea3ef8d-db01-4328-be0b-0f403dd5ac8d"
+#define RECIVE_SEED "d1f387bf-fbe4-4f0b-ab79-3e545de4488f"
+#define RECIVE_TIME "89b753e7-ff02-4ce9-95f7-221e24596d48"
+#define RECIVE_STRIKES "607e6006-eb85-4738-8d59-a1ce1defd7fc"
+
+union
+{
+  float f;
+  char a[4];
+} u;
+
+bool deviceConnected = false;
+
+BLEServer *btServer;
+
+BLEService *sRecive;
+BLEService *sSend;
+
+BLECharacteristic *sReciveSeed;
+BLECharacteristic *sReciveTime;
+BLECharacteristic *sReciveStrikes;
+
+BLECharacteristic *sSendSeed;
+BLECharacteristic *sSendTime;
+BLECharacteristic *sSendStrikes;
+BLECharacteristic *sSendTimeLeft;
+BLECharacteristic *sSendSubmit;
+
+uint32_t cwrite = BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE;
+uint32_t cnotify = BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY | BLECharacteristic::PROPERTY_INDICATE;
+
+BLEAdvertising *pAdvertising;
+
+settings_t stored_settings;
 int num_minutes;
-char timeLeft[5] = {0, 0, 0, 0, '\0'};
+float timeLeft;
 
-void returnFail(String msg)
+float strToFloat(std::string str)
 {
-  server.sendHeader("Connection", "close");
-  server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(500, "text/plain", msg + "\r\n");
+  const char *encoded = str.c_str();
+  //memcpy(u.a, encoded, 4);
+  u.a[0] = encoded[3];
+  u.a[1] = encoded[2];
+  u.a[2] = encoded[1];
+  u.a[3] = encoded[0];
+
+  return u.f;
 }
 
-void handleSubmit()
+int strToInt(std::string str)
 {
-  config_t config;
-  int addr = 0;
-
-  if (!server.hasArg("serial_num") || !server.hasArg("num_minutes"))
-  {
-    return returnFail("BAD ARGS");
-  }
-  server.arg("serial_num").toCharArray(config.serial, 7);
-  num_minutes = server.arg("num_minutes").toInt();
-  config.batteries = server.arg("num_batteries").toInt();
-  config.indicators = ((!!server.hasArg("port1")) | ((!!server.hasArg("port2")) << 1));
-  config.ports = (!!server.hasArg("port3") | ((!!server.hasArg("port4")) << 1) | ((!!server.hasArg("port5")) << 2));
-  config_to_raw(&config, &stored_config);
-
-  for (int i = 0; i < 7; i++)
-  {
-    byte b = ((byte *)(&stored_config))[i];
-    EEPROM.write(addr++, b);
-  }
-  // Write time
-  EEPROM.write(addr++, (byte)(num_minutes));
-  EEPROM.commit();
-
-  server.send(200, "text/html", INDEX_HTML);
+  const char *encoded = str.c_str();
+  return (int(encoded[1]) << 8) + int(encoded[0]);
 }
 
-void handleRoot()
+class ConnectionServerCallbacks : public BLEServerCallbacks
 {
-  if (server.hasArg("serial_num"))
+  void onConnect(BLEServer *pServer)
   {
-    handleSubmit();
-  }
-  else
-  {
-    server.send(200, "text/html", INDEX_HTML);
-  }
-}
+    deviceConnected = true;
+    Serial.println("BLE Connected");
+  };
 
-void handleNotFound()
+  void onDisconnect(BLEServer *pServer)
+  {
+    deviceConnected = false;
+    Serial.println("BLE Disconnected");
+  }
+};
+
+class ReciveSeed : public BLECharacteristicCallbacks
 {
-  String message = "File Not Found\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i = 0; i < server.args(); i++)
+  void onWrite(BLECharacteristic *pCharacteristic)
   {
-    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
+    int rint = strToInt(pCharacteristic->getValue());
+    stored_settings.seed = rint;
+    preferences.begin("pktane");
+    preferences.putInt("seed", rint);
+    preferences.end();
+    sSendSeed->setValue(rint);
+    Serial.print("Recived seed: ");
+    Serial.println(stored_settings.seed);
   }
-  server.send(404, "text/plain", message);
-}
+};
 
-void submitTime(char *time)
+class ReciveTime : public BLECharacteristicCallbacks
 {
-  char path[14];
-  strcpy(path, "/Score/");
-  memcpy(path + 7, stored_config.serial, 5);
-  path[12] = stored_config.serial6 + '0';
-  path[13] = '\0';
-
-  float fTimeLeft = 0;
-  fTimeLeft += (time[0] - '0') * 10;
-  fTimeLeft += time[1] - '0';
-  fTimeLeft += (time[2] - '0') / 10.0;
-  fTimeLeft += (time[3] - '0') / 100.0;
-
-  if (!Firebase.pushFloat(firebaseData, path, fTimeLeft))
+  void onWrite(BLECharacteristic *pCharacteristic)
   {
-    Serial.print("Error in push, ");
-    Serial.println(firebaseData.errorReason());
+    float rfloat = strToFloat(pCharacteristic->getValue());
+    stored_settings.time = rfloat;
+    preferences.begin("pktane");
+    preferences.putFloat("time", rfloat);
+    preferences.end();
+    sSendTime->setValue(rfloat);
+    Serial.print("Recived time: ");
+    Serial.println(stored_settings.time);
   }
+};
+
+class ReciveStrikes : public BLECharacteristicCallbacks
+{
+  void onWrite(BLECharacteristic *pCharacteristic)
+  {
+    int rint = strToInt(pCharacteristic->getValue());
+    stored_settings.strikes = rint;
+    preferences.begin("pktane");
+    preferences.putInt("strikes", rint);
+    preferences.end();
+    sSendStrikes->setValue(rint);
+    Serial.print("Recived strikes: ");
+    Serial.println(stored_settings.strikes);
+  }
+};
+
+void submitTime(bool won)
+{
+  Serial.print("Seed: ");
+  Serial.println(stored_settings.seed);
+  sSendSeed->setValue(stored_settings.seed);
+  sSendSeed->notify();
+
+  Serial.print("Time: ");
+  Serial.println(stored_settings.time, 5);
+  sSendTime->setValue(stored_settings.time);
+  sSendTime->notify();
+
+  Serial.print("Strikes: ");
+  Serial.println(stored_settings.strikes);
+  uint16_t s = (uint16_t)stored_settings.strikes; //need to cast as setValue doesn't accept uint8_t
+  sSendStrikes->setValue(s);
+  sSendStrikes->notify();
+
+  Serial.print("TimeLeft: ");
+  Serial.println(timeLeft, 5);
+  sSendTimeLeft->setValue(timeLeft);
+  sSendTimeLeft->notify();
+
+  Serial.print("Result: ");
+  Serial.println(won ? "winner" : (timeLeft <= 0.0 ? "timedOut" : "strikedOut"));
+  sSendSubmit->setValue(won ? "winner" : (timeLeft <= 0.0 ? "timedOut" : "strikedOut"));
+  sSendSubmit->notify();
 }
 
 void setup(void)
 {
   Serial.begin(19200);
+  Serial2.begin(19200); //To communicate with timer
 
-  EEPROM.begin(512);
-  int addr = 0;
-  for (int i = 0; i < 7; i++)
-  {
-    byte b = EEPROM.read(addr++);
-    ((byte *)(&stored_config))[i] = b;
-  }
-  // Read time
-  num_minutes = EEPROM.read(addr++);
+  Serial.println("Loading settings from flash");
 
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  //Serial.println("");
+  preferences.begin("pktane");
 
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(WIFI_SSID);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+  stored_settings.seed = preferences.getInt("seed", 0);
+  stored_settings.time = preferences.getFloat("time", 5);
+  stored_settings.strikes = preferences.getInt("strikes", 3);
+  preferences.end();
 
-  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  Firebase.reconnectWiFi(true);
+  Serial.println("Setting up BLE");
+  Serial.print("Device Name:");
+  Serial.println(DEVICENAME);
 
-  if (mdns.begin("ktane-setup", WiFi.localIP()))
-  {
-    Serial.println("MDNS responder started");
-  }
+  BLEDevice::init(DEVICENAME);
+  btServer = BLEDevice::createServer();
+  btServer->setCallbacks(new ConnectionServerCallbacks());
 
-  server.on("/", handleRoot);
-  server.onNotFound(handleNotFound);
+  sRecive = btServer->createService(RECIVE);
 
-  server.begin();
-  Serial.print("Connect to http://ktane-setup.local or http://");
-  Serial.println(WiFi.localIP());
+  sReciveSeed = sRecive->createCharacteristic(RECIVE_SEED, cwrite);
+  sReciveSeed->setCallbacks(new ReciveSeed());
 
-  // Add service to MDNS-SD
-  mdns.addService("http", "tcp", 80);
+  sReciveTime = sRecive->createCharacteristic(RECIVE_TIME, cwrite);
+  sReciveTime->setCallbacks(new ReciveTime());
+
+  sReciveStrikes = sRecive->createCharacteristic(RECIVE_STRIKES, cwrite);
+  sReciveStrikes->setCallbacks(new ReciveStrikes());
+
+  sSend = btServer->createService(SEND);
+
+  sSendSeed = sSend->createCharacteristic(SEND_SEED, cnotify);
+  sSendSeed->addDescriptor(new BLE2902());
+  sSendSeed->setValue(stored_settings.seed);
+
+  sSendTime = sSend->createCharacteristic(SEND_TIME, cnotify);
+  sSendTime->addDescriptor(new BLE2902());
+  sSendTime->setValue(stored_settings.time);
+
+  sSendStrikes = sSend->createCharacteristic(SEND_STRIKES, cnotify);
+  sSendStrikes->addDescriptor(new BLE2902());
+  uint16_t s = (uint16_t)stored_settings.strikes; //need to cast as setValue doesn't accept uint8_t
+  sSendStrikes->setValue(s);
+
+  sSendTimeLeft = sSend->createCharacteristic(SEND_TIMELEFT, cnotify);
+  sSendTimeLeft->addDescriptor(new BLE2902());
+  float tl = 0;
+  sSendTimeLeft->setValue(tl);
+
+  sSendSubmit = sSend->createCharacteristic(SEND_SUBMIT, cnotify);
+  sSendSubmit->addDescriptor(new BLE2902());
+  sSendSubmit->setValue("none");
+
+  sRecive->start();
+  sSend->start();
+
+  pAdvertising = btServer->getAdvertising();
+  pAdvertising->start();
+
+  Serial.println("Setup done");
 }
 
 void loop(void)
 {
-  mdns.update();
 
-  server.handleClient();
-  if (Serial.available() > 0)
+  if (Serial2.available() > 0)
   {
-    while (Serial.available() > 0)
+    while (Serial2.available() > 0)
     {
-      if (Serial.read() == 'W')
+      if (Serial2.read() == 'W')
       {
-        char c;
-        for(int i = 0; i < 4; i++){
-          while(!Serial.available() > 0){}
-          timeLeft[i] = Serial.read();;
+        while (Serial2.available() <= 0)
+        {
+          delay(1);
         }
-        submitTime(timeLeft);
+        u.f = 0;
+        Serial2.readBytes(u.a, 4);
+        delay(5);
+        bool won = (Serial2.read() == '1');
+        timeLeft = u.f;
+
+        submitTime(won);
       }
       // Throw away data
-      Serial.read();
+      Serial2.read();
     }
-    Serial.write((uint8_t *)(&stored_config), 7);
-    Serial.write(num_minutes);
+    u.f = stored_settings.time;
+    Serial2.write(stored_settings.seed >> 8);
+    Serial2.write(stored_settings.seed);
+    Serial2.write(u.a, 4);
+    Serial2.write(stored_settings.strikes);
   }
 }

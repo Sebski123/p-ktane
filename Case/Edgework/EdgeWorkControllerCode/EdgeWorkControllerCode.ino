@@ -294,6 +294,7 @@ void setup()
     ;
   } // wait for serial port to connect. Needed for native USB
 
+  Serial.println(F("### EdgeWorkController Module ###"));
   Serial.println(F("Getting Seed"));
 
   while (!module.getSeed())

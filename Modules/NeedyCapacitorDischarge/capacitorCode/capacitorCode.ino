@@ -1,6 +1,5 @@
 #include "KTANECommon.h"
 #include "LedControl.h"
-#include "Adafruit_LiquidCrystal.h"
 
 // Defines
 //  Pins
@@ -38,7 +37,7 @@ void setup()
     {
         ; // wait for serial port to connect. Needed for native USB
     }
-    Serial.println("Capacitor Discharge");
+    Serial.println("### Capacitor Discharge Module ###");
     Serial.println("Starting setup");
     pinMode(LEVER_BUTTON, INPUT_PULLUP);
 

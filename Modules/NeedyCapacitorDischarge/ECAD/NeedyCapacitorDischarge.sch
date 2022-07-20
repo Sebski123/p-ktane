@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:NeedyCapacitorDischarge-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -15,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L MCU_Microchip_ATmega:ATmega328-PU U1
+L NeedyCapacitorDischarge-rescue:ATmega328-PU-MCU_Microchip_ATmega U1
 U 1 1 5F599BB8
 P 3800 3250
 F 0 "U1" H 3156 3296 50  0000 R CNN
@@ -234,8 +233,6 @@ F 3 "" H 2750 3650 50  0001 C CNN
 	1    2750 3650
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	2750 3650 2750 3750
 Wire Wire Line
 	2750 4450 2750 4550
 Wire Wire Line
@@ -508,17 +505,6 @@ Connection ~ 7000 3050
 Wire Wire Line
 	7000 3050 7000 4300
 NoConn ~ 6300 2050
-$Comp
-L Device:LED D13
-U 1 1 5F749B98
-P 2750 3900
-F 0 "D13" H 2743 4116 50  0000 C CNN
-F 1 "Red" H 2743 4025 50  0000 C CNN
-F 2 "" H 2750 3900 50  0001 C CNN
-F 3 "~" H 2750 3900 50  0001 C CNN
-	1    2750 3900
-	0    1    1    0   
-$EndComp
 NoConn ~ 4400 4350
 $Comp
 L LED:HDSP-4830_2 BAR1
@@ -983,8 +969,6 @@ F 3 "~" H 2750 4300 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	2750 4150 2750 4050
-Wire Wire Line
 	5500 4500 5850 4500
 NoConn ~ 4400 4250
 NoConn ~ 4400 4150
@@ -1010,4 +994,53 @@ Wire Wire Line
 	1650 3000 1750 3000
 Wire Wire Line
 	2050 3000 2150 3000
+$Comp
+L Device:LED_RCBG D2
+U 1 1 60F907FB
+P 2750 3900
+F 0 "D2" V 2704 4260 50  0000 L CNN
+F 1 "LED_RCBG" V 2795 4260 50  0000 L CNN
+F 2 "" H 2750 3850 50  0001 C CNN
+F 3 "~" H 2750 3850 50  0001 C CNN
+	1    2750 3900
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2750 3700 2750 3650
+Wire Wire Line
+	2750 4150 2950 4150
+Wire Wire Line
+	2950 4150 2950 4100
+NoConn ~ 2750 4100
+NoConn ~ 2550 4100
+$Comp
+L Switch:SW_Push_Dual SW2
+U 1 1 60FCEA85
+P 2800 1350
+F 0 "SW2" H 2800 1635 50  0000 C CNN
+F 1 "SW_Push_Dual" H 2800 1544 50  0000 C CNN
+F 2 "" H 2800 1550 50  0001 C CNN
+F 3 "~" H 2800 1550 50  0001 C CNN
+	1    2800 1350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR03
+U 1 1 60FCF4E5
+P 3100 1350
+F 0 "#PWR03" H 3100 1100 50  0001 C CNN
+F 1 "GND" H 3105 1177 50  0000 C CNN
+F 2 "" H 3100 1350 50  0001 C CNN
+F 3 "" H 3100 1350 50  0001 C CNN
+	1    3100 1350
+	0    -1   -1   0   
+$EndComp
+Text Label 2500 1350 2    50   ~ 0
+rst
+Wire Wire Line
+	2500 1350 2600 1350
+Wire Wire Line
+	3000 1350 3100 1350
+NoConn ~ 3000 1550
+NoConn ~ 2600 1550
 $EndSCHEMATC

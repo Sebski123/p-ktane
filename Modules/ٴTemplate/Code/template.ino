@@ -3,10 +3,14 @@
 SWireClient client(MY_ADDRESS);
 KTANEModule module(client, 3, 4);
 
-void setup() {
+void setup()
+{
   Serial.begin(19200);
-  
-  while(!module.getConfig()){
+
+  Serial.println("### Template Module ###");
+
+  while (!module.getConfig())
+  {
     module.interpretData();
   }
 
@@ -17,10 +21,12 @@ void setup() {
   module.sendReady();
 }
 
-void loop() {
+void loop()
+{
   module.interpretData();
 
-  if(!module.is_solved){
+  if (!module.is_solved)
+  {
     /*
     checkInputs();
     if(they_solved_it) {

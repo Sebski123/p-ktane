@@ -60,6 +60,7 @@ void setup()
     ; // wait for serial port to connect. Needed for native USB
   }
 
+  Serial.println("### Morse Code Module ###");
   Serial.println("Beginning Setup");
   Serial.println("Setup 7-segments");
   /*

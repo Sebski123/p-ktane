@@ -43,6 +43,7 @@ void setup()
 {
     Serial.begin(19200);
 
+    Serial.println("### Venting Gas Module ###");
     Serial.println("Starting setup");
 
     Serial.println("Initializing display");

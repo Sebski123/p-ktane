@@ -2,10 +2,10 @@
 #include "LedControl.h"
 
 // Defines
-#define ABORT 0    
-#define DETONATE 1    
-#define HOLD 2    
-#define PRESS 3    
+#define ABORT 0
+#define DETONATE 1
+#define HOLD 2
+#define PRESS 3
 
 #define BLUE 0
 #define RED 1
@@ -56,11 +56,11 @@ int colors[5][2] = {
 };
 
 int rgbValues[5][3] = {
-    {0, 0, 255}, //Blue
-    {255, 0, 0}, //Red
+    {0, 0, 255},    //Blue
+    {255, 0, 0},    //Red
     {255, 255, 80}, //White
-    {255, 60, 0}, //Yellow
-    {255, 0, 255}  //Violet (buttons only, not  coloured strips)
+    {255, 60, 0},   //Yellow
+    {255, 0, 255}   //Violet (buttons only, not  coloured strips)
 };
 
 int constants[4] = {
@@ -109,7 +109,7 @@ void checkSolution(bool held)
 
     if (!held)
     {
-        if ((text == DETONATE && module.getNumBatteries() > 1) || (module.getNumBatteries() > 2 && module.getLitFRK()) ||(text == HOLD && buttonColor == RED))
+        if ((text == DETONATE && module.getNumBatteries() > 1) || (module.getNumBatteries() > 2 && module.getLitFRK()) || (text == HOLD && buttonColor == RED))
         {
             module.win();
             return;
@@ -123,13 +123,15 @@ void checkSolution(bool held)
     }
     else
     {
-        if (!(text == DETONATE && module.getNumBatteries() > 1) || (module.getNumBatteries() > 2 && module.getLitFRK()) ||(text == HOLD && buttonColor == RED))
+        if (!(text == DETONATE && module.getNumBatteries() > 1) || (module.getNumBatteries() > 2 && module.getLitFRK()) || (text == HOLD && buttonColor == RED))
         {
             module.sendTime();
             unsigned long timeout = millis() + 2000;
-            while(!module.getTime()){
+            while (!module.getTime())
+            {
                 module.interpretData();
-                if(millis() > timeout){
+                if (millis() > timeout)
+                {
                     Serial.println("Timed out waiting for time");
                     break;
                 }
@@ -157,10 +159,11 @@ void setup()
 {
     Serial.begin(19200);
 
+    Serial.println("### Button Module ###");
     Serial.println("Starting setup");
 
     pinMode(BUTTON_PIN, INPUT_PULLUP);
-    
+
     pinMode(BUTTON_LED_PIN_GREEN, OUTPUT);
     pinMode(BUTTON_LED_PIN_BLUE, OUTPUT);
     pinMode(BUTTON_LED_PIN_RED, OUTPUT);

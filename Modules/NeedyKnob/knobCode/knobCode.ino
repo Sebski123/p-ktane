@@ -36,6 +36,7 @@ void setup()
 {
     Serial.begin(19200);
 
+    Serial.println("### Knob Module ###");
     Serial.println("Starting setup");
 
     pinMode(KNOB_UP, INPUT_PULLUP);

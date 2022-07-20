@@ -76,6 +76,7 @@ void setup()
 {
     Serial.begin(19200);
 
+    Serial.println("### Complicated Wires Module ###");
     Serial.println("Begin setup");
 
     Serial.println("Preparing 7-segment");

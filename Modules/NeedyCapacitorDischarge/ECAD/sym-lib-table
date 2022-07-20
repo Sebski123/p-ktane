@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name NeedyCapacitorDischarge-rescue)(type Legacy)(uri ${KIPRJMOD}/NeedyCapacitorDischarge-rescue.lib)(options "")(descr ""))
+)

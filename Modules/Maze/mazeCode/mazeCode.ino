@@ -109,11 +109,11 @@ void move()
     {
         //check if move is in bounds
         if (playerLocation[1] > 0)
-        { 
+        {
             //check if move is valid
             if (maze[playerLocation[1] * 2 - 1][playerLocation[0] * 2] == 1)
             {
-                //strike if it isn't                  
+                //strike if it isn't
                 module.strike();
                 leds[mazeMap[playerLocation[1] * 2 - 1][playerLocation[0] * 2]] = red;
             }
@@ -129,10 +129,10 @@ void move()
     {
         //check if move is in bounds
         if (playerLocation[0] > 0)
-        { 
+        {
             //check if move is valid
             if (maze[playerLocation[1] * 2][playerLocation[0] * 2 - 1] == 1)
-            {   //strike if it isn't            
+            { //strike if it isn't
                 module.strike();
                 leds[mazeMap[playerLocation[1] * 2][playerLocation[0] * 2 - 1]] = red;
             }
@@ -148,10 +148,10 @@ void move()
     {
         //check if move is in bounds
         if (playerLocation[1] < 5)
-        { 
+        {
             //check if move is valid
             if (maze[playerLocation[1] * 2 + 1][playerLocation[0] * 2] == 1)
-            {   //strike if it isn't                
+            { //strike if it isn't
                 module.strike();
                 leds[mazeMap[playerLocation[1] * 2 + 1][playerLocation[0] * 2]] = red;
             }
@@ -167,10 +167,10 @@ void move()
     {
         //check if move is in bounds
         if (playerLocation[0] < 5)
-        { 
+        {
             //check if move is valid
             if (maze[playerLocation[1] * 2][playerLocation[0] * 2 + 1] == 1)
-            {   //strike if it isn't                  
+            { //strike if it isn't
                 module.strike();
                 leds[mazeMap[playerLocation[1] * 2][playerLocation[0] * 2 + 1]] = red;
             }
@@ -183,7 +183,7 @@ void move()
     }
 
     //update the lights
-    leds[mainDotsMap[playerLocation[1]][playerLocation[0]]] = white; 
+    leds[mainDotsMap[playerLocation[1]][playerLocation[0]]] = white;
     leds[mainDotsMap[goalLocation[0]][goalLocation[1]]] = pulse;
 
     FastLED.show();
@@ -192,6 +192,8 @@ void move()
 void setup()
 {
     Serial.begin(19200);
+
+    Serial.println("### Maze Module ###");
 
     Serial.println(F("Getting config"));
     while (!module.getConfig())
@@ -277,7 +279,7 @@ void setup()
             {
                 leds[mazeMap[i][j]] = dark;
             }
-            if(maze[i][j] == 4)
+            if (maze[i][j] == 4)
             {
                 leds[mazeMap[i][j]] = circle;
             }
@@ -304,10 +306,10 @@ void loop()
         updateButtons();
 
         //update pulse animation
-        pulse = CRGB(map(quadwave8(millis() / (20) * PI), 0, 255, minPulse, maxPulse), 0, 0); 
+        pulse = CRGB(map(quadwave8(millis() / (20) * PI), 0, 255, minPulse, maxPulse), 0, 0);
 
-        move();    
-    
+        move();
+
         //Check if player reached the goal
         if ((playerLocation[0] == goalLocation[0]) && (playerLocation[1] == goalLocation[1]))
         {

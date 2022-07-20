@@ -79,9 +79,11 @@ int mapping[2][3][4] = {
     },
 };
 
-void stopLights(){
+void stopLights()
+{
   noTone(BUZZER);
-  for(int i = 0; i < 4; i++){
+  for (int i = 0; i < 4; i++)
+  {
     digitalWrite(led_pins[i], HIGH);
   }
 }
@@ -91,7 +93,8 @@ void update_lights()
   static unsigned long old_millis = 0;
   static int light_stage = 0;
 
-  if(resetLightStage) {
+  if (resetLightStage)
+  {
     old_millis = 0;
     light_stage = 0;
     resetLightStage = false;
@@ -160,6 +163,7 @@ void setup()
 {
   Serial.begin(19200);
 
+  Serial.println("### Simon Says Module ###");
   Serial.println("Begin setup");
 
   pinMode(button_pins[0], INPUT);
@@ -177,7 +181,8 @@ void setup()
 
   Serial.println("Getting config");
 
-  while(!module.getConfig()){
+  while (!module.getConfig())
+  {
     module.interpretData();
   }
 
